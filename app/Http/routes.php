@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('login');
 });
 
+
+Route::get('/users', 'UserController@index');
+Route::get('/fetchUsers', 'UserController@retrieve');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
