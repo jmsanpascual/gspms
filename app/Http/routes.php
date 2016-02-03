@@ -16,8 +16,12 @@ Route::get('/', function () {
 });
 
 Route::get('index', function () {
-  return view('index');
+  return view('layouts/index');
 });
+
+Route::get('create.account', array('as' => 'create.account', function () {
+  return view('create-account');
+}));
 
 /*
 |--------------------------------------------------------------------------

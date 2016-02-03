@@ -75,7 +75,7 @@
                       <i class="fa fa-list-alt"></i> Accounts
                   </a>
                   <ul class="nav-sub">
-                      <li><a href="forms-components.html">Create Account</a>
+                      <li><a href="{{ route('create.account') }}">Create Account</a>
                       </li>
                   </ul>
               </li>
@@ -85,7 +85,7 @@
         <!--main content start-->
         <section class="main-content-wrapper">
             <section id="main-content">
-
+              @yield('content')
             </section>
         </section>
     </div>
