@@ -8,16 +8,33 @@ function BindAngularDirectiveCtrl($scope, $compile, DTOptionsBuilder, DTColumnBu
     vm.delete = deleteRow;
     vm.dtInstance = {};
     vm.persons = {};
-    vm.dtOptions = DTOptionsBuilder.fromSource('js/controllers/data.json')//.fromFnPromise(function() {
-           // return $http.get('').then
-            // return $resource('data.json').query().$promise;
-       // })//fromSource('js/controllers/data.json')
-        .withPaginationType('full_numbers')
+    // .fromSource('js/controllers/data.json')
+    vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
+            
+            return $http.get('fetchUsers').then(function(result){
+                result = result.data;
+                console.log(result);
+                if(result.status)
+                {
+                    console.log('users');
+                    console.log(result.users);
+                    return result.users;
+                }
+                else
+                {
+                    alert('Unable to load datatable');
+                }
+                
+            }, function(err){
+                alert('Unable to load datatable');
+            });
+       }).withPaginationType('full_numbers')
         .withOption('createdRow', createdRow);
+
     vm.dtColumns = [
-        DTColumnBuilder.newColumn('id').withTitle('ID'),
-        DTColumnBuilder.newColumn('firstName').withTitle('First name'),
-        DTColumnBuilder.newColumn('lastName').withTitle('Last name'),
+        DTColumnBuilder.newColumn('AccountDetailsID').withTitle('ID'),
+        DTColumnBuilder.newColumn('Username').withTitle('Username'),
+        DTColumnBuilder.newColumn('AccountType').withTitle('Account Type'),
         DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
     ];
