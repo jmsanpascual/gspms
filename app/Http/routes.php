@@ -16,8 +16,15 @@ Route::get('/', function () {
 });
 
 
-Route::get('/users', 'UserController@index');
-Route::get('/fetchUsers', 'UserController@retrieve');
+Route::get('users', 'UserController@index');
+Route::get('fetchUsers', 'UserController@retrieve');
+Route::get('index', function () {
+  return view('layouts/index');
+});
+
+Route::get('create.account', array('as' => 'create.account', function () {
+  return view('create-account');
+}));
 
 /*
 |--------------------------------------------------------------------------
