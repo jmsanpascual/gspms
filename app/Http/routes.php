@@ -23,6 +23,9 @@ Route::get('create.account', array('as' => 'create.account', function () {
   return view('create-account');
 }));
 
+Route::get('/users', 'UserController@index');
+Route::get('/fetchUsers', 'UserController@retrieve');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
