@@ -15,7 +15,10 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
+    {!! HTML::style('css/bootstrap/css/bootstrap.min.css'); !!}
+    <!-- {!! HTML::style('css/bootstrap/css/bootstrap-theme.min.css'); !!} --> <!-- Conflict sa template main.css -->
+    {!! HTML::style('css/angular-datatable.css') !!}
+    {!! HTML::style('js/others/datatable/media/css/jquery.dataTables.min.css'); !!}
     <!-- Font Icons -->
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/simple-line-icons.css">
@@ -28,6 +31,7 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <!-- Feature detection -->
     <script src="js/modernizr-2.6.2.min.js"></script>
+    @yield('css')
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="assets/js/html5shiv.js"></script>
@@ -55,7 +59,7 @@
                     </li>
                     <li class="dropdown settings">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                      Jhom San Pascual <i class="fa fa-angle-down"></i>
+                      Chester Tiongson <i class="fa fa-angle-down"></i>
                     </a>
                         <ul class="dropdown-menu animated fadeInDown">
                             <li>
@@ -72,12 +76,29 @@
             <ul class="nav nav-pills nav-stacked">
               <li class="nav-dropdown">
                   <a href="#" title="Forms">
-                      <i class="fa fa-list-alt"></i> Accounts
+                    <i class="fa fa-list-alt"></i> Accounts
                   </a>
                   <ul class="nav-sub">
-                      <li><a href="{{ route('create.account') }}">Create Account</a>
-                      </li>
+                    <li>
+                      <a href="{{ route('create.account') }}">Create Account</a>
+                    </li>
+                    <li>
+                      <a href="{{ URL::to('users') }}">View List</a>
+                    </li>
                   </ul>
+              </li>
+              <li class="nav-dropdown">
+                <a href="#" title="Forms">
+                    <i class="icon-doc"></i> Projects
+                </a>
+                <ul class="nav-sub">
+                    <li>
+                      <a href="{{ route('create.project') }}">Create Proposal</a>
+                    </li>
+                    <li>
+                      <a href="{{ route('allocate-budget.project') }}">Allocate Budget</a>
+                    </li>
+                </ul>
               </li>
             </ul>
         </nav>
@@ -92,11 +113,20 @@
     <!--main content end-->
 
     <!--Global JS-->
-    <script src="js/jquery-1.10.2.min.js"></script>
+    <!-- // <script src="js/jquery-1.10.2.min.js"></script> -->
+
+    {!! HTML::script('js/others/jquery-1.12.0.min.js') !!}
     <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="plugins/navgoco/jquery.navgoco.min.js"></script>
     <script src="plugins/waypoints/waypoints.min.js"></script>
     <script src="js/application.js"></script>
+    {!! HTML::script('js/others/datatable/media/js/jquery.dataTables.min.js') !!}
+    {!! HTML::script('js/vendor/node_modules/angular/angular.min.js') !!}
+    {!! HTML::script('js/vendor/node_modules/angular-resource/angular-resource.min.js') !!}
+    {!! HTML::script('js/vendor/node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js') !!}
+    {!! HTML::script('js/others/angular-datatable.min.js') !!}
+
+    @yield('scripts')
 
 </body>
 
