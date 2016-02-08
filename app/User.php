@@ -24,4 +24,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    // public function scopejoinUserInfo()
+    // {
+    //     $user_info = (new UserInfo)->getTable();
+    //     return leftJoin($user_info . ' AS pi', 
+    //             'users.id', '=', $user_info . '.user_id');
+    // }
 }

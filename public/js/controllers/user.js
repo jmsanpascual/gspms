@@ -1,7 +1,8 @@
-angular.module('showcase.bindAngularDirective', ['datatables'])
-.controller('BindAngularDirectiveCtrl', BindAngularDirectiveCtrl);
+'use strict'
 
-function BindAngularDirectiveCtrl($scope, $compile, DTOptionsBuilder, DTColumnBuilder, $http) {
+var users = angular.module('users', ['datatables','common.service', 'ui.bootstrap']);
+
+users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnBuilder, reqDef) {
     var vm = this;
     vm.message = '';
     vm.edit = edit;
@@ -11,8 +12,7 @@ function BindAngularDirectiveCtrl($scope, $compile, DTOptionsBuilder, DTColumnBu
     // .fromSource('js/controllers/data.json')
     vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
             
-            return $http.get('fetchUsers').then(function(result){
-                result = result.data;
+            return reqDef.get('fetchUsers').then(function(result){
                 console.log(result);
                 if(result.status)
                 {
@@ -32,25 +32,30 @@ function BindAngularDirectiveCtrl($scope, $compile, DTOptionsBuilder, DTColumnBu
         .withOption('createdRow', createdRow);
 
     vm.dtColumns = [
-        DTColumnBuilder.newColumn('AccountDetailsID').withTitle('ID'),
-        DTColumnBuilder.newColumn('Username').withTitle('Username'),
-        DTColumnBuilder.newColumn('AccountType').withTitle('Account Type'),
+        DTColumnBuilder.newColumn('username').withTitle('Username'),
+        DTColumnBuilder.newColumn('first_name').withTitle('First NAme'),
+        DTColumnBuilder.newColumn('last_name').withTitle('Last Name'),
+        DTColumnBuilder.newColumn('email').withTitle('Email'),
         DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
     ];
+
+
+    function deleteRow(person) {
+        vm.message = 'You are trying to remove the row: ' + JSON.stringify(person);
+        // Delete some data and call server to make changes...
+        // Then reload the data so that DT is refreshed
+        vm.dtInstance.reloadData();
+    };
 
     function edit(person) {
         vm.message = 'You are trying to edit the row: ' + JSON.stringify(person);
         // Edit some data and call server to make changes...
         // Then reload the data so that DT is refreshed
         vm.dtInstance.reloadData();
-    }
-    function deleteRow(person) {
-        vm.message = 'You are trying to remove the row: ' + JSON.stringify(person);
-        // Delete some data and call server to make changes...
-        // Then reload the data so that DT is refreshed
-        vm.dtInstance.reloadData();
-    }
+    };
+
+
     function createdRow(row, data, dataIndex) {
         // Recompiling so we can bind Angular directive to the DT
         $compile(angular.element(row).contents())($scope);
@@ -64,4 +69,37 @@ function BindAngularDirectiveCtrl($scope, $compile, DTOptionsBuilder, DTColumnBu
             '   <i class="fa fa-trash-o"></i>' +
             '</button>';
     }
-}
+});
+
+users.controller('userCtrl', function($scope,defaultModal, reqDef){
+    $scope.users = {};
+    $scope.add = function(){
+
+        var attr = {
+            size: 'md',
+            templateUrl : 'addUser'
+        };
+        var userModal = defaultModal.showModal(attr);
+
+        userModal.result.then(function(data){
+            console.log(data);
+            console.log('adding');
+            
+            reqDef.post('addUser',data).then(function(result){
+                if(result.status){
+
+                }
+                else
+                {
+                    //error
+
+                }
+            });
+        });
+    };
+
+    $scope.addUser = function()
+    {
+        
+    }
+});

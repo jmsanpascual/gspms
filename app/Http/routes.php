@@ -18,6 +18,8 @@ Route::get('/', function () {
 
 Route::get('users', 'UserController@index');
 Route::get('fetchUsers', 'UserController@retrieve');
+Route::get('addUser', 'UserController@showModal');
+Route::post('addUser', 'UserController@create');
 Route::get('index', function () {
   return view('layouts/index');
 });

@@ -15,7 +15,7 @@
           <h1 class="h1">View List</h1>
       </div>
   </div>
-  <div class="row" ng-app = "showcase.bindAngularDirective">
+  <div class="row" ng-app = "users">
       <div class="col-md-12">
           <div class="panel panel-default">
               <div class="panel-heading">
@@ -25,8 +25,9 @@
                       <i class="fa fa-times"></i>
                   </div>
               </div>
-              <div class="panel-body" ng-controller="BindAngularDirectiveCtrl as showCase">
-                <div ng-controller="BindAngularDirectiveCtrl as showCase">
+              <div class="panel-body" ng-controller="userCtrl">
+                    <button class = "btn btn-success pull-right" ng-click = "add()"> Add User</button>
+                <div ng-controller="userDTCtrl as showCase">
                   <p class="text-danger"><strong>@{{ showCase.message }}</strong></p>
                   <br>
                   <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" dt-instance="showCase.dtInstance" class="table table-hover row-border hover">

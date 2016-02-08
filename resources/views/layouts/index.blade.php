@@ -27,9 +27,9 @@
     <!-- Custom styles for this theme -->
     <link rel="stylesheet" href="css/main.css">
     <!-- Fonts -->
-    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900,300italic,400italic,600italic,700italic,900italic' rel='stylesheet' type='text/css'>
+    <!-- <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900,300italic,400italic,600italic,700italic,900italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <!-- Feature detection -->
+    --> <!-- Feature detection -->
     <script src="js/modernizr-2.6.2.min.js"></script>
     @yield('css')
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -111,6 +111,7 @@
     {!! HTML::script('js/vendor/node_modules/angular-resource/angular-resource.min.js') !!}
     {!! HTML::script('js/vendor/node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js') !!}
     {!! HTML::script('js/others/angular-datatable.min.js') !!}
+    {!! HTML::script('js/services/common_service.js') !!}
     
     @yield('scripts')
 
