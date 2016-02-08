@@ -147,6 +147,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        'Illuminate\Html\HtmlServiceProvider',
 
         /*
          * Application Service Providers...
@@ -155,7 +156,6 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        'Illuminate\Html\HtmlServiceProvider',
     ],
 
     /*

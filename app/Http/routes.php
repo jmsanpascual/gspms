@@ -15,11 +15,6 @@ Route::get('/', function () {
     return view('login');
 });
 
-
-Route::get('users', 'UserController@index');
-Route::get('fetchUsers', 'UserController@retrieve');
-Route::get('addUser', 'UserController@showModal');
-Route::post('addUser', 'UserController@create');
 Route::get('index', function () {
   return view('layouts/index');
 });
@@ -27,6 +22,21 @@ Route::get('index', function () {
 Route::get('create.account', array('as' => 'create.account', function () {
   return view('create-account');
 }));
+
+Route::get('create.project', array('as' => 'create.project', function () {
+  return view('create-project');
+}));
+
+Route::get('allocate-budget.project', array('as' => 'allocate-budget.project', function () {
+  return view('allocate-budget-project');
+}));
+
+Route::get('/users', 'UserController@index');
+Route::get('/fetchUsers', 'UserController@retrieve');
+
+Route::get('addUser', 'UserController@showModal');
+Route::post('addUser', 'UserController@create');
+
 
 /*
 |--------------------------------------------------------------------------

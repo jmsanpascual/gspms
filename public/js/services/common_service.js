@@ -118,10 +118,8 @@ common.service('defaultModal', function($uibModal, $log){
 
 // used by service
 common.controller('defaultModalInstanceCtrl', function ($scope, $uibModalInstance, attr) {
-    $scope.attr = attr;
-    console.log('here');
 
-    $scope.submitData = {};
+    $scope.submitData = (attr != undefined) ? attr : {};
     $scope.save = function (form) {
         // console.log(deleteAttr.deleteKey);
         // console.log(deleteAttr.deleteName);

@@ -2746,3 +2746,8 @@ h3.timeline-title {
     display: none;
   }
 }
+
+/* Angular JS CSS */
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}

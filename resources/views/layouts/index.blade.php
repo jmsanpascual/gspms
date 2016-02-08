@@ -16,7 +16,7 @@
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <!-- Bootstrap core CSS -->
     {!! HTML::style('css/bootstrap/css/bootstrap.min.css'); !!}
-    {!! HTML::style('css/bootstrap/css/bootstrap-theme.min.css'); !!}
+    <!-- {!! HTML::style('css/bootstrap/css/bootstrap-theme.min.css'); !!} --> <!-- Conflict sa template main.css -->
     {!! HTML::style('css/angular-datatable.css') !!}
     {!! HTML::style('js/others/datatable/media/css/jquery.dataTables.min.css'); !!}
     <!-- Font Icons -->
@@ -59,7 +59,7 @@
                     </li>
                     <li class="dropdown settings">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                      Jhom San Pascual <i class="fa fa-angle-down"></i>
+                      Chester Tiongson <i class="fa fa-angle-down"></i>
                     </a>
                         <ul class="dropdown-menu animated fadeInDown">
                             <li>
@@ -76,15 +76,29 @@
             <ul class="nav nav-pills nav-stacked">
               <li class="nav-dropdown">
                   <a href="#" title="Forms">
-                      <i class="fa fa-list-alt"></i> Accounts
+                    <i class="fa fa-list-alt"></i> Accounts
                   </a>
                   <ul class="nav-sub">
-
-                      <li><a href="{{ route('create.account') }}">Create Account</a>
-                      </li>
-                      <li><a href="{{ URL::to('users') }}">View List</a>
-                      </li>
+                    <li>
+                      <a href="{{ route('create.account') }}">Create Account</a>
+                    </li>
+                    <li>
+                      <a href="{{ URL::to('users') }}">View List</a>
+                    </li>
                   </ul>
+              </li>
+              <li class="nav-dropdown">
+                <a href="#" title="Forms">
+                    <i class="icon-doc"></i> Projects
+                </a>
+                <ul class="nav-sub">
+                    <li>
+                      <a href="{{ route('create.project') }}">Create Proposal</a>
+                    </li>
+                    <li>
+                      <a href="{{ route('allocate-budget.project') }}">Allocate Budget</a>
+                    </li>
+                </ul>
               </li>
             </ul>
         </nav>
