@@ -99,7 +99,8 @@ common.service('defaultModal', function($uibModal, $log){
                 resolveAttr[key] = config[key];
             }
         }
-
+        console.log('attr');
+        console.log(resolveAttr);
         // overwrite resolve
         config.resolve = {
              attr : function(){
@@ -118,7 +119,8 @@ common.service('defaultModal', function($uibModal, $log){
 
 // used by service
 common.controller('defaultModalInstanceCtrl', function ($scope, $uibModalInstance, attr) {
-
+    console.log('attr');
+    console.log(attr);
     $scope.submitData = (attr != undefined) ? attr : {};
     $scope.save = function (form) {
         // console.log(deleteAttr.deleteKey);

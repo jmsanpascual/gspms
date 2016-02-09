@@ -21,6 +21,20 @@ class UserController extends Controller
         return view('users');
     }
 
+    public function getRoles()
+    {
+        try
+        {
+            $data['roles'] = App\Roles::select('id', 'name')->get();
+            
+            return json_encode($data);
+        }
+        catch(Exception $e)
+        {
+            Log::info($e->getMessage());
+        }
+    }
+
     public function create()
     {
         $status = FALSE;
@@ -28,7 +42,7 @@ class UserController extends Controller
         try
         {   
             $input = Request::all();
-            
+            // $input = $input['users']
             Log::info('create');
 
             Log::info(json_encode($input));
@@ -70,6 +84,7 @@ class UserController extends Controller
                 'birth_date' => $input['bdate']
             ]);
             App\UserInfo::insert(['user_id' => $user_id, 'personal_info_id' => $personal_id]);
+            App\UserRoles::insert(['role_id' => $input['selectedRole'], 'user_id' => $user_id]);
             DB::commit();
         }
         catch(Exception $e)
@@ -84,11 +99,26 @@ class UserController extends Controller
         return json_encode($data);
     }
 
-    public function showModal()
+    public function showModal($action = 'Add')
     {
-        return view('modals/users');
+        $data['action'] = $action;
+        return view('modals/users', $data);
     }
 
+    // single user
+    public function retrieveUser()
+    {
+        try
+        {
+
+        }
+        catch(Exception $e)
+        {
+            $msg = $e->getMessage();
+        }
+    }
+
+    // user list
     public function retrieve()
     {
         $status = FALSE;

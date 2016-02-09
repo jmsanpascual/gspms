@@ -37,6 +37,8 @@ Route::get('/fetchUsers', 'UserController@retrieve');
 Route::get('addUser', 'UserController@showModal');
 Route::post('addUser', 'UserController@create');
 
+Route::get('getRoles', 'UserController@getRoles');
+Route::get('showUserDetails', 'UserController@getRoles');
 
 /*
 |--------------------------------------------------------------------------

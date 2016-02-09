@@ -17,8 +17,8 @@ users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTCo
                 console.log(result);
 
                 if (result.status) {
-                    console.log('users');
-                    console.log(result.users);
+                    // console.log('users');
+                    // console.log(result.users);
                     return result.users;
                 } else {
                     alert('Unable to load datatable');
@@ -44,7 +44,38 @@ users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTCo
             size: 'md',
             templateUrl : 'addUser'
         };
-        var userModal = defaultModal.showModal(attr);
+
+        var openModal = function(attr){
+            var userModal = defaultModal.showModal(attr);
+
+            // when the modal opens
+            userModal.result.then(function(data){
+                console.log(data);
+                console.log('updating');
+                // adding of user
+                reqDef.post('editUser',data.users).then(function(result){
+                    if(result.status){
+
+                    }
+                    else
+                    {
+                        //error
+
+                    }
+                });
+            });
+        }
+        // call open modal
+        // showUserDetails
+        reqDef.get('getRoles').then(function(result){
+            if(result.roles != undefined)
+                attr.roles = result.roles;
+
+            openModal(attr);
+        }, function(err){
+            openModal(attr);
+        });
+
         // Edit some data and call server to make changes...
         // Then reload the data so that DT is refreshed
         // vm.dtInstance.reloadData();
@@ -84,25 +115,40 @@ users.controller('userCtrl', function($scope,defaultModal, reqDef){
 
         var attr = {
             size: 'md',
-            templateUrl : 'addUser'
+            templateUrl : 'addUser',
         };
-        var userModal = defaultModal.showModal(attr);
 
-        userModal.result.then(function(data){
-            console.log(data);
-            console.log('adding');
-            
-            reqDef.post('addUser',data).then(function(result){
-                if(result.status){
+        var openModal = function(attr){
+            var userModal = defaultModal.showModal(attr);
 
-                }
-                else
-                {
-                    //error
+            // when the modal opens
+            userModal.result.then(function(data){
+                console.log(data);
+                console.log('adding');
+                // adding of user
+                reqDef.post('addUser',data.users).then(function(result){
+                    if(result.status){
 
-                }
+                    }
+                    else
+                    {
+                        //error
+
+                    }
+                });
             });
+        }
+        // call open modal
+        reqDef.get('getRoles').then(function(result){
+            if(result.roles != undefined)
+                attr.roles = result.roles;
+
+            openModal(attr);
+        }, function(err){
+            openModal(attr);
         });
+
+        
     };
 
 });
