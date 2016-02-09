@@ -35,9 +35,9 @@
 </head>
 
 <body class="animated fadeIn">
-    <section id="login-container">
+    <section id="login-container" ng-app='login'>
 
-        <div class="row">
+        <div class="row" ng-controller='LoginCtrl'>
             <div class="col-md-3" id="login-wrapper">
                 <div class="panel panel-primary animated flipInY">
                     <div class="panel-heading">
@@ -47,16 +47,18 @@
                     </div>
                     <div class="panel-body">
                        <p> Login to access your account.</p>
-                        <form class="form-horizontal" role="form">
+                        <form class="form-horizontal" role="form" ng-submit='login()'>
                             <div class="form-group">
                                 <div class="col-md-12">
-                                    <input type="email" class="form-control" id="email" placeholder="Email" required>
+                                    <input type="text" class="form-control" id='email' placeholder="Username"
+                                    ng-model='user.username' required>
                                     <i class="fa fa-user"></i>
                                 </div>
                             </div>
                             <div class="form-group">
                                <div class="col-md-12">
-                                    <input type="password" class="form-control" id="password" placeholder="Password" required>
+                                    <input type="password" class="form-control" id='password' placeholder="Password"
+                                    ng-model='user.password' required>
                                     <i class="fa fa-lock"></i>
                                     <!-- <a href="javascript:void(0)" class="help-block">Forgot Your Password?</a> -->
                                 </div>
@@ -80,6 +82,8 @@
     <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="plugins/waypoints/waypoints.min.js"></script>
     <script src="js/application.js"></script>
+    {!! HTML::script('js/vendor/node_modules/angular/angular.min.js') !!}
+    {!! HTML::script('js/controllers/login.js') !!}
 </body>
 
 </html>

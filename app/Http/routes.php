@@ -31,6 +31,7 @@ Route::get('allocate-budget.project', array('as' => 'allocate-budget.project', f
   return view('allocate-budget-project');
 }));
 
+Route::post('/login', 'UserController@login');
 Route::get('/users', 'UserController@index');
 Route::get('/fetchUsers', 'UserController@retrieve');
 

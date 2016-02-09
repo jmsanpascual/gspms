@@ -7,13 +7,14 @@ use Log;
 use DB;
 use Request;
 use Hash;
+use Auth;
 
 class UserController extends Controller
 {
 
     public function __construct()
     {
-        
+
     }
 
     public function index()
@@ -40,9 +41,8 @@ class UserController extends Controller
         $status = FALSE;
         $msg = '';
         try
-        {   
+        {
             $input = Request::all();
-            // $input = $input['users']
             Log::info('create');
 
             Log::info(json_encode($input));
@@ -150,4 +150,14 @@ class UserController extends Controller
 
     }
 
+    public function login()
+    {
+        $credentials = Request::all();
+
+        if (Auth::attempt($credentials)) {
+            return array('status' => true);
+        } else {
+            return array('status' => false);
+        }
+    }
 }

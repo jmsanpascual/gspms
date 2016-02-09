@@ -53,6 +53,8 @@ var app = function() {
 
     var menu = function() {
         var subMenu = $('.sidebar .nav');
+        if (!subMenu.length) return;
+
         $(subMenu).navgoco({
             caretHtml: false,
             accordion: true,
@@ -192,7 +194,6 @@ var app = function() {
         $('.slider-span').slider()
     };
 
-
     //return functions
     return {
         init: init,
@@ -208,5 +209,4 @@ var app = function() {
 //Load global functions
 $(document).ready(function() {
     app.init();
-
 });
