@@ -14,7 +14,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-
+        DB::connection()->enableQueryLog();
     }
 
     public function index()
@@ -106,29 +106,52 @@ class UserController extends Controller
     }
 
     // single user
-    public function retrieveUser()
+    public function retrieveUser($id)
     {
+        $status = FALSE;
+        $msg = '';
         try
         {
+            $token = csrf_token();
+            Log::info('token' . $token);
+            $data['roles'] = App\Roles::select('id', 'name')->get();
+            $data['users'] = App\User::leftJoin('user_roles AS B', 'users.id', '=', 'B.user_id')
+            ->leftJoin('user_info AS C', 'users.id', '=', 'C.user_id')
+            ->leftJoin('personal_info AS D', 'C.personal_info_id', '=', 'D.id')
+            ->select('users.id', 'users.username', 'B.role_id AS selectedRole', 'D.first_name AS fname',
+             'D.middle_name AS mname', 'D.last_name AS lname', 'D.contact_num AS cnum',
+'D.email', 'D.address', 'D.birth_date AS bdate', DB::Raw('"'. $token . '" AS token'))
+            ->where('users.id', $id)->first();
 
+            $status = TRUE;
         }
         catch(Exception $e)
         {
             $msg = $e->getMessage();
         }
+        Log::info('line 129  -- - - ');
+        Log::info(json_encode(DB::getQueryLog()));
+        $data['status'] = $status;
+        $data['msg'] = $msg;
+
+        return json_encode($data);
     }
 
     // user list
     public function retrieve()
     {
         $status = FALSE;
-        DB::connection()->enableQueryLog();
         try
         {
             // join('table_name', '')
             $data['users'] = App\User::leftJoin('user_info AS A', 'users.id', '=', 'A.user_id')
-            ->leftJoin('personal_info AS B', 'A.personal_info_id', '=', 'B.id')->get();
+            ->leftJoin('personal_info AS D', 'A.personal_info_id', '=', 'D.id')->
+            select( 'users.id', 'users.username', 'D.first_name AS fname',
+             'D.middle_name AS mname', 'D.last_name AS lname', 'D.contact_num AS cnum',
+            'D.email', 'D.address', 'D.birth_date')
+            ->get();
             $status = TRUE;
+             Log::info(json_encode(DB::getQueryLog()));
         }
         catch(Exception $e)
         {
@@ -140,14 +163,98 @@ class UserController extends Controller
         return $data;
     }
 
-    public function update(Request $input)
+    public function update()
     {
+       $status = FALSE;
+        $msg = '';
+        try
+        {
+            $input = Request::all();
+            Log::info('update');
 
+            Log::info(json_encode($input));
+            Log::info(json_encode($input['username']));
+
+            // check if username or email already exist w/c is not yet deleted
+            $result = App\User::leftJoin('user_info AS A', 'users.id', '=', 'A.user_id')
+            ->leftJoin('personal_info AS B', 'A.personal_info_id', '=', 'B.id')
+            ->where(function($query) use ($input) {
+                $query->where('users.username', $input['username'])
+                ->orWhere('B.email', $input['email']);
+            })
+            ->where('users.id', '!=', $input['id']) // not equal to itself
+            ->whereNull('users.deleted_at')
+            ->whereNull('B.deleted_at')
+            ->count();
+
+
+            if($result > 0)
+            {
+                // throw new Exception('username or email already exist');
+            }
+            $users = array('username' => $input['username']);
+            if(!EMPTY($input['password']))
+                $users['password'] = Hash::make($input['password']);
+
+            DB::beginTransaction();
+            App\User::where('id', $input['id'])->update($users);
+
+            $p_id = App\UserInfo::where('user_id', $input['id'])->select('personal_info_id')->first();
+
+            $personal_id = App\PersonalInfo::where('id', $p_id->personal_info_id)->update([
+                'first_name' => $input['fname'],
+                'middle_name' => $input['mname'],
+                'last_name' => $input['lname'],
+                'contact_num' => $input['cnum'],
+                'email' => $input['email'],
+                'address' => $input['address'],
+                'birth_date' => $input['bdate']
+            ]);
+            App\UserRoles::where('user_id', $input['id'])->update(['role_id' => $input['selectedRole']]);
+            DB::commit();
+        }
+        catch(Exception $e)
+        {
+            DB::rollback();
+            Log::info(json_encode(DB::getQueryLog()));
+            Log::info($e->getMessage());
+            $msg = $e->getMessage();
+        }
+        $data['status'] = $status;
+        $data['msg'] = $msg;
+
+        return json_encode($data);
     }
 
-    public function delete()
+    public function delete($id)
     {
+        $status = FALSE;
+        $msg = '';
+        try
+        {
+            DB::beginTransaction();
+            Log::info($id);
+            App\User::where('id', $id)->delete();
+            $p_id = App\UserInfo::where('user_id', $id)->select('personal_info_id')->first();
+            Log::info('line 237');
+            Log::info($p_id);
+            App\PersonalInfo::where('id', $p_id->personal_info_id)->delete();
+            DB::commit();
+            $status = TRUE;
 
+        }
+        catch(Exception $e)
+        {
+            DB::rollback();
+
+            Log::info($e->getMessage());
+            $msg = $e->getMessage();
+        }
+         Log::info(json_encode(DB::getQueryLog()));
+        $data['status'] = $status;
+        $data['msg'] = $msg;
+
+        return json_encode($data);
     }
 
     public function login()

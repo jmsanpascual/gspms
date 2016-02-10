@@ -39,8 +39,11 @@ Route::get('addUser', 'UserController@showModal');
 Route::post('addUser', 'UserController@create');
 
 Route::get('getRoles', 'UserController@getRoles');
-Route::get('showUserDetails', 'UserController@getRoles');
-
+Route::group(['middleware' => 'web'], function () {
+	Route::get('showUserDetails/{id}', 'UserController@retrieveUser');
+	Route::post('editUser', 'UserController@update');
+	Route::delete('deleteUser/{id}', 'UserController@delete');
+});
 /*
 |--------------------------------------------------------------------------
 | Application Routes
