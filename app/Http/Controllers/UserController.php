@@ -8,6 +8,7 @@ use DB;
 use Request;
 use Hash;
 use Auth;
+use Lang;
 
 class UserController extends Controller
 {
@@ -42,7 +43,8 @@ class UserController extends Controller
         $msg = '';
         try
         {
-            $input = Request::all();
+            $input = Request::get('users');
+            // $input = $input['users'];
             Log::info('create');
 
             Log::info(json_encode($input));
@@ -86,6 +88,8 @@ class UserController extends Controller
             App\UserInfo::insert(['user_id' => $user_id, 'personal_info_id' => $personal_id]);
             App\UserRoles::insert(['role_id' => $input['selectedRole'], 'user_id' => $user_id]);
             DB::commit();
+            $status = TRUE;
+            $msg = Lang::get('notifications.data_saved'); 
         }
         catch(Exception $e)
         {
@@ -169,7 +173,7 @@ class UserController extends Controller
         $msg = '';
         try
         {
-            $input = Request::all();
+            $input = Request::get('users');
             Log::info('update');
 
             Log::info(json_encode($input));
@@ -212,6 +216,8 @@ class UserController extends Controller
             ]);
             App\UserRoles::where('user_id', $input['id'])->update(['role_id' => $input['selectedRole']]);
             DB::commit();
+            $status = TRUE;
+            $msg = Lang::get('notifications.data_saved'); 
         }
         catch(Exception $e)
         {

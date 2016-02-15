@@ -42,7 +42,8 @@ users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTCo
     function edit(person) {
         var attr = {
             size: 'md',
-            templateUrl : 'addUser'
+            templateUrl : 'addUser',
+            saveUrl: 'editUser'
         };
 
         console.log('person');
@@ -56,16 +57,16 @@ users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTCo
                 console.log(data);
                 console.log('updating');
                 // adding of user
-                reqDef.post('editUser',data.users).then(function(result){
-                    if(result.status){
+                // reqDef.post('editUser',data.users).then(function(result){
+                //     if(result.status){
                         vm.dtInstance.reloadData(); // update datatable here
-                    }
-                    else
-                    {
-                        //error
+                    // }
+                    // else
+                    // {
+                    //     //error
 
-                    }
-                });
+                    // }
+                // });
             });
         }
         // call open modal
@@ -137,6 +138,7 @@ users.controller('userCtrl', function($scope,defaultModal, reqDef){
         var attr = {
             size: 'md',
             templateUrl : 'addUser',
+            saveUrl: 'addUser'
         };
 
         var openModal = function(attr){
@@ -145,18 +147,18 @@ users.controller('userCtrl', function($scope,defaultModal, reqDef){
             // when the modal opens
             userModal.result.then(function(data){
                 console.log(data);
-                console.log('adding');
+                console.log('added');
                 // adding of user
-                reqDef.post('addUser',data.users).then(function(result){
-                    if(result.status){
-                        //success
-                    }
-                    else
-                    {
-                        //error
+                // reqDef.post('addUser',data.users).then(function(result){
+                //     if(result.status){
+                //         //success
+                //     }
+                //     else
+                //     {
+                //         //error
 
-                    }
-                });
+                //     }
+                // });
             });
         }
         // call open modal
