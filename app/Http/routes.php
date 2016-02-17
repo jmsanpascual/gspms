@@ -43,6 +43,17 @@ Route::get('/projects/view-project', array('as' => 'view.project', function () {
 }));
 Route::resource('projects', 'ProjectController');
 
+// RESTful resource route for Programs
+Route::resource('programs', 'ProgramController');
+
+// RESTful resource route for Project Status
+Route::resource('project-status', 'ProjectStatusController');
+
+Route::group(['middleware' => 'web'], function () {
+	Route::get('showUserDetails/{id}', 'UserController@retrieveUser');
+	Route::post('editUser', 'UserController@update');
+	Route::delete('deleteUser/{id}', 'UserController@delete');
+});
 /*
 |--------------------------------------------------------------------------
 | Application Routes

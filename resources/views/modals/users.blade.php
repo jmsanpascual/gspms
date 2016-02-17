@@ -7,6 +7,8 @@
 	<form role="form" id = "userForm">
 		<h3>Account Information</h3>
 		<hr>
+		<input type ="hidden" ng-model = "submitData.users.id">
+		<input type ="hidden" ng-model = "submitData.users.token">
 		<div class = "form-group">
 			<div class = "row">
 				<div class = "col-md-12">
@@ -28,7 +30,7 @@
 			</div>
 			
 		</div>
-		<div class = "form-group">
+		<div class = "form-group" ng-if = "!submitData.users.id">
 			<div class = "row">
 				<div class = "col-md-12">
 				<label class = "form-label col-md-3">Confirm Password</label>

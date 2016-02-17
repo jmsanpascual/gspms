@@ -30,9 +30,9 @@ class ProjectController extends Controller
         try {
             $project = Request::all();
             App\Project::insert($project);
-            return Response::json(arrya(true));
-        } catch (Exception $e) {
-            return Response::json(array('error' => $e->getMessage()));
+            return Response::json([true]);
+       } catch (Exception $e) {
+            return Response::json(['error' => $e->getMessage()]);
         }
     }
 }

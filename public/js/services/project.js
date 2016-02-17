@@ -1,7 +1,7 @@
 'use strict'
-var projectSrvc = angular.module('project.service', ['ngResource']);
+var projectService = angular.module('project.service', ['ngResource']);
 
-projectSrvc.factory('Project', function (ProjRestApi) {
+projectService.factory('Project', function (ProjRestApi) {
     var _self = this;
     var projects = null;
 
@@ -30,7 +30,7 @@ projectSrvc.factory('Project', function (ProjRestApi) {
     };
 });
 
-projectSrvc.factory('ProjRestApi', function ($resource) {
+projectService.factory('ProjRestApi', function ($resource) {
     var restApi = $resource('../projects');
 
     return restApi;

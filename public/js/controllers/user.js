@@ -32,8 +32,8 @@ users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTCo
 
     vm.dtColumns = [
         DTColumnBuilder.newColumn('username').withTitle('Username'),
-        DTColumnBuilder.newColumn('first_name').withTitle('First NAme'),
-        DTColumnBuilder.newColumn('last_name').withTitle('Last Name'),
+        DTColumnBuilder.newColumn('fname').withTitle('First NAme'),
+        DTColumnBuilder.newColumn('lname').withTitle('Last Name'),
         DTColumnBuilder.newColumn('email').withTitle('Email'),
         DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
@@ -42,8 +42,12 @@ users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTCo
     function edit(person) {
         var attr = {
             size: 'md',
-            templateUrl : 'addUser'
+            templateUrl : 'addUser',
+            saveUrl: 'editUser'
         };
+
+        console.log('person');
+        console.log(person);
 
         var openModal = function(attr){
             var userModal = defaultModal.showModal(attr);
@@ -53,23 +57,28 @@ users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTCo
                 console.log(data);
                 console.log('updating');
                 // adding of user
-                reqDef.post('editUser',data.users).then(function(result){
-                    if(result.status){
+                // reqDef.post('editUser',data.users).then(function(result){
+                //     if(result.status){
+                        vm.dtInstance.reloadData(); // update datatable here
+                    // }
+                    // else
+                    // {
+                    //     //error
 
-                    }
-                    else
-                    {
-                        //error
-
-                    }
-                });
+                    // }
+                // });
             });
         }
         // call open modal
         // showUserDetails
-        reqDef.get('getRoles').then(function(result){
+        reqDef.get('showUserDetails/' + person.id).then(function(result){
+            console.log(result);
+            console.log('show user details');
             if(result.roles != undefined)
                 attr.roles = result.roles;
+
+            if(result.users != undefined)
+                attr.users = result.users;
 
             openModal(attr);
         }, function(err){
@@ -87,10 +96,23 @@ users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTCo
         // Then reload the data so that DT is refreshed
         // vm.dtInstance.reloadData();
         var attr = {
-            deleteName : person.username
+            deleteName : person.username,
+            deletedKey : person.id
         }
-        defaultModal.delConfirm(attr);
+        var del = defaultModal.delConfirm(attr);
 
+        del.result.then(function(id){
+            reqDef.delete('deleteUser/'+id).then(function(result){
+                if(result.status)
+                {
+                    console.log('successfully deleted');
+                }
+                else
+                {
+                    console.log('not deleted');
+                }
+            });
+        });
     }
 
     function createdRow(row, data, dataIndex) {
@@ -116,6 +138,7 @@ users.controller('userCtrl', function($scope,defaultModal, reqDef){
         var attr = {
             size: 'md',
             templateUrl : 'addUser',
+            saveUrl: 'addUser'
         };
 
         var openModal = function(attr){
@@ -124,18 +147,18 @@ users.controller('userCtrl', function($scope,defaultModal, reqDef){
             // when the modal opens
             userModal.result.then(function(data){
                 console.log(data);
-                console.log('adding');
+                console.log('added');
                 // adding of user
-                reqDef.post('addUser',data.users).then(function(result){
-                    if(result.status){
+                // reqDef.post('addUser',data.users).then(function(result){
+                //     if(result.status){
+                //         //success
+                //     }
+                //     else
+                //     {
+                //         //error
 
-                    }
-                    else
-                    {
-                        //error
-
-                    }
-                });
+                //     }
+                // });
             });
         }
         // call open modal

@@ -37,17 +37,8 @@
                       <div class="form-group">
                           <label class="col-sm-3 control-label">Program Name</label>
                           <div class="col-sm-6">
-                            <select class="form-control input-sm" ng-model="project.program_id">
-                                <option value="1">Regulatory Compliance</option>
-                                <option value="2">Green Building</option>
-                                <option value="3">Carbon Neutrality</option>
-                                <option value="4">Occupational Safety and Health</option>
-                                <option value="5">Disaster Risk Reduction Management-Emergency Preparedness</option>
-                                <option value="6">Biodiversity</option>
-                                <option value="7">Water Resources Management</option>
-                                <option value="8">Green Procurement</option>
-                                <option value="9">Data Management</option>
-                                <option value="10">Environmental Education</option>
+                            <select class="form-control input-sm" ng-model='program'
+                             ng-options="program.name for program in programs">
                             </select>
                           </div>
                       </div>
@@ -78,10 +69,8 @@
                       <div class="form-group">
                           <label class="col-sm-3 control-label">Status</label>
                           <div class="col-sm-6">
-                            <select ng-model="project.proj_status_id" class="form-control input-sm">
-                                <option value="1">For Approval</option>
-                                <option value="2">On-Going</option>
-                                <option value="3">Completed</option>
+                            <select ng-model="status" class="form-control input-sm"
+                             ng-options="projStatus.name for projStatus in projectStatus">
                             </select>
                           </div>
                       </div>
@@ -143,6 +132,8 @@
 @endsection
 
 @section('scripts')
+{!! HTML::script('js/services/project-status.js') !!}
+{!! HTML::script('js/services/program.js') !!}
 {!! HTML::script('js/services/project.js') !!}
 {!! HTML::script('js/controllers/dynamic-element.js') !!}
 {!! HTML::script('js/controllers/project.js') !!}

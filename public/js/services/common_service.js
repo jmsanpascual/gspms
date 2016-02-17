@@ -118,17 +118,31 @@ common.service('defaultModal', function($uibModal, $log){
 
 
 // used by service
-common.controller('defaultModalInstanceCtrl', function ($scope, $uibModalInstance, attr) {
+common.controller('defaultModalInstanceCtrl', function ($scope, $uibModalInstance, attr, $http) {
     console.log('attr');
     console.log(attr);
     $scope.submitData = (attr != undefined) ? attr : {};
-    $scope.save = function (form) {
+    $scope.save = function (url) {
         // console.log(deleteAttr.deleteKey);
         // console.log(deleteAttr.deleteName);
         // $uibModalInstance.close(attr.item);
         // angular.element(document.getElementById('userForm')).trigger('submit');
         // document.getElementById('userForm').submit();
-        $uibModalInstance.close($scope.submitData);
+        // $uibModalInstance.close($scope.submitData);
+        $http.post($scope.submitData.saveUrl, $scope.submitData).then(function(result){
+            result = result.data;
+            if(result.status)
+            {
+                $uibModalInstance.close(result);
+                alert(result.msg);
+            }
+            else
+            {
+                alert(result.msg);
+            }
+        },function(){
+            alert('Error. Internal server.');
+        });
     };
 
     $scope.close = function () {
