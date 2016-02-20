@@ -44,6 +44,16 @@ Route::group(['middleware' => 'web'], function () {
 	Route::post('editUser', 'UserController@update');
 	Route::delete('deleteUser/{id}', 'UserController@delete');
 });
+
+
+Route::get('fetchProj', 'ProjectController@fetch');
+Route::get('projects', array('as' => 'projects', 'uses' => 'ProjectController@index'));
+Route::get('showProj', 'ProjectController@showModal');
+Route::post('projects', 'ProjectController@store');
+Route::post('projects/update', 'ProjectController@update');
+Route::get('projects/details/{id}', 'ProjectController@retrieve');
+Route::delete('projects/{id}', 'ProjectController@delete');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes

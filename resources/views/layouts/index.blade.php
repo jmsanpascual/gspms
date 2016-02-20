@@ -98,6 +98,9 @@
                     <li>
                       <a href="{{ route('allocate-budget.project') }}">Allocate Budget</a>
                     </li>
+                    <li>
+                      <a href="{{ route('projects') }}">View List</a>
+                    </li>
                 </ul>
               </li>
             </ul>
