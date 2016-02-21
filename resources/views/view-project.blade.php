@@ -58,6 +58,7 @@
 {!! HTML::script('js/services/project-status.js') !!}
 {!! HTML::script('js/services/program.js') !!}
 {!! HTML::script('js/services/project.js') !!}
+{!! HTML::script('js/services/user.js') !!}
 {!! HTML::script('js/controllers/dynamic-element.js') !!}
 {!! HTML::script('js/controllers/project.js') !!}
 @endsection

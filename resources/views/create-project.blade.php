@@ -46,10 +46,8 @@
                       <div class="form-group">
                           <label class="col-sm-3 control-label">Champion</label>
                           <div class="col-sm-6">
-                            <select class="form-control input-sm" ng-model="project.champion_id">
-                                <option value="1">Champion User 1</option>
-                                <option value="2">Champion User 2</option>
-                                <option value="3">Carbon User 3</option>
+                            <select ng-model="champion" class="form-control input-sm"
+                             ng-options="user.fullName | titlecase for user in users">
                             </select>
                           </div>
                       </div>
@@ -135,6 +133,7 @@
 {!! HTML::script('js/services/project-status.js') !!}
 {!! HTML::script('js/services/program.js') !!}
 {!! HTML::script('js/services/project.js') !!}
+{!! HTML::script('js/services/user.js') !!}
 {!! HTML::script('js/controllers/dynamic-element.js') !!}
 {!! HTML::script('js/controllers/project.js') !!}
 @endsection

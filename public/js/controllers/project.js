@@ -1,13 +1,20 @@
 'use strict'
 var projectCtrl = angular.module('project.controller', [
+    'user.service',
     'project.service',
     'program.service',
     'projectStatus.service',
     'dynamicElement'
 ]);
 
-projectCtrl.controller('ProjectCtrl', function ($scope, Project, ProgramRestApi, ProjectStatusRestApi) {
+projectCtrl.controller('ProjectCtrl', function ($scope, User, Project, ProgramRestApi, ProjectStatusRestApi) {
     $scope.projects = {};
+
+    User.getUsers().then(function (result) {
+        console.log('Users:', result.users);
+        $scope.users = result.users;
+        $scope.champion = $scope.users[0];
+    });
 
     Project.getProjects().then(function (projects) {
         console.log('Projects:', projects);
