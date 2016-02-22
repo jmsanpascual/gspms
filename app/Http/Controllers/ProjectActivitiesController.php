@@ -38,4 +38,10 @@ class ProjectActivitiesController extends Controller
 
     	return array($data);
     }
+
+    public function show()
+    {
+        return view('modals/project-activities');
+    }
+
 }

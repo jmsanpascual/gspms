@@ -47,7 +47,7 @@ Route::get('projects/view-project', array('as' => 'view.project', function () {
 Route::get('projects/view-project2', array('as' => 'view.project2', function () {
   return view('projects');
 }));
-
+Route::get('projects/fetch/{id}', 'ProjectController@fetchProj');
 Route::post('projects/update', 'ProjectController@update');
 Route::resource('projects', 'ProjectController');
 

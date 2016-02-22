@@ -26,7 +26,7 @@ class ProjectController extends Controller
             Log::info($proj);
             $data['proj'] = App\Projects::JoinStatus()
                         ->select($proj . '.name',  $proj . '.start_date', $proj . '.end_date', 
-                            $stat . '.name AS status', 'total_budget')
+                            $stat . '.name AS status', 'total_budget', $proj . '.id')
                         ->get();
             $status = TRUE;
         }
@@ -47,10 +47,30 @@ class ProjectController extends Controller
 
     public function show()
     {
-        $data['action'] = 'Add';
-        return view('modals/projects', $data);
+        return view('modals/projects');
     }
 
+    public function fetchProj($id)
+    {
+        $status = FALSE;
+        $msg = '';
+        try
+        {
+            $data['proj'] = App\Projects::select('id', 'name', 'start_date','end_date', 'objective', 
+                'total_budget', 'champion_id', 'program_id', 'proj_status_id', 'resource_person_id',
+                'partner_organization', 'partner_community')
+            ->where('id', $id)->first();
+            $status = TRUE;
+        }
+        catch(Exception $e)
+        {
+            $msg = $e->getMessage();
+        }
+        $data['status'] = $status;
+        $data['msg'] = $msg;
+
+        return Response::json($data);
+    }
     // public function index()
     // {
     //     try {
@@ -90,7 +110,14 @@ class ProjectController extends Controller
         try
         {
             // $request
-            
+            Log::info('update');
+            Log::info($request);
+            $id = $request['id'];
+            $upd_arr = $request;
+            unset($upd_arr['id']);
+            App\Projects::where('id', $id)->update($upd_arr);
+
+            // $data['proj']
             $status = TRUE;
         }
         catch(Exception $e)

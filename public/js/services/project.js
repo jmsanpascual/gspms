@@ -18,15 +18,31 @@ projectService.factory('Project', function (ProjRestApi) {
             return response;
         });
     };
-    
+
+    var fetchProject = function(params) {
+
+        return ProjRestApi.fetchProj(params).$promise.then(function(response){
+            return response;
+        });
+    };
+
     return {
         getProjects: getProjects,
-        addProject: addProject
+        addProject: addProject,
+        fetchProject : fetchProject
     };
 });
 
 projectService.factory('ProjRestApi', function ($resource) {
-    var restApi = $resource('../projects/:id', {id:'@id'});
+    var restApi = $resource('../projects/:id', {id:'@id'},
+        {
+            fetchProj: {
+                method: 'GET',
+                params: '@id',
+                url: '../projects/fetch/:id'
+            }
+
+        });
 
     return restApi;
 });

@@ -137,7 +137,7 @@ projectCtrl.controller('ProjectCtrl', function ($scope, User, Project, ProgramRe
         DTColumnBuilder.newColumn('start_date').withTitle('Start Date'),
         DTColumnBuilder.newColumn('end_date').withTitle('End Date'),
         DTColumnBuilder.newColumn('total_budget').withTitle('Total Budget'),
-        DTColumnBuilder.newColumn('total_budget').withTitle('Status'),
+        DTColumnBuilder.newColumn('status').withTitle('Status'),
         DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable()
             .renderWith(actionsHtml)
     ];
@@ -175,7 +175,8 @@ projectCtrl.controller('ProjectCtrl', function ($scope, User, Project, ProgramRe
         }
         //fetch url fix it
         // var data = {id : };
-        Project.fetchProject().then(function(result){
+        console.log(proj);
+        Project.fetchProject({id : proj.id}).then(function(result){
             if(result.status)
             {
                 attr.proj = result.proj;

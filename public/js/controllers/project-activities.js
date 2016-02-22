@@ -39,57 +39,20 @@ projActCtrl.controller('projActDTCtrl', function($scope, $compile, DTOptionsBuil
     {
       alert('activities add');
         var attr = {
-            size: 'lg',
-            templateUrl : 'project_activities',
-            saveUrl: 'project_activities/update',
+            size: 'md',
+            templateUrl : '../project-activities/project-activities',
+            saveUrl: '../project-activities',
             action: 'Add'
         };
-
-        // console.log('proj');
-        // console.log(proj);
-
-        // var openModal = function(attr){
             var modal = defaultModal.showModal(attr);
 
-        //     // when the modal opens
-        //     modal.result.then(function(data){
-        //         console.log(data);
-        //         console.log('updating');
-        //         // adding of user
-        //         // reqDef.post('editUser',data.users).then(function(result){
-        //         //     if(result.status){
-        //                 vm.dtInstance.reloadData(); // update datatable here
-        //             // }
-        //             // else
-        //             // {
-        //             //     //error
-
-        //             // }
-        //         // });
-        //     });
-        // }
-        // call open modal
-        // showUserDetails
-        // reqDef.get('project_activities/details/' + padtc.id).then(function(result){
-        //     console.log(result);
-        //     // console.log('show user details');
-        //     // if(result.roles != undefined)
-        //     //     attr.roles = result.roles;
-
-        //     // if(result.users != undefined)
-        //     //     attr.users = result.users;
-
-        //     openModal(attr);
-        // }, function(err){
-        //     openModal(attr);
-        // });
     }
 
     function edit(attr) {
         var attr = {
-            size: 'lg',
-            templateUrl : 'showProj',
-            saveUrl: 'project_activities/update'
+            size: 'md',
+            templateUrl : 'project_activities',
+            saveUrl: '../project_activities/update'
         };
 
         console.log('proj');

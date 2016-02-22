@@ -1,7 +1,7 @@
 @extends('layouts.defaultModal')
 
 @section('title')
-	{{$action}} Project
+	@{{ submitData.action}} Project
 @stop
 @section('modal-content')
 	<form role="form" id = "projForm">
