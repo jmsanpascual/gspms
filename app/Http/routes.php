@@ -23,10 +23,6 @@ Route::get('create.account', array('as' => 'create.account', function () {
   return view('create-account');
 }));
 
-Route::get('create.project', array('as' => 'create.project', function () {
-  return view('create-project');
-}));
-
 Route::get('allocate-budget.project', array('as' => 'allocate-budget.project', function () {
   return view('allocate-budget-project');
 }));
@@ -39,6 +35,27 @@ Route::get('addUser', 'UserController@showModal');
 Route::post('addUser', 'UserController@create');
 
 Route::get('getRoles', 'UserController@getRoles');
+Route::get('showUserDetails', 'UserController@getRoles');
+
+Route::get('user/getChampion', 'UserController@getChampion');
+Route::get('user/getResourcePerson', 'UserController@getResourcePerson');
+Route::resource('user', 'UserController');
+// RESTful resource route for Projects
+Route::get('/projects/view-project', array('as' => 'view.project', function () {
+  return view('projects');
+}));
+
+Route::post('projects/update', 'ProjectController@update');
+Route::resource('projects', 'ProjectController');
+
+Route::resource('project-activities', 'ProjectActivitiesController');
+
+// RESTful resource route for Programs
+Route::resource('programs', 'ProgramController');
+
+// RESTful resource route for Project Status
+Route::resource('project-status', 'ProjectStatusController');
+
 Route::group(['middleware' => 'web'], function () {
 	Route::get('showUserDetails/{id}', 'UserController@retrieveUser');
 	Route::post('editUser', 'UserController@update');
@@ -46,13 +63,6 @@ Route::group(['middleware' => 'web'], function () {
 });
 
 
-Route::get('fetchProj', 'ProjectController@fetch');
-Route::get('projects', array('as' => 'projects', 'uses' => 'ProjectController@index'));
-Route::get('showProj', 'ProjectController@showModal');
-Route::post('projects', 'ProjectController@store');
-Route::post('projects/update', 'ProjectController@update');
-Route::get('projects/details/{id}', 'ProjectController@retrieve');
-Route::delete('projects/{id}', 'ProjectController@delete');
 
 /*
 |--------------------------------------------------------------------------

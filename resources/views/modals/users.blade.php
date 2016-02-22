@@ -1,7 +1,7 @@
 @extends('layouts.defaultModal')
 
 @section('title')
-	{{$action}} Users
+	@{{submitData.action}} User
 @stop
 @section('modal-content')
 	<form role="form" id = "userForm">
@@ -14,7 +14,7 @@
 				<div class = "col-md-12">
 				<label class = "form-label col-md-3">Username</label>
 				<div class = "col-md-6">
-					<input type = "text" ng-model = "submitData.users.username">
+					<input type = "text" class = "form-control" ng-model = "submitData.users.username">
 				</div>
 			</div>
 			</div>
@@ -24,7 +24,7 @@
 				<div class = "col-md-12">
 				<label class = "form-label col-md-3">Password</label>
 				<div class = "col-md-6">
-					<input type = "password" ng-model = "submitData.users.password">
+					<input type = "password" class = "form-control" ng-model = "submitData.users.password">
 				</div>
 			</div>
 			</div>
@@ -35,7 +35,7 @@
 				<div class = "col-md-12">
 				<label class = "form-label col-md-3">Confirm Password</label>
 				<div class = "col-md-6">
-					<input type = "password" ng-model = "submitData.users.repassword">
+					<input type = "password" class = "form-control" ng-model = "submitData.users.repassword">
 				</div>
 			</div>
 			</div>
@@ -60,7 +60,7 @@
 				<div class = "col-md-12">
 				<label class = "form-label col-md-3">First Name</label>
 				<div class = "col-md-6">
-					<input type = "text" ng-model = "submitData.users.fname">
+					<input type = "text" class = "form-control" ng-model = "submitData.users.fname">
 				</div>
 			</div>
 			</div>
@@ -70,7 +70,7 @@
 				<div class = "col-md-12">
 				<label class = "form-label col-md-3">Middle Name</label>
 				<div class = "col-md-6">
-					<input type = "text" ng-model = "submitData.users.mname">
+					<input type = "text" class = "form-control" ng-model = "submitData.users.mname">
 				</div>
 			</div>
 			</div>
@@ -80,7 +80,7 @@
 				<div class = "col-md-12">
 				<label class = "form-label col-md-3">Last Name</label>
 				<div class = "col-md-6">
-					<input type = "text" ng-model = "submitData.users.lname">
+					<input type = "text" class = "form-control" ng-model = "submitData.users.lname">
 				</div>
 			</div>
 			</div>
@@ -90,7 +90,7 @@
 				<div class = "col-md-12">
 				<label class = "form-label col-md-3">Email</label>
 				<div class = "col-md-6">
-					<input type = "text" ng-model = "submitData.users.email">
+					<input type = "text" class = "form-control" ng-model = "submitData.users.email">
 				</div>
 			</div>
 			</div>
@@ -100,7 +100,7 @@
 				<div class = "col-md-12">
 				<label class = "form-label col-md-3">Contact Number</label>
 				<div class = "col-md-6">
-					<input type = "text" ng-model = "submitData.users.cnum">
+					<input type = "text" class = "form-control" ng-model = "submitData.users.cnum">
 				</div>
 			</div>
 			</div>
@@ -110,7 +110,7 @@
 				<div class = "col-md-12">
 				<label class = "form-label col-md-3">Birthdate</label>
 				<div class = "col-md-6">
-					<input type = "text" ng-model = "submitData.users.bdate">
+					<input type = "text" class = "form-control" ng-model = "submitData.users.bdate">
 				</div>
 			</div>
 			</div>

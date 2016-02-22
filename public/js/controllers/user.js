@@ -39,11 +39,54 @@ users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTCo
             .renderWith(actionsHtml)
     ];
 
+    this.add = function(){
+
+        var attr = {
+            size: 'md',
+            templateUrl : 'addUser',
+            saveUrl: 'addUser',
+            action: 'Add'
+        };
+
+        var openModal = function(attr){
+            var userModal = defaultModal.showModal(attr);
+
+            // when the modal opens
+            userModal.result.then(function(data){
+                console.log(data);
+                console.log('added');
+                // adding of user
+                // reqDef.post('addUser',data.users).then(function(result){
+                //     if(result.status){
+                //         //success
+                //     }
+                //     else
+                //     {
+                //         //error
+
+                //     }
+                // });
+            });
+        }
+        // call open modal
+        reqDef.get('getRoles').then(function(result){
+            if(result.roles != undefined)
+                attr.roles = result.roles;
+
+            openModal(attr);
+        }, function(err){
+            openModal(attr);
+        });
+
+        
+    }
+
     function edit(person) {
         var attr = {
             size: 'md',
             templateUrl : 'addUser',
-            saveUrl: 'editUser'
+            saveUrl: 'editUser',
+            action: 'Edit'
         };
 
         console.log('person');
@@ -132,46 +175,46 @@ users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTCo
 });
 
 users.controller('userCtrl', function($scope,defaultModal, reqDef){
-    $scope.users = {};
-    $scope.add = function(){
+    // $scope.users = {};
+    // $scope.add = function(){
 
-        var attr = {
-            size: 'md',
-            templateUrl : 'addUser',
-            saveUrl: 'addUser'
-        };
+    //     var attr = {
+    //         size: 'md',
+    //         templateUrl : 'addUser',
+    //         saveUrl: 'addUser'
+    //     };
 
-        var openModal = function(attr){
-            var userModal = defaultModal.showModal(attr);
+    //     var openModal = function(attr){
+    //         var userModal = defaultModal.showModal(attr);
 
-            // when the modal opens
-            userModal.result.then(function(data){
-                console.log(data);
-                console.log('added');
-                // adding of user
-                // reqDef.post('addUser',data.users).then(function(result){
-                //     if(result.status){
-                //         //success
-                //     }
-                //     else
-                //     {
-                //         //error
+    //         // when the modal opens
+    //         userModal.result.then(function(data){
+    //             console.log(data);
+    //             console.log('added');
+    //             // adding of user
+    //             // reqDef.post('addUser',data.users).then(function(result){
+    //             //     if(result.status){
+    //             //         //success
+    //             //     }
+    //             //     else
+    //             //     {
+    //             //         //error
 
-                //     }
-                // });
-            });
-        }
-        // call open modal
-        reqDef.get('getRoles').then(function(result){
-            if(result.roles != undefined)
-                attr.roles = result.roles;
+    //             //     }
+    //             // });
+    //         });
+    //     }
+    //     // call open modal
+    //     reqDef.get('getRoles').then(function(result){
+    //         if(result.roles != undefined)
+    //             attr.roles = result.roles;
 
-            openModal(attr);
-        }, function(err){
-            openModal(attr);
-        });
+    //         openModal(attr);
+    //     }, function(err){
+    //         openModal(attr);
+    //     });
 
         
-    };
+    // };
 
 });

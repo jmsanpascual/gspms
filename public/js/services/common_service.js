@@ -122,19 +122,25 @@ common.controller('defaultModalInstanceCtrl', function ($scope, $uibModalInstanc
     console.log('attr');
     console.log(attr);
     $scope.submitData = (attr != undefined) ? attr : {};
-    $scope.save = function (url) {
-        // console.log(deleteAttr.deleteKey);
-        // console.log(deleteAttr.deleteName);
-        // $uibModalInstance.close(attr.item);
-        // angular.element(document.getElementById('userForm')).trigger('submit');
-        // document.getElementById('userForm').submit();
-        // $uibModalInstance.close($scope.submitData);
-        $http.post($scope.submitData.saveUrl, $scope.submitData).then(function(result){
+    $scope.save = function (formData) {
+        console.log('formdata',formData);
+        var data = (formData == undefined) ? $scope.submitData : $scope.submitData[formData];
+        $http.post($scope.submitData.saveUrl, data).then(function(result){
             result = result.data;
             if(result.status)
             {
-                $uibModalInstance.close(result);
-                alert(result.msg);
+                if(attr.keepOpen == undefined)
+                {
+                    $uibModalInstance.close(result);
+                }
+                else
+                {
+                    console.log(result[formData]);
+                    $scope.submitData[formData] = result[formData];
+                    if(result.saveUrl != undefined)
+                        $scope.submitData['saveUrl'] = result.saveUrl; // make the url update
+                }
+                // alert(result.msg);
             }
             else
             {

@@ -9,7 +9,7 @@ use Request;
 use Hash;
 use Auth;
 use Lang;
-
+use Response;
 class UserController extends Controller
 {
 
@@ -21,6 +21,52 @@ class UserController extends Controller
     public function index()
     {
         return view('users');
+    }
+
+    public function getResourcePerson()
+    {
+        $status = FALSE;
+        $msg = '';
+        try
+        {
+            $user_info = (new App\UserInfo)->getTable();
+            $personal_info = (new App\PersonalInfo)->getTable();
+            $data['resource_persons'] = App\PersonalInfo::joinUserInfo()->whereNull($user_info.'.user_id')
+                                ->select($personal_info . '.id', 
+                                    DB::raw('CONCAT(last_name,", ",first_name, " ",middle_name) AS name'))->get();
+            $status = TRUE;
+        }
+        catch(Exception $e)
+        {
+            $msg = $e->getMessage();
+        }
+        $data['status'] = $status;
+        $data['msg'] = $msg;
+
+        return Response::json($data);
+    }
+
+    public function getChampion()
+    {
+        $status = FALSE;
+        $msg = '';
+        try
+        {
+            $personal_info = (new App\PersonalInfo)->getTable();
+            $data['champions'] = App\User::joinUserRole()->joinPersonalInfo()
+                                ->where('role_id', config('constants.role_champion'))
+                                ->select($personal_info . '.id', 
+                                    DB::raw('CONCAT(last_name,", ",first_name, " ",middle_name) AS name'))->get();
+            $status = TRUE;
+        }
+        catch(Exception $e)
+        {
+            $msg = $e->getMessage();
+        }
+        $data['status'] = $status;
+        $data['msg'] = $msg;
+
+        return Response::json($data);
     }
 
     public function getRoles()
@@ -103,10 +149,9 @@ class UserController extends Controller
         return json_encode($data);
     }
 
-    public function showModal($action = 'Add')
+    public function showModal()
     {
-        $data['action'] = $action;
-        return view('modals/users', $data);
+        return view('modals/users');
     }
 
     // single user

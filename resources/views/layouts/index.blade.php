@@ -13,24 +13,24 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <!-- Favicon -->
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <!-- Bootstrap core CSS -->
     {!! HTML::style('css/bootstrap/css/bootstrap.min.css'); !!}
     <!-- {!! HTML::style('css/bootstrap/css/bootstrap-theme.min.css'); !!} --> <!-- Conflict sa template main.css -->
     {!! HTML::style('css/angular-datatable.css') !!}
     {!! HTML::style('js/others/datatable/media/css/jquery.dataTables.min.css'); !!}
     <!-- Font Icons -->
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/simple-line-icons.css">
+    {!! HTML::style('css/font-awesome.min.css'); !!}
+    {!! HTML::style('css/simple-line-icons.css'); !!}
     <!-- CSS Animate -->
-    <link rel="stylesheet" href="css/animate.css">
+    {!! HTML::style('css/animate.css'); !!}
     <!-- Custom styles for this theme -->
-    <link rel="stylesheet" href="css/main.css">
+    {!! HTML::style('css/main.css'); !!}
     <!-- Fonts -->
     <!-- <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900,300italic,400italic,600italic,700italic,900italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     --> <!-- Feature detection -->
-    <script src="js/modernizr-2.6.2.min.js"></script>
+    {!! HTML::script('js/modernizr-2.6.2.min.js') !!}
     @yield('css')
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -55,7 +55,7 @@
             <div class="user-nav">
                 <ul>
                     <li class="profile-photo">
-                        <img src="img/avatar.png" alt="" class="img-circle">
+                        <img src="{{ asset('img/avatar.png') }}" alt="" class="img-circle">
                     </li>
                     <li class="dropdown settings">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -93,13 +93,13 @@
                 </a>
                 <ul class="nav-sub">
                     <li>
-                      <a href="{{ route('create.project') }}">Create Proposal</a>
+                      <a href="{{ route('view.project') }}">View Projects</a>
+                    </li>
+                    <li>
+                      <a href="{{ route('projects.create') }}">Create Proposal</a>
                     </li>
                     <li>
                       <a href="{{ route('allocate-budget.project') }}">Allocate Budget</a>
-                    </li>
-                    <li>
-                      <a href="{{ route('projects') }}">View List</a>
                     </li>
                 </ul>
               </li>
@@ -119,17 +119,17 @@
     <!-- // <script src="js/jquery-1.10.2.min.js"></script> -->
 
     {!! HTML::script('js/others/jquery-1.12.0.min.js') !!}
-    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script src="plugins/navgoco/jquery.navgoco.min.js"></script>
-    <script src="plugins/waypoints/waypoints.min.js"></script>
-    <script src="js/application.js"></script>
+    {!! HTML::script('plugins/bootstrap/js/bootstrap.min.js') !!}
+    {!! HTML::script('plugins/navgoco/jquery.navgoco.min.js') !!}
+    {!! HTML::script('plugins/waypoints/waypoints.min.js') !!}
+    {!! HTML::script('js/application.js') !!}
     {!! HTML::script('js/others/datatable/media/js/jquery.dataTables.min.js') !!}
     {!! HTML::script('js/vendor/node_modules/angular/angular.min.js') !!}
     {!! HTML::script('js/vendor/node_modules/angular-resource/angular-resource.min.js') !!}
     {!! HTML::script('js/vendor/node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js') !!}
     {!! HTML::script('js/others/angular-datatable.min.js') !!}
     {!! HTML::script('js/services/common_service.js') !!}
-    
+
     @yield('scripts')
 
 </body>

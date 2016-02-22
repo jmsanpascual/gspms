@@ -26,10 +26,23 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    // public function scopejoinUserInfo()
-    // {
-    //     $user_info = (new UserInfo)->getTable();
-    //     return leftJoin($user_info . ' AS pi', 
-    //             'users.id', '=', $user_info . '.user_id');
-    // }
+    public function scopejoinUserInfo($query)
+    {
+        $user_info = (new UserInfo)->getTable();
+        return $query->leftJoin($user_info, $this->getTable() . '.id', '=', $user_info . '.user_id');
+    }
+
+    public function scopejoinPersonalInfo($query)
+    {
+        $user_info = (new UserInfo)->getTable();
+        $personal_info = (new PersonalInfo)->getTable();
+        return $query->leftJoin($user_info, $this->getTable() . '.id', '=', $user_info . '.user_id')
+                ->leftJoin($personal_info, $user_info . '.personal_info_id', '=', $personal_info . '.id');
+    }
+
+    public function scopejoinUserRole($query)
+    {
+        $user_role = (new UserRoles)->getTable();
+        return $query->leftJoin($user_role, $this->getTable() . '.id', '=', $user_role . '.user_id');
+    }
 }

@@ -25,9 +25,9 @@
                       <i class="fa fa-times"></i>
                   </div>
               </div>
-              <div class="panel-body" ng-controller="userCtrl">
-                    <button class = "btn btn-success pull-right" ng-click = "add()"> Add User</button>
-                <div ng-controller="userDTCtrl as showCase">
+              <div class="panel-body" ng-controller="userDTCtrl as showCase">
+                    <button class = "btn btn-success pull-right" ng-click = "showCase.add()"> Add User</button>
+                <div >
                   <p class="text-danger"><strong>@{{ showCase.message }}</strong></p>
                   <br>
                   <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" dt-instance="showCase.dtInstance" class="table table-hover row-border hover">
