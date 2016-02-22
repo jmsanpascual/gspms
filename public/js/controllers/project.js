@@ -4,21 +4,68 @@ var projectCtrl = angular.module('project.controller', [
    'program.service',
    'projectStatus.service',
    'dynamicElement',
+   'user.service',
    'datatables',
    'common.service', 
    'ui.bootstrap',
    'project.activites.controller',
-   'user.service'
  ]);
 
-projectCtrl.controller('projDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnBuilder, 
-    reqDef, defaultModal, Project, ProgramRestApi, ProjectStatusRestApi, UserRestApi) {
+
+projectCtrl.controller('ProjectCtrl', function ($scope, User, Project, ProgramRestApi, ProjectStatusRestApi) {
+    $scope.projects = {};
+
+    User.getUsers().then(function (result) {
+        console.log('Users:', result.users);
+        $scope.users = result.users;
+        $scope.champion = $scope.users[0];
+    });
+
+    Project.getProjects().then(function (projects) {
+        console.log('Projects:', projects);
+        $scope.projects = projects;
+    });
+
+    // instantiate program
+    ProgramRestApi.query().$promise.then(function (programs) {
+       var result = programs[0];
+       console.log('Programs:', result);
+       if(result.status)
+       {
+          $scope.program = result.program;
+       }
+       else
+       {
+        console.log(result.msg);
+       }
+    });
+
+    // instantiate project status
+    ProjectStatusRestApi.query().$promise.then(function (projectStatus) {
+       var result = projectStatus[0];
+       console.log('Project Status:', result);
+       if(result.status)
+       {
+          $scope.status = result.projectStatus;
+       }
+       else
+       {
+          console.log(result.msg);
+       }
+    });
+    
+
+  });
+
+  projectCtrl.controller('projDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnBuilder, 
+  reqDef, defaultModal, Project, ProgramRestApi, ProjectStatusRestApi, UserRestApi) {
     var vm = this;
     vm.message = '';
     vm.edit = edit;
     vm.delete = deleteRow;
     vm.dtInstance = {};
     vm.projects = {};
+
 
     // instantiate program
     ProgramRestApi.query().$promise.then(function (programs) {
@@ -127,7 +174,7 @@ projectCtrl.controller('projDTCtrl', function($scope, $compile, DTOptionsBuilder
           var modal = defaultModal.showModal(attr); 
         }
         //fetch url fix it
-        var data = {id : };
+        // var data = {id : };
         Project.fetchProject().then(function(result){
             if(result.status)
             {

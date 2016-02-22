@@ -40,6 +40,11 @@ class ProjectController extends Controller
         return array($data);
     }
 
+    public function create()
+    {
+        return view('create-project');
+    }
+
     public function show()
     {
         $data['action'] = 'Add';

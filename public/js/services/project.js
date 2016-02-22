@@ -7,7 +7,6 @@ projectService.factory('Project', function (ProjRestApi) {
 
     var getProjects = function () {
         return ProjRestApi.query().$promise.then(function (projects) {
-            // projects = cleanRestResponse(projects);
             return projects;
         });
     };
@@ -19,18 +18,7 @@ projectService.factory('Project', function (ProjRestApi) {
             return response;
         });
     };
-
-    var fetchProject = function(params) {
-
-        return ProjRestApi.get(params).$promise.then(function(response){
-            return response;
-        });
-    };
-
-    var cleanRestResponse = function (obj) {
-        return JSON.parse(angular.toJson(obj));
-    };
-
+    
     return {
         getProjects: getProjects,
         addProject: addProject

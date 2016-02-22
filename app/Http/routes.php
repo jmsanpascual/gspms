@@ -41,7 +41,10 @@ Route::get('user/getChampion', 'UserController@getChampion');
 Route::get('user/getResourcePerson', 'UserController@getResourcePerson');
 Route::resource('user', 'UserController');
 // RESTful resource route for Projects
-Route::get('/projects/view-project', array('as' => 'view.project', function () {
+Route::get('projects/view-project', array('as' => 'view.project', function () {
+  return view('view-project');
+}));
+Route::get('projects/view-project2', array('as' => 'view.project2', function () {
   return view('projects');
 }));
 
@@ -57,9 +60,9 @@ Route::resource('programs', 'ProgramController');
 Route::resource('project-status', 'ProjectStatusController');
 
 Route::group(['middleware' => 'web'], function () {
-	Route::get('showUserDetails/{id}', 'UserController@retrieveUser');
-	Route::post('editUser', 'UserController@update');
-	Route::delete('deleteUser/{id}', 'UserController@delete');
+    Route::get('showUserDetails/{id}', 'UserController@retrieveUser');
+    Route::post('editUser', 'UserController@update');
+    Route::delete('deleteUser/{id}', 'UserController@delete');
 });
 
 
