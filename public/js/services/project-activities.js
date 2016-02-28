@@ -6,5 +6,12 @@ projectActivitiesService.factory('ProjectActivities', function(ProjectActivities
 });
 
 projectActivitiesService.factory('ProjectActivitiesRestApi', function ($resource) {
-    return $resource('../project-activities/:activity_id', {activity_id : '@activity_id'});
+    return $resource('../project-activities/:activity_id', {activity_id : '@activity_id'},
+    	{
+    		fetchDetails : {
+    			method : 'GET',
+    			url : '../project-activities/details/:proj_id/:id',
+				params : {id : '@id', proj_id : '@proj_id'} 
+    		}
+    	});
 });

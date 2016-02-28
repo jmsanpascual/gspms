@@ -9,8 +9,14 @@ use App\Http\Controllers\Controller;
 use App;
 use Response;
 use Log;
+use DB;
 class ProjectController extends Controller
 {
+
+    public function __construct()
+    {
+        DB::connection()->enableQueryLog();
+    }
 
     public function index()
     {
@@ -25,8 +31,10 @@ class ProjectController extends Controller
             Log::info('line 24 - - - -');
             Log::info($proj);
             $data['proj'] = App\Projects::JoinStatus()
-                        ->select($proj . '.name',  $proj . '.start_date', $proj . '.end_date', 
-                            $stat . '.name AS status', 'total_budget', $proj . '.id')
+                        ->select($proj . '.name', $stat . '.name AS status', $proj . '.id', 
+                        'start_date','end_date', 'objective', 'total_budget', 'champion_id', 
+                        'program_id', 'proj_status_id', 'resource_person_id', 'partner_organization',
+                        'partner_community')
                         ->get();
             $status = TRUE;
         }
@@ -92,7 +100,10 @@ class ProjectController extends Controller
             Log::info('project');
             Log::info($project);
             $project['id'] = App\Project::insertGetId($project);
+            // get status name
+            $stat_name = App\ActivityStatus::where('id', $project['proj_status_id'])->value('name');
             $data['proj'] = $project;
+            $data['proj']['status'] = $stat_name;
             $status = TRUE;
        } catch (Exception $e) {
             $msg = $e->getMessage();
@@ -109,15 +120,16 @@ class ProjectController extends Controller
         $msg = '';
         try
         {
-            // $request
+            $request = $request->all();
             Log::info('update');
             Log::info($request);
             $id = $request['id'];
             $upd_arr = $request;
             unset($upd_arr['id']);
+            unset($upd_arr['status']);
             App\Projects::where('id', $id)->update($upd_arr);
 
-            // $data['proj']
+            $data['proj'] = $request;
             $status = TRUE;
         }
         catch(Exception $e)
@@ -127,6 +139,30 @@ class ProjectController extends Controller
         $data['status'] = $status;
         $data['msg'] = $msg;
 
+        return Response::json($data);
+    }
+
+    public function destroy($id)
+    {
+        $msg = '';
+        $status = FALSE;
+        try
+        {
+            Log::info($id);
+            DB::beginTransaction();
+
+            App\Projects::where('id', $id)->delete();
+            // DB::rollback();
+            DB::commit();
+            $status = TRUE;
+        }
+        catch(Exception $e)
+        {
+            $msg = $e->getMessage();
+        }
+        Log::info(json_encode(DB::getQueryLog()));
+        $data['msg'] = $msg;
+        $data['status'] = $status;
         return Response::json($data);
     }
 }

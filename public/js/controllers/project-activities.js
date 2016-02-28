@@ -1,120 +1,116 @@
 'use strict'
-var projActCtrl = angular.module('project.activites.controller', ['projectActivities.service', 'datatables', 'common.service', 'ui.bootstrap']);
+angular.module('project.activites.controller', 
+    [
+    'projectActivities.service', 
+    'datatables', 
+    'common.service', 
+    'ui.bootstrap',
+    'activityStatus.service'
+    ])
   
-projActCtrl.controller('projActDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnBuilder, 
-    reqDef, defaultModal, ProjectActivitiesRestApi) {
-    $scope.proj_id = 1; //declared in modals/projects.blade.php
+.controller('projActDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder, 
+    reqDef, defaultModal, ProjectActivitiesRestApi, activityStatusRestApi) {
+    // $scope.proj_id = 1; //declared in modals/projects.blade.php
     var vm = this;
     vm.message = '';
     vm.edit = edit;
     vm.delete = deleteRow;
     vm.dtInstance = {};
-    vm.project_activities = {};
+    vm.project_activities = [];
+
+    $scope.getProjActivities = function(proj_id)
+    {
+        ProjectActivitiesRestApi.query({proj_id : $scope.proj_id}).$promise.then(function (result) {
+           result = result[0];
+          if (result.status) {
+              console.log('proj');
+              console.log(result.proj);
+              vm.project_activities =  result.proj_activities;
+          } else {
+              alert('Unable to load datatable');
+          }
+       });
+    }
+
+    $scope.status = {};
+
+    activityStatusRestApi.query().$promise.then(function(result){
+        var result = result[0];
+        if(result.status)
+        {
+            $scope.status = result.activity_status;
+        }
+        else
+        {
+            alert(result.status);
+        }
+    });
 
     // .fromSource('js/controllers/data.json')
-    vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
-            return ProjectActivitiesRestApi.query({proj_id : $scope.proj_id}).$promise.then(function (result) {
-                       result = result[0];
-                      if (result.status) {
-                          console.log('proj');
-                          console.log(result.proj);
-                          return result.proj_activities;
-                      } else {
-                          alert('Unable to load datatable');
-                      }
+    vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
 
-                   });
-       }).withPaginationType('full_numbers')
-        .withOption('createdRow', createdRow);
-
-    vm.dtColumns = [
-        DTColumnBuilder.newColumn('name').withTitle('Activity Name'),
-        DTColumnBuilder.newColumn('start_date').withTitle('Start Date'),
-        DTColumnBuilder.newColumn('end_date').withTitle('End Date'),
-        DTColumnBuilder.newColumn('total_budget').withTitle('Status'),
-        DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable()
-            .renderWith(actionsHtml)
+    vm.dtColumnDefs = [
+        DTColumnDefBuilder.newColumnDef(0),
+        DTColumnDefBuilder.newColumnDef(1),
+        DTColumnDefBuilder.newColumnDef(2),
+        DTColumnDefBuilder.newColumnDef(3),
+        DTColumnDefBuilder.newColumnDef(4).notSortable()
     ];
+
+
     this.add = function()
     {
-      alert('activities add');
         var attr = {
             size: 'md',
             templateUrl : '../project-activities/project-activities',
             saveUrl: '../project-activities',
-            action: 'Add'
+            action: 'Add',
+            status : $scope.status,
+            projAct : {proj_id : $scope.proj_id}
+
         };
-            var modal = defaultModal.showModal(attr);
+        
+        defaultModal.showModal(attr).result.then(function(data){
+            console.log(data);
+            vm.project_activities.push(data.projAct);
+        });      
 
     }
 
-    function edit(attr) {
+    function edit(index, act) {
         var attr = {
             size: 'md',
-            templateUrl : 'project_activities',
-            saveUrl: '../project_activities/update'
+            templateUrl : '../project-activities/project-activities',
+            saveUrl: '../project-activities/update',
+            action: 'Edit',
+            status : $scope.status,
+            projAct : angular.copy(act)
         };
-
-        console.log('proj');
-        console.log(proj);
-
-        var openModal = function(attr){
-            var modal = defaultModal.showModal(attr);
-
-            // when the modal opens
-            modal.result.then(function(data){
-                console.log(data);
-                console.log('updating');
-                // adding of user
-                // reqDef.post('editUser',data.users).then(function(result){
-                //     if(result.status){
-                        vm.dtInstance.reloadData(); // update datatable here
-                    // }
-                    // else
-                    // {
-                    //     //error
-
-                    // }
-                // });
-            });
-        }
-        // call open modal
-        // showUserDetails
-        reqDef.get('project_activities/details/' + padtc.id).then(function(result){
-            console.log(result);
-            // console.log('show user details');
-            // if(result.roles != undefined)
-            //     attr.roles = result.roles;
-
-            // if(result.users != undefined)
-            //     attr.users = result.users;
-
-            openModal(attr);
-        }, function(err){
-            openModal(attr);
-        });
-
-        // Edit some data and call server to make changes...
-        // Then reload the data so that DT is refreshed
-        // vm.dtInstance.reloadData();
+        attr.projAct.proj_id = $scope.proj_id;
+        
+        defaultModal.showModal(attr).result.then(function(data){
+            console.log(data);
+            vm.project_activities.splice(index, 1, angular.copy(data.projAct));
+        });   
     }
 
-    function deleteRow(attr) {
+    function deleteRow(index, act) {
         // vm.message = 'You are trying to remove the row: ' + JSON.stringify(person);
         // Delete some data and call server to make changes...
         // Then reload the data so that DT is refreshed
         // vm.dtInstance.reloadData();
         var attr = {
-            deleteName : padtc.name,
-            deletedKey : padtc.id
+            deleteName : act.name,
+            deletedKey : act.id
         }
         var del = defaultModal.delConfirm(attr);
 
         del.result.then(function(id){
-            reqDef.delete('project_activities/'+id).then(function(result){
+            ProjectActivitiesRestApi.remove({activity_id : act.id}).$promise.then(function(result){
                 if(result.status)
                 {
                     console.log('successfully deleted');
+                    vm.project_activities.splice(index, 1);
                 }
                 else
                 {

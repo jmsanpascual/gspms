@@ -31,7 +31,34 @@
                   <button class = "btn btn-success pull-right" ng-click = "proj.add()"> Add Project</button>
                   <p class="text-danger"><strong>@{{ proj.message }}</strong></p>
                   <br>
-                  <table datatable="" dt-options="proj.dtOptions" dt-columns="proj.dtColumns" dt-instance="proj.dtInstance" class="table table-hover row-border hover">
+                  <table datatable="ng" dt-options="proj.dtOptions" dt-columns="proj.dtColumnDefs" dt-instance="proj.dtInstance" class="table table-hover row-border hover">
+                  <thead>
+                    <tr>
+                      <th>Project Title</th>
+                      <th>Start Date</th>
+                      <th>End Date</th>
+                      <th>Total Budget</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat = "data in proj.projects">
+                      <td>@{{data.name}}</td>
+                      <td>@{{data.start_date}}</td>
+                      <td>@{{data.end_date}}</td>
+                      <td>@{{data.total_budget}}</td>
+                      <td>@{{data.status}}</td>
+                      <td>
+                        <button class="btn btn-warning" ng-click="proj.edit($index, data)">
+                        <i class="fa fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger" ng-click="proj.delete($index ,data)">
+                           <i class="fa fa-trash-o"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
                   </table>
                 </div>
               </div>
@@ -47,6 +74,7 @@
 {!! HTML::script('js/services/project.js') !!}
 {!! HTML::script('js/services/project-activities.js') !!}
 {!! HTML::script('js/services/user.js') !!}
+{!! HTML::script('js/services/activity-status.js') !!}
 {!! HTML::script('js/controllers/dynamic-element.js') !!}
 {!! HTML::script('js/controllers/project.js') !!}
 {!! HTML::script('js/controllers/project-activities.js') !!}

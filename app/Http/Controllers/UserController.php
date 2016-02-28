@@ -134,6 +134,7 @@ class UserController extends Controller
             App\UserInfo::insert(['user_id' => $user_id, 'personal_info_id' => $personal_id]);
             App\UserRoles::insert(['role_id' => $input['selectedRole'], 'user_id' => $user_id]);
             DB::commit();
+            $data['users'] = $input;
             $status = TRUE;
             $msg = Lang::get('notifications.data_saved');
         }
@@ -163,13 +164,12 @@ class UserController extends Controller
         {
             $token = csrf_token();
             Log::info('token' . $token);
-            $data['roles'] = App\Roles::select('id', 'name')->get();
             $data['users'] = App\User::leftJoin('user_roles AS B', 'users.id', '=', 'B.user_id')
             ->leftJoin('user_info AS C', 'users.id', '=', 'C.user_id')
             ->leftJoin('personal_info AS D', 'C.personal_info_id', '=', 'D.id')
             ->select('users.id', 'users.username', 'B.role_id AS selectedRole', 'D.first_name AS fname',
              'D.middle_name AS mname', 'D.last_name AS lname', 'D.contact_num AS cnum',
-'D.email', 'D.address', 'D.birth_date AS bdate', DB::Raw('"'. $token . '" AS token'))
+            'D.email', 'D.address', 'D.birth_date AS bdate', DB::Raw('"'. $token . '" AS token'))
             ->where('users.id', $id)->first();
 
             $status = TRUE;
@@ -192,12 +192,15 @@ class UserController extends Controller
         $status = FALSE;
         try
         {
+            $token = csrf_token();
             // join('table_name', '')
-            $data['users'] = App\User::leftJoin('user_info AS A', 'users.id', '=', 'A.user_id')
-            ->leftJoin('personal_info AS D', 'A.personal_info_id', '=', 'D.id')->
-            select( 'users.id', 'users.username', 'D.first_name AS fname',
+            $data['users'] = App\User::leftJoin('user_roles AS B', 'users.id', '=', 'B.user_id')
+            ->leftJoin('user_info AS C', 'users.id', '=', 'C.user_id')
+            ->leftJoin('personal_info AS D', 'C.personal_info_id', '=', 'D.id')
+            ->select('users.id', 'users.username', 'B.role_id AS selectedRole', 'D.first_name AS fname',
              'D.middle_name AS mname', 'D.last_name AS lname', 'D.contact_num AS cnum',
-            'D.email', 'D.address', 'D.birth_date', DB::raw('CONCAT(D.first_name, " ", D.last_name) as fullName'))
+            'D.email', 'D.address', 'D.birth_date AS bdate', DB::Raw('"'. $token . '" AS token')
+            , DB::raw('CONCAT(D.first_name, " ", D.last_name) as fullName'))
             ->get();
             $status = TRUE;
              Log::info(json_encode(DB::getQueryLog()));
@@ -261,6 +264,7 @@ class UserController extends Controller
             ]);
             App\UserRoles::where('user_id', $input['id'])->update(['role_id' => $input['selectedRole']]);
             DB::commit();
+            $data['users'] = $input;
             $status = TRUE;
             $msg = Lang::get('notifications.data_saved');
         }

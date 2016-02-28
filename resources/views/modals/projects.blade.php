@@ -102,11 +102,36 @@
 		<div ng-if = "submitData.proj.id">
 		<h3>Activities</h3>
 		<hr>
-		 <div ng-controller="projActDTCtrl as padtc" ng-init = 'proj_id = submitData.proj.id'>
+		 <div ng-controller="projActDTCtrl as padtc" ng-init = 'proj_id = submitData.proj.id; getProjActivities(submitData.proj.id)'>
 	        <button class = "btn btn-success pull-right" ng-click = "padtc.add()"> Add Activity</button>
 	        <p class="text-danger"><strong>@{{ padtc.message }}</strong></p>
 	        <br>
-	        <table datatable="" dt-options="padtc.dtOptions" dt-columns="padtc.dtColumns" dt-instance="padtc.dtInstance" class="table table-hover row-border hover">
+	        <table datatable="ng" dt-options="padtc.dtOptions" dt-columns="padtc.dtColumnDefs" dt-instance="padtc.dtInstance" class="table table-hover row-border hover">
+	        <thead>
+	            <tr>
+	              <th>Activity Name</th>
+	              <th>Start Date</th>
+	              <th>End Date</th>
+	              <th>Status</th>
+	              <th>Actions</th>
+	            </tr>
+	          </thead>
+	          <tbody>
+	            <tr ng-repeat = "data in padtc.project_activities">
+	              <td>@{{data.name}}</td>
+	              <td>@{{data.start_date}}</td>
+	              <td>@{{data.end_date}}</td>
+	              <td>@{{data.status}}</td>
+	              <td>
+	                <button class="btn btn-warning" ng-click="padtc.edit($index, data)">
+	                <i class="fa fa-edit"></i>
+	                </button>
+	                <button class="btn btn-danger" ng-click="padtc.delete($index ,data)">
+	                   <i class="fa fa-trash-o"></i>
+	                </button>
+	              </td>
+	            </tr>
+	          </tbody>
 	        </table>
 	      </div>
 	  </div>

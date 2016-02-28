@@ -1,51 +1,60 @@
 'use strict'
 
-var users = angular.module('users', ['datatables','common.service', 'ui.bootstrap']);
+angular.module('users', ['datatables','common.service', 'ui.bootstrap', 'roles.service'])
 
-users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnBuilder, reqDef, defaultModal) {
+.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder, reqDef, defaultModal,rolesRestApi) {
     var vm = this;
     vm.message = '';
     vm.edit = edit;
     vm.delete = deleteRow;
     vm.dtInstance = {};
-    vm.persons = {};
+    vm.persons = [];
+    $scope.roles = {};
 
-    // .fromSource('js/controllers/data.json')
-    vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
-            return reqDef.get('fetchUsers').then(function(result){
+    rolesRestApi.query().$promise.then(function(result){
+        result = result[0];
+        $scope.roles = result.roles;
+    });
 
-                console.log(result);
+    reqDef.get('fetchUsers').then(function(result){
 
-                if (result.status) {
-                    // console.log('users');
-                    // console.log(result.users);
-                    return result.users;
-                } else {
-                    alert('Unable to load datatable');
-                }
+            console.log(result);
 
-            }, function(err){
+            if (result.status) {
+                // console.log('users');
+                // console.log(result.users);
+                vm.persons = result.users;
+            } else {
                 alert('Unable to load datatable');
-            });
-       }).withPaginationType('full_numbers')
-        .withOption('createdRow', createdRow);
+            }
 
-    vm.dtColumns = [
-        DTColumnBuilder.newColumn('username').withTitle('Username'),
-        DTColumnBuilder.newColumn('fname').withTitle('First NAme'),
-        DTColumnBuilder.newColumn('lname').withTitle('Last Name'),
-        DTColumnBuilder.newColumn('email').withTitle('Email'),
-        DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable()
-            .renderWith(actionsHtml)
+        }, function(err){
+            alert('Unable to load datatable');
+        });
+
+    console.log('persons');
+    console.log(vm.persons);
+
+    vm.dtOptions = DTOptionsBuilder.newOptions()
+    .withPaginationType('full_numbers');
+
+    vm.dtColumnDefs = [
+        DTColumnDefBuilder.newColumnDef(0),
+        DTColumnDefBuilder.newColumnDef(1),
+        DTColumnDefBuilder.newColumnDef(2),
+        DTColumnDefBuilder.newColumnDef(3),
+        DTColumnDefBuilder.newColumnDef(4).notSortable()
     ];
 
-    this.add = function(){
 
+    this.add = function(){
+        console.log(vm.persons);
         var attr = {
             size: 'md',
             templateUrl : 'addUser',
             saveUrl: 'addUser',
-            action: 'Add'
+            action: 'Add',
+            roles : $scope.roles
         };
 
         var openModal = function(attr){
@@ -56,16 +65,8 @@ users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTCo
                 console.log(data);
                 console.log('added');
                 // adding of user
-                // reqDef.post('addUser',data.users).then(function(result){
-                //     if(result.status){
-                //         //success
-                //     }
-                //     else
-                //     {
-                //         //error
-
-                //     }
-                // });
+                vm.persons.unshift(data.users);
+                console.log(vm.persons);
             });
         }
         // call open modal
@@ -81,63 +82,34 @@ users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTCo
         
     }
 
-    function edit(person) {
+    function edit(index, person) {
         var attr = {
             size: 'md',
             templateUrl : 'addUser',
             saveUrl: 'editUser',
-            action: 'Edit'
+            action: 'Edit',
+            users : angular.copy(person), 
+            roles : $scope.roles
         };
 
-        console.log('person');
-        console.log(person);
+        var userModal = defaultModal.showModal(attr);
 
-        var openModal = function(attr){
-            var userModal = defaultModal.showModal(attr);
+        // when the modal opens
+        userModal.result.then(function(data){
+            console.log(data);
+            console.log('updating');
 
-            // when the modal opens
-            userModal.result.then(function(data){
-                console.log(data);
-                console.log('updating');
-                // adding of user
-                // reqDef.post('editUser',data.users).then(function(result){
-                //     if(result.status){
-                        vm.dtInstance.reloadData(); // update datatable here
-                    // }
-                    // else
-                    // {
-                    //     //error
-
-                    // }
-                // });
-            });
-        }
-        // call open modal
-        // showUserDetails
-        reqDef.get('showUserDetails/' + person.id).then(function(result){
-            console.log(result);
-            console.log('show user details');
-            if(result.roles != undefined)
-                attr.roles = result.roles;
-
-            if(result.users != undefined)
-                attr.users = result.users;
-
-            openModal(attr);
-        }, function(err){
-            openModal(attr);
+            vm.persons.splice(index, 1, angular.copy(data.users));
         });
-
-        // Edit some data and call server to make changes...
-        // Then reload the data so that DT is refreshed
-        // vm.dtInstance.reloadData();
+        
     }
 
-    function deleteRow(person) {
+    function deleteRow(index, person) {
         // vm.message = 'You are trying to remove the row: ' + JSON.stringify(person);
         // Delete some data and call server to make changes...
         // Then reload the data so that DT is refreshed
         // vm.dtInstance.reloadData();
+        console.log(person);
         var attr = {
             deleteName : person.username,
             deletedKey : person.id
@@ -149,6 +121,7 @@ users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTCo
                 if(result.status)
                 {
                     console.log('successfully deleted');
+                    vm.persons.splice(index, 1);
                 }
                 else
                 {
@@ -157,64 +130,4 @@ users.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTCo
             });
         });
     }
-
-    function createdRow(row, data, dataIndex) {
-        // Recompiling so we can bind Angular directive to the DT
-        $compile(angular.element(row).contents())($scope);
-    }
-
-    function actionsHtml(data, type, full, meta) {
-        vm.persons[data.id] = data;
-        return '<button class="btn btn-warning" ng-click="showCase.edit(showCase.persons[' + data.id + '])">' +
-            '   <i class="fa fa-edit"></i>' +
-            '</button>&nbsp;' +
-            '<button class="btn btn-danger" ng-click="showCase.delete(showCase.persons[' + data.id + '])" )"="">' +
-            '   <i class="fa fa-trash-o"></i>' +
-            '</button>';
-    }
-});
-
-users.controller('userCtrl', function($scope,defaultModal, reqDef){
-    // $scope.users = {};
-    // $scope.add = function(){
-
-    //     var attr = {
-    //         size: 'md',
-    //         templateUrl : 'addUser',
-    //         saveUrl: 'addUser'
-    //     };
-
-    //     var openModal = function(attr){
-    //         var userModal = defaultModal.showModal(attr);
-
-    //         // when the modal opens
-    //         userModal.result.then(function(data){
-    //             console.log(data);
-    //             console.log('added');
-    //             // adding of user
-    //             // reqDef.post('addUser',data.users).then(function(result){
-    //             //     if(result.status){
-    //             //         //success
-    //             //     }
-    //             //     else
-    //             //     {
-    //             //         //error
-
-    //             //     }
-    //             // });
-    //         });
-    //     }
-    //     // call open modal
-    //     reqDef.get('getRoles').then(function(result){
-    //         if(result.roles != undefined)
-    //             attr.roles = result.roles;
-
-    //         openModal(attr);
-    //     }, function(err){
-    //         openModal(attr);
-    //     });
-
-        
-    // };
-
 });

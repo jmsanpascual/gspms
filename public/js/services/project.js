@@ -26,10 +26,18 @@ projectService.factory('Project', function (ProjRestApi) {
         });
     };
 
+    var remove = function(params){
+        return ProjRestApi.remove(params).$promise.then(function(response)
+        {
+            return response;
+        });
+    }
+
     return {
         getProjects: getProjects,
         addProject: addProject,
-        fetchProject : fetchProject
+        fetchProject : fetchProject,
+        remove : remove
     };
 });
 
