@@ -27,12 +27,15 @@ class ProjectActivitiesController extends Controller
     		// Log::info('line 24 - - -  PROJACT');
     		// Log::info($request->all());
     		$proj_id = $request->get('proj_id');
-
+            if(EMPTY($proj_id))
+                return;
             $activity = (new App\Activities)->getTable();
             $act_status = (new App\ActivityStatus)->getTable();
+            $token = csrf_token();
     		$data['proj_activities'] = App\ProjectActivities::joinActivityStatus()
                                     ->select("$activity.id","$activity.name", "$activity.start_date", 
-                                    "$activity.end_date", "$act_status.name AS status", "$activity.status_id")
+                                    "$activity.end_date", "$act_status.name AS status", "$activity.status_id",
+                                    DB::Raw('"'. $token . '" AS token'))
     								->where('proj_id', $proj_id)->get();
             Log::info(' lINE 33 - - - - -');
             Log::info(json_encode(DB::getQueryLog()));
@@ -88,6 +91,7 @@ class ProjectActivitiesController extends Controller
             $proj_id = $req->get('proj_id');
             $activity = $req->all();
             unset($activity['proj_id']);
+            unset($activity['token']);
             Log::info($proj_id);
             Log::info($activity);
             DB::beginTransaction();
@@ -125,6 +129,7 @@ class ProjectActivitiesController extends Controller
             unset($activity['proj_id']);
             unset($activity['id']);
             unset($activity['status']);
+            unset($activity['token']);
             Log::info($activity);
             DB::beginTransaction();
             $id = App\Activities::where('id', $act_id)->update($activity);

@@ -27,6 +27,8 @@ Route::get('allocate-budget.project', array('as' => 'allocate-budget.project', f
   return view('allocate-budget-project');
 }));
 
+Route::group(['middleware' => 'web'], function () {
+
 Route::post('/login', 'UserController@login');
 Route::get('/users', 'UserController@index');
 Route::get('/fetchUsers', 'UserController@retrieve');
@@ -57,6 +59,24 @@ Route::get('project-activities/details/{proj_id}/{id}', 'ProjectActivitiesContro
 Route::post('project-activities/update', 'ProjectActivitiesController@update');
 Route::resource('project-activities', 'ProjectActivitiesController');
 
+Route::resource('budget', 'BudgetController');
+
+Route::get('budget-request/add', array(function () {
+  return view('modals/budget-request-form');
+}));
+
+Route::post('budget-request/update', 'BudgetRequestController@update');
+Route::resource('budget-request', 'BudgetRequestController');
+Route::resource('budget-request-status', 'BudgetRequestStatusController');
+
+Route::get('items/add', array(function () {
+  return view('modals/items-form');
+}));
+Route::post('items/update', 'ItemController@update');
+Route::resource('items', 'ItemController');
+
+Route::resource('categories', 'CategoryController');
+
 // RESTful resource route for Programs
 Route::resource('programs', 'ProgramController');
 
@@ -66,11 +86,10 @@ Route::resource('project-status', 'ProjectStatusController');
 // RESTful resource route for Activity Status
 Route::resource('activity-status', 'ActivityStatusController');
 
-// Route::group(['middleware' => 'web'], function () {
     Route::get('showUserDetails/{id}', 'UserController@retrieveUser');
     Route::post('editUser', 'UserController@update');
     Route::delete('deleteUser/{id}', 'UserController@delete');
-// });
+});
 
 
 

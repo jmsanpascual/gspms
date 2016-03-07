@@ -30,11 +30,12 @@ class ProjectController extends Controller
             $stat = (new App\ProjectStatus)->getTable();
             Log::info('line 24 - - - -');
             Log::info($proj);
+            $token = csrf_token();
             $data['proj'] = App\Projects::JoinStatus()
                         ->select($proj . '.name', $stat . '.name AS status', $proj . '.id', 
                         'start_date','end_date', 'objective', 'total_budget', 'champion_id', 
                         'program_id', 'proj_status_id', 'resource_person_id', 'partner_organization',
-                        'partner_community')
+                        'partner_community', DB::Raw('"'. $token . '" AS token'))
                         ->get();
             $status = TRUE;
         }
@@ -64,9 +65,10 @@ class ProjectController extends Controller
         $msg = '';
         try
         {
+            $token = csrf_token();
             $data['proj'] = App\Projects::select('id', 'name', 'start_date','end_date', 'objective', 
                 'total_budget', 'champion_id', 'program_id', 'proj_status_id', 'resource_person_id',
-                'partner_organization', 'partner_community')
+                'partner_organization', 'partner_community', DB::Raw('"'. $token . '" AS token'))
             ->where('id', $id)->first();
             $status = TRUE;
         }
@@ -89,8 +91,6 @@ class ProjectController extends Controller
     //     }
     // }
     
-    
-
     public function store(Request $request)
     {
         $status = FALSE;
@@ -99,6 +99,7 @@ class ProjectController extends Controller
             $project = $request->all();
             Log::info('project');
             Log::info($project);
+            unset($project['token']);
             $project['id'] = App\Project::insertGetId($project);
             // get status name
             $stat_name = App\ActivityStatus::where('id', $project['proj_status_id'])->value('name');
@@ -127,6 +128,7 @@ class ProjectController extends Controller
             $upd_arr = $request;
             unset($upd_arr['id']);
             unset($upd_arr['status']);
+            unset($upd_arr['token']);
             App\Projects::where('id', $id)->update($upd_arr);
 
             $data['proj'] = $request;

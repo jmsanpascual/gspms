@@ -9,6 +9,8 @@ angular.module('project.controller', [
    'common.service', 
    'ui.bootstrap',
    'project.activites.controller',
+   'budget.request.controller',
+   'items.controller'
  ])
 
 .controller('projDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder, 

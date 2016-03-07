@@ -1,31 +1,34 @@
 'use strict'
-angular.module('project.activites.controller', 
+angular.module('budget.request.controller', 
     [
-    'projectActivities.service', 
+    'budgetRequest.service', 
     'datatables', 
     'common.service', 
     'ui.bootstrap',
-    'activityStatus.service'
+    'budgetRequestStatus.service'
     ])
   
-.controller('projActDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder, 
-    reqDef, defaultModal, ProjectActivitiesRestApi, activityStatusRestApi) {
+.controller('BudgetReqCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder, 
+    defaultModal, BudgetRequestRestApi, BudgetRequestStatusRestApi) {
     // $scope.proj_id = 1; //declared in modals/projects.blade.php
     var vm = this;
     vm.message = '';
     vm.edit = edit;
     vm.delete = deleteRow;
     vm.dtInstance = {};
-    vm.project_activities = [];
+    vm.budget_requests = [];
 
-    $scope.getProjActivities = function(proj_id)
+    $scope.getProjBudgetReq = function()
     {
-        ProjectActivitiesRestApi.query({proj_id : $scope.proj_id}).$promise.then(function (result) {
+        console.log('proj_id');
+        console.log($scope.proj_id);
+        BudgetRequestRestApi.query({proj_id : $scope.proj_id}).$promise.then(function (result) {
            result = result[0];
+           console.log(result);
           if (result.status) {
-              console.log('proj');
-              console.log(result.proj);
-              vm.project_activities =  result.proj_activities;
+              console.log('request');
+              console.log(result.budget_requests);
+              vm.budget_requests =  result.budget_requests;
           } else {
               alert('Unable to load datatable');
           }
@@ -34,11 +37,11 @@ angular.module('project.activites.controller',
 
     $scope.status = {};
 
-    activityStatusRestApi.query().$promise.then(function(result){
+    BudgetRequestStatusRestApi.query().$promise.then(function(result){
         var result = result[0];
         if(result.status)
         {
-            $scope.status = result.activity_status;
+            $scope.status = result.br_status;
         }
         else
         {
@@ -53,7 +56,6 @@ angular.module('project.activites.controller',
         DTColumnDefBuilder.newColumnDef(0),
         DTColumnDefBuilder.newColumnDef(1),
         DTColumnDefBuilder.newColumnDef(2),
-        DTColumnDefBuilder.newColumnDef(3),
         DTColumnDefBuilder.newColumnDef(4).notSortable()
     ];
 
@@ -62,17 +64,17 @@ angular.module('project.activites.controller',
     {
         var attr = {
             size: 'md',
-            templateUrl : '../project-activities/project-activities',
-            saveUrl: '../project-activities',
+            templateUrl : '../budget-request/add',
+            saveUrl: '../budget-request',
             action: 'Add',
             status : $scope.status,
-            projAct : {proj_id : $scope.proj_id}
+            brequest : {proj_id : $scope.proj_id}
 
         };
-        
+
         defaultModal.showModal(attr).result.then(function(data){
             console.log(data);
-            vm.project_activities.push(data.projAct);
+            vm.budget_requests.push(data.brequest);
         });      
 
     }
@@ -80,17 +82,17 @@ angular.module('project.activites.controller',
     function edit(index, act) {
         var attr = {
             size: 'md',
-            templateUrl : '../project-activities/project-activities',
-            saveUrl: '../project-activities/update',
+            templateUrl : '../budget-request/add',
+            saveUrl: '../budget-request/update',
             action: 'Edit',
             status : $scope.status,
-            projAct : angular.copy(act)
+            brequest : angular.copy(act)
         };
-        attr.projAct.proj_id = $scope.proj_id;
+        attr.brequest.proj_id = $scope.proj_id;
         
         defaultModal.showModal(attr).result.then(function(data){
             console.log(data);
-            vm.project_activities.splice(index, 1, angular.copy(data.projAct));
+            vm.budget_requests.splice(index, 1, angular.copy(data.brequest));
         });   
     }
 
@@ -106,11 +108,11 @@ angular.module('project.activites.controller',
         var del = defaultModal.delConfirm(attr);
 
         del.result.then(function(id){
-            ProjectActivitiesRestApi.remove({activity_id : act.id}).$promise.then(function(result){
+            BudgetRequestRestApi.remove({id : act.id}).$promise.then(function(result){
                 if(result.status)
                 {
                     console.log('successfully deleted');
-                    vm.project_activities.splice(index, 1);
+                    vm.budget_requests.splice(index, 1);
                 }
                 else
                 {
@@ -120,33 +122,7 @@ angular.module('project.activites.controller',
         });
     }
 
-
 })
 
-.controller('btnCtrl', function($scope, defaultModal){
-    $scope.showItem = function()
-    {
-        var attr = {
-            size: 'lg',
-            templateUrl : '../items/items',
-            proj_id : $scope.proj_id
-        };
-        
-        defaultModal.showModal(attr);      
-    }
-
-    $scope.showReqBudget = function()
-    {
-        console.log('proj id');
-        console.log($scope.proj_id);
-        var attr = {
-            size: 'md',
-            templateUrl : '../budget-request/budget-request',
-            proj_id : $scope.proj_id
-        };
-        
-        defaultModal.showModal(attr);      
-    }
-});
 
 

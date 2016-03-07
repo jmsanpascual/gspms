@@ -140,5 +140,9 @@
 @stop
 
 @section('btn')
+	<div class = "pull-left" ng-controller = "btnCtrl" ng-init = 'proj_id = submitData.proj.id;'>
+		<button class = "btn btn-info" ng-click="showItem()">Add Item/Expense</button>
+		<button class = "btn btn-warning" ng-click="showReqBudget()">Request Budget</button>
+	</div>
 	<button class = "btn btn-success" ng-click="save('proj')">Save</button>
 @stop
