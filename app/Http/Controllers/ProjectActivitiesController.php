@@ -34,7 +34,7 @@ class ProjectActivitiesController extends Controller
             $token = csrf_token();
     		$data['proj_activities'] = App\ProjectActivities::joinActivityStatus()
                                     ->select("$activity.id","$activity.name", "$activity.start_date", 
-                                    "$activity.end_date", "$act_status.name AS status", "$activity.status_id",
+                                    "$activity.end_date", "$activity.remarks", "$act_status.name AS status", "$activity.status_id",
                                     DB::Raw('"'. $token . '" AS token'))
     								->where('proj_id', $proj_id)->get();
             Log::info(' lINE 33 - - - - -');
@@ -130,11 +130,14 @@ class ProjectActivitiesController extends Controller
             unset($activity['id']);
             unset($activity['status']);
             unset($activity['token']);
-            Log::info($activity);
             DB::beginTransaction();
+            $activity['status_id'] = 1;
+            
+            Log::info($activity);
             $id = App\Activities::where('id', $act_id)->update($activity);
-            $stat = App\ActivityStatus::where('id', $req->get('status_id'))->value('name');
+            $stat = App\ActivityStatus::where('id', $activity['status_id'])->value('name');
             $data['projAct'] = $req->all();
+            $data['projAct']['status_id'] = $activity['status_id'];
             $data['projAct']['status'] = $stat;
             DB::commit();
             $status = TRUE;
@@ -150,6 +153,34 @@ class ProjectActivitiesController extends Controller
         return Response::json($data);
     }
 
+    public function updateStatus(Request $req)
+    {
+        $msg = '';
+        $status = FALSE;
+        try
+        {
+            // missing check if for approval
+            $stat = App\Activities::where('id', $req->get('act_id'))
+            ->update([
+                'status_id' => $req->get('id'),
+                'remarks' => $req->get('remarks')
+            ]);
+
+            $data['stat'] = App\ActivityStatus::where('id', $req->get('id'))->first(['id','name']);
+            Log::info('stat' . json_encode($data['stat']));
+            $status = TRUE;
+        }
+        catch(Exception $e)
+        {
+            Log::info(json_encode(DB::getQueryLog()));
+            $msg = $e->getMessage();
+        }
+        $data['msg'] = $msg;
+        $data['status'] = $status;
+
+        return Response::json($data);
+    }
+    
     public function destroy($id)
     {
         $msg = '';

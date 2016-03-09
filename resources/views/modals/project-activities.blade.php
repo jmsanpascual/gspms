@@ -40,7 +40,17 @@
 			</div>
 			</div>
 		</div>
-		<div class = "form-group">
+		<div class = "form-group" ng-if = "submitData.projAct.status_id">
+			<div class = "row">
+				<div class = "col-md-12">
+				<label class = "form-label col-md-4">Remarks</label>
+				<div class = "col-md-6">
+					<textarea class = "form-control" style ="resize:none" ng-model = "submitData.projAct.remarks"></textarea>
+				</div>
+			</div>
+			</div>
+		</div>
+		<!-- <div class = "form-group">
 			<div class = "row">
 				<div class = "col-md-12">
 				<label class = "form-label col-md-4">Status</label>
@@ -51,12 +61,20 @@
 				</div>	
 			</div>
 			</div>
-		</div>
+		</div> -->
 
 	  <!-- End Activities -->
 	</form>
 @stop
 
 @section('btn')
-	<button class = "btn btn-success" ng-click="save('projAct')">Save</button>
+	<span ng-controller = "ActivityStatusCtrl as asc" ng-init = "asc.data.proj_id = submitData.projAct.proj_id;
+	asc.data.act_id = submitData.projAct.id" style ="margin-right: 5px;" ng-if = "submitData.projAct.id">
+		<span ng-if = "submitData.projAct.status_id == 1">
+			<button class = "btn btn-primary" ng-click = "asc.approve()">Approve</button>
+			<button class = "btn btn-danger" ng-click = "asc.disapprove()">Disapprove</button>
+		</span>
+		<button class = "btn btn-info" ng-click = "asc.completed()" ng-if = "submitData.projAct.status_id == 2">Completed</button>
+	</span>
+	<button class = "btn btn-success" ng-if = "submitData.projAct.status_id != 4" ng-click="save('projAct')">Save</button>
 @stop

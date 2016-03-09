@@ -12,6 +12,15 @@ projectActivitiesService.factory('ProjectActivitiesRestApi', function ($resource
     			method : 'GET',
     			url : '../project-activities/details/:proj_id/:id',
 				params : {id : '@id', proj_id : '@proj_id'} 
+    		},
+    		request : {
+    			method : 'POST',
+    			url : '../project-activities/request',
+    			params : {
+    				id : '@id',
+    				proj_id : '@proj_id',
+    				act_id : '@act_id'
+    			}
     		}
     	});
 });

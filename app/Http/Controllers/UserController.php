@@ -107,15 +107,14 @@ class UserController extends Controller
             ->whereNull('B.deleted_at')
             ->count();
 
-
             if($result > 0)
             {
-                // throw new Exception('username or email already exist');
+                throw new \Exception('username or email already exist');
             }
 
             if($input['password'] != $input['repassword'])
             {
-                // throw new Exception('password and confirm password are not equal');
+                throw new \Exception('password and confirm password are not equal');
             }
             DB::beginTransaction();
             $user_id = App\User::insertGetId([
@@ -138,7 +137,7 @@ class UserController extends Controller
             $status = TRUE;
             $msg = Lang::get('notifications.data_saved');
         }
-        catch(Exception $e)
+        catch(\Exception $e)
         {
             DB::rollback();
             Log::info($e->getMessage());

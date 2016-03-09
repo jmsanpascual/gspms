@@ -57,6 +57,7 @@ Route::resource('projects', 'ProjectController');
 
 Route::get('project-activities/details/{proj_id}/{id}', 'ProjectActivitiesController@fetch');
 Route::post('project-activities/update', 'ProjectActivitiesController@update');
+Route::post('project-activities/request', 'ProjectActivitiesController@updateStatus');
 Route::resource('project-activities', 'ProjectActivitiesController');
 
 Route::resource('budget', 'BudgetController');
@@ -65,6 +66,8 @@ Route::get('budget-request/add', array(function () {
   return view('modals/budget-request-form');
 }));
 
+
+Route::post('budget-request/request', 'BudgetRequestController@updateStatus');
 Route::post('budget-request/update', 'BudgetRequestController@update');
 Route::resource('budget-request', 'BudgetRequestController');
 Route::resource('budget-request-status', 'BudgetRequestStatusController');

@@ -35,7 +35,7 @@ class BudgetRequestController extends Controller
             $token = csrf_token();
     		$data['budget_requests'] = App\ProjectBudgetRequest::JoinBudgetStatus()
     			->select("$br.id", "proj_id", "amount", "reason", "status_id",
-                DB::Raw('"'. $token . '" AS token'), $br_status . ".name AS status")
+                DB::Raw('"'. $token . '" AS token'), $br_status . ".name AS status", "$br.remarks")
     			->where('proj_id', $proj_id)->get();
             Log::info(' lINE 33 - - - - -');
             Log::info(json_encode(DB::getQueryLog()));
@@ -96,9 +96,15 @@ class BudgetRequestController extends Controller
             unset($upd_arr['id']);
             unset($upd_arr['status']);
             unset($upd_arr['token']);
-            App\ProjectBudgetRequest::where('id', $id)->update($upd_arr);
 
+            $upd_arr['status_id'] = 1; // for approval
+
+            App\ProjectBudgetRequest::where('id', $id)->update($upd_arr);
+            $stat_name = App\BudgetRequestStatus::where('id', $upd_arr['status_id'])
+                ->value('name');
             $data['brequest'] = $request;
+            $data['brequest']['status_id'] = $upd_arr['status_id'];
+            $data['brequest']['status'] = $stat_name;
             $status = TRUE;
         }
         catch(Exception $e)
@@ -107,6 +113,34 @@ class BudgetRequestController extends Controller
         }
         $data['status'] = $status;
         $data['msg'] = $msg;
+
+        return Response::json($data);
+    }
+
+    public function updateStatus(Request $req)
+    {
+        $msg = '';
+        $status = FALSE;
+        try
+        {
+            // missing check if for approval
+            $stat = App\ProjectBudgetRequest::where('id', $req->get('br_id'))
+            ->update([
+                'status_id' => $req->get('id'),
+                'remarks' => $req->get('remarks')
+            ]);
+
+            $data['stat'] = App\BudgetRequestStatus::where('id', $req->get('id'))->first(['id','name']);
+            Log::info('stat' . json_encode($data['stat']));
+            $status = TRUE;
+        }
+        catch(Exception $e)
+        {
+            Log::info(json_encode(DB::getQueryLog()));
+            $msg = $e->getMessage();
+        }
+        $data['msg'] = $msg;
+        $data['status'] = $status;
 
         return Response::json($data);
     }

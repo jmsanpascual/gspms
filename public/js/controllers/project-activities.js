@@ -32,19 +32,19 @@ angular.module('project.activites.controller',
        });
     }
 
-    $scope.status = {};
+    // $scope.status = {};
 
-    activityStatusRestApi.query().$promise.then(function(result){
-        var result = result[0];
-        if(result.status)
-        {
-            $scope.status = result.activity_status;
-        }
-        else
-        {
-            alert(result.status);
-        }
-    });
+    // activityStatusRestApi.query().$promise.then(function(result){
+    //     var result = result[0];
+    //     if(result.status)
+    //     {
+    //         $scope.status = result.activity_status;
+    //     }
+    //     else
+    //     {
+    //         alert(result.status);
+    //     }
+    // });
 
     // .fromSource('js/controllers/data.json')
     vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
@@ -65,7 +65,7 @@ angular.module('project.activites.controller',
             templateUrl : '../project-activities/project-activities',
             saveUrl: '../project-activities',
             action: 'Add',
-            status : $scope.status,
+            // status : $scope.status,
             projAct : {proj_id : $scope.proj_id}
 
         };
@@ -83,7 +83,7 @@ angular.module('project.activites.controller',
             templateUrl : '../project-activities/project-activities',
             saveUrl: '../project-activities/update',
             action: 'Edit',
-            status : $scope.status,
+            // status : $scope.status,
             projAct : angular.copy(act)
         };
         attr.projAct.proj_id = $scope.proj_id;
@@ -122,6 +122,57 @@ angular.module('project.activites.controller',
 
 
 })
+
+.constant('actStatus', {
+    ACT_STAT_APPROVED : 2,
+    ACT_STAT_DISAPPROVED : 3,
+    ACT_STAT_COMPLETED : 4
+})
+
+.controller('ActivityStatusCtrl', function($scope, ProjectActivitiesRestApi, actStatus){
+    // this.proj_id;
+    var _self = this;
+    _self.data = {};
+    _self.data.remarks = $scope.submitData.projAct.remarks
+    var changeStatus = function()
+    {
+        ProjectActivitiesRestApi.request(_self.data).$promise.then(function(result){
+            if(!result.status)
+            {
+                alert(result.msg);
+                return;
+            }
+            // alert('approved');
+            // from modal scope
+            console.log(result);
+            $scope.submitData.projAct.status_id = result.stat.id;
+            $scope.submitData.projAct.status = result.stat.name;
+            console.log('status');
+            console.log($scope.submitData);
+            $scope.closeSubmit($scope.submitData);
+        });
+    }
+
+    _self.approve = function()
+    {
+        _self.data.id = actStatus.ACT_STAT_APPROVED; // approved
+        console.log(_self.data);
+        changeStatus();
+    }
+
+    _self.disapprove = function()
+    {
+        _self.data.id = actStatus.ACT_STAT_DISAPPROVED; // approved
+        changeStatus();
+    }
+
+    _self.completed = function()
+    {
+        _self.data.id = actStatus.ACT_STAT_COMPLETED; // completed
+        changeStatus();
+    }
+})
+
 
 .controller('btnCtrl', function($scope, defaultModal){
     $scope.showItem = function()

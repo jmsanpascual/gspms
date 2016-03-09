@@ -124,5 +124,48 @@ angular.module('budget.request.controller',
 
 })
 
+.constant('brStatus', {
+    ACT_STAT_APPROVED : 2,
+    ACT_STAT_DISAPPROVED : 3
+})
+
+.controller('BudgetRequestStatusCtrl', function($scope, brStatus, BudgetRequestRestApi){
+    var _self = this;
+    _self.data = {};
+    _self.data.remarks = $scope.submitData.brequest.remarks
+    var changeStatus = function()
+    {
+        BudgetRequestRestApi.request(_self.data).$promise.then(function(result){
+            if(!result.status)
+            {
+                alert(result.msg);
+                return;
+            }
+            // alert('approved');
+            // from modal scope
+            console.log(result);
+            $scope.submitData.brequest.status_id = result.stat.id;
+            $scope.submitData.brequest.status = result.stat.name;
+            console.log('status');
+            console.log($scope.submitData);
+            $scope.closeSubmit($scope.submitData);
+        });
+    }
+
+    _self.approve = function()
+    {
+        _self.data.id = brStatus.ACT_STAT_APPROVED; // approved
+        console.log(_self.data);
+        changeStatus();
+    }
+
+    _self.disapprove = function()
+    {
+        _self.data.id = brStatus.ACT_STAT_DISAPPROVED; // approved
+        changeStatus();
+    }
+
+});
+
 
 

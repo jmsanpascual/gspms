@@ -156,6 +156,11 @@ common.controller('defaultModalInstanceCtrl', function ($scope, $uibModalInstanc
         });
     };
 
+    $scope.closeSubmit = function()
+    {
+        $uibModalInstance.close($scope.submitData);
+    }
+
     $scope.close = function () {
         if(!changeClose)
             $uibModalInstance.dismiss('cancel');
