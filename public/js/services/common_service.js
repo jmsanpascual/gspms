@@ -3,7 +3,7 @@
 var common = angular.module('common.service', []);
 
 common.service('defaultModal', function($uibModal, $log){
-    
+
     this.delConfirm = function(config, overwrite){
 
         if(config != undefined)
@@ -42,7 +42,7 @@ common.service('defaultModal', function($uibModal, $log){
         //     console.log('No config delete key yet.');
 
         // Declare the model instance
-        var templateUrl = 'js/templates/confirm.html'; 
+        var templateUrl = 'js/templates/confirm.html';
         var staticController = 'confirmModalInstanceCtrl';
         var staticVar = ['size', 'templateUrl', 'controller'];
         var resolveAttr = {};
@@ -57,7 +57,7 @@ common.service('defaultModal', function($uibModal, $log){
         // all attr not in static var will be put in resolve
         for(var key in config)
         {
-            // if not in static var 
+            // if not in static var
             if(staticVar.indexOf(key) < 0)
             {
                 resolveAttr[key] = config[key];
@@ -66,7 +66,7 @@ common.service('defaultModal', function($uibModal, $log){
 
         // overwrite resolve
         config.resolve = {
-             attr : function(){
+             attr : function () {
                 return resolveAttr;
             },
         };
@@ -85,7 +85,7 @@ common.service('defaultModal', function($uibModal, $log){
         //     console.log('No config delete key yet.');
 
         // Declare the model instance
-        // var templateUrl = 'js/templates/defaultModal.html'; 
+        // var templateUrl = 'js/templates/defaultModal.html';
         config.controller = (instanceCtrl != undefined) ? instanceCtrl : 'defaultModalInstanceCtrl';
         var staticVar = ['size', 'templateUrl', 'controller'];
         var resolveAttr = {};
@@ -93,7 +93,7 @@ common.service('defaultModal', function($uibModal, $log){
         // all attr not in static var will be put in resolve
         for(var key in config)
         {
-            // if not in static var 
+            // if not in static var
             if(staticVar.indexOf(key) < 0)
             {
                 resolveAttr[key] = config[key];
@@ -188,7 +188,7 @@ common.service('reqDef', function($http){
 common.service('displayNotif', function($timeout){
     var toastElement = angular.element(document.querySelector('.toast'));
     toastElement.css('display','none');
-        
+
     this.show = function(msg){
         toastElement.css('display', 'block');
         toastElement.html(msg);
@@ -226,7 +226,7 @@ common.service('tmjLoading', function($timeout){
     {
         var element = document.querySelectorAll('textarea, input[type="text"]');
         angular.element(element).attr('disabled', true);
-        
+
     }
 
     this.enableKeys = function()

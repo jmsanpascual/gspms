@@ -39,9 +39,22 @@ Route::get('showUserDetails', 'UserController@getRoles');
 
 // RESTful resource route for Projects
 Route::get('projects/view-project', array('as' => 'view.project', function () {
-  return view('view-project');
+    return view('view-project');
 }));
 Route::resource('projects', 'ProjectController');
+
+// RESTful resource route for Resource Persons
+Route::get('resource-persons/view-resource-persons', array('as' => 'view.resource-persons', function () {
+    return view('resource-persons');
+}));
+Route::get('resource-persons/add-resource-person', array('as' => 'add-resource-persons', function () {
+  $data['action'] = $action;
+  return view('modals/resource-person', $data);
+}));
+Route::resource('resource-persons', 'ResourcePersonController');
+
+// RESTful resource route for Schools
+Route::resource('schools', 'SchoolController');
 
 // RESTful resource route for Programs
 Route::resource('programs', 'ProgramController');
