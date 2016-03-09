@@ -96,6 +96,9 @@
                       <a href="{{ route('view.project') }}">View Projects</a>
                     </li>
                     <li>
+                      <a href="{{ route('view.project2') }}">View Projects2</a>
+                    </li>
+                    <li>
                       <a href="{{ route('projects.create') }}">Create Proposal</a>
                     </li>
                     <li>

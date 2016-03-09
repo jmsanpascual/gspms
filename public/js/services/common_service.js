@@ -42,7 +42,7 @@ common.service('defaultModal', function($uibModal, $log){
         //     console.log('No config delete key yet.');
 
         // Declare the model instance
-        var templateUrl = 'js/templates/confirm.html';
+        var templateUrl = 'js/templates/confirm.html'; 
         var staticController = 'confirmModalInstanceCtrl';
         var staticVar = ['size', 'templateUrl', 'controller'];
         var resolveAttr = {};
@@ -122,19 +122,30 @@ common.controller('defaultModalInstanceCtrl', function ($scope, $uibModalInstanc
     console.log('attr');
     console.log(attr);
     $scope.submitData = (attr != undefined) ? attr : {};
-    $scope.save = function (url) {
-        // console.log(deleteAttr.deleteKey);
-        // console.log(deleteAttr.deleteName);
-        // $uibModalInstance.close(attr.item);
-        // angular.element(document.getElementById('userForm')).trigger('submit');
-        // document.getElementById('userForm').submit();
-        // $uibModalInstance.close($scope.submitData);
-        $http.post($scope.submitData.saveUrl, $scope.submitData).then(function(result){
+    var changeClose = false;
+    var postData;
+    $scope.save = function (formData) {
+        console.log('formdata',formData);
+        var data = (formData == undefined) ? $scope.submitData : $scope.submitData[formData];
+        $http.post($scope.submitData.saveUrl, data).then(function(result){
             result = result.data;
             if(result.status)
             {
-                $uibModalInstance.close(result);
-                alert(result.msg);
+                if(attr.keepOpen == undefined)
+                {
+                    $uibModalInstance.close(result);
+                }
+                else
+                {
+                    console.log(result[formData]);
+                    $scope.submitData[formData] = result[formData];
+                    if(result.saveUrl != undefined)
+                        $scope.submitData['saveUrl'] = result.saveUrl; // make the url update
+
+                    changeClose = true; // if keepOpen true
+                    postData = $scope.submitData[formData];
+                }
+                // alert(result.msg);
             }
             else
             {
@@ -145,8 +156,16 @@ common.controller('defaultModalInstanceCtrl', function ($scope, $uibModalInstanc
         });
     };
 
+    $scope.closeSubmit = function()
+    {
+        $uibModalInstance.close($scope.submitData);
+    }
+
     $scope.close = function () {
-        $uibModalInstance.dismiss('cancel');
+        if(!changeClose)
+            $uibModalInstance.dismiss('cancel');
+        else
+            $uibModalInstance.close(postData);
     };
 });
 

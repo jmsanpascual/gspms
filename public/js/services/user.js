@@ -1,5 +1,18 @@
 'use strict'
-var userService = angular.module('user.service', []);
+var userService = angular.module('user.service', ['ngResource']);
+
+userService.factory('UserRestApi', function ($resource) {
+    return $resource('../user', {}, {
+    	'getChampion' : {
+    		url : '../user/getChampion',
+    		method: 'GET'
+    	},
+    	'getResourcePerson' : {
+    		url : '../user/getResourcePerson',
+    		method : 'GET'
+    	}
+    });
+});
 
 // $http could be replaced by restApi if ever
 userService.factory('User', function ($http) {

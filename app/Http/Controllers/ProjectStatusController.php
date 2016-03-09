@@ -12,11 +12,18 @@ class ProjectStatusController extends Controller
 {
     public function index()
     {
+    	$status = FALSE;
+    	$msg = '';
         try {
-            $projectStatus = ProjectStatus::all('id', 'name');
-            return Response::json($projectStatus);
+            $data['projectStatus'] = ProjectStatus::all('id', 'name');
+            $status = TRUE;
         } catch (Exception $e) {
-            return Response::json([['error' => $e->getMessage()]]);
+        	$msg = $e->getMessage();
         }
+
+        $data['status'] = $status;
+        $data['msg'] = $msg;
+
+        return array($data);
     }
 }

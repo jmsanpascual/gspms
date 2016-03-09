@@ -25,12 +25,37 @@
                       <i class="fa fa-times"></i>
                   </div>
               </div>
-              <div class="panel-body" ng-controller="userCtrl">
-                    <button class = "btn btn-success pull-right" ng-click = "add()"> Add User</button>
-                <div ng-controller="userDTCtrl as showCase">
+              <div class="panel-body" ng-controller="userDTCtrl as showCase">
+                    <button class = "btn btn-success pull-right" ng-click = "showCase.add()"> Add User</button>
+                <div >
                   <p class="text-danger"><strong>@{{ showCase.message }}</strong></p>
                   <br>
-                  <table datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" dt-instance="showCase.dtInstance" class="table table-hover row-border hover">
+                  <table datatable="ng" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table table-hover row-border hover">
+                  <thead>
+                    <tr>
+                      <th>Username</th>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                      <th>Email</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat = "person in showCase.persons">
+                      <td>@{{person.username}}</td>
+                      <td>@{{person.fname}}</td>
+                      <td>@{{person.lname}}</td>
+                      <td>@{{person.email}}</td>
+                      <td>
+                        <button class="btn btn-warning" ng-click="showCase.edit($index, person)">
+                        <i class="fa fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger" ng-click="showCase.delete($index ,person)">
+                           <i class="fa fa-trash-o"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
                   </table>
                 </div>
               </div>
@@ -42,4 +67,5 @@
 
 @section('scripts')
 {!! HTML::script('js/controllers/user.js') !!}
+{!! HTML::script('js/services/roles.js') !!}
 @endsection

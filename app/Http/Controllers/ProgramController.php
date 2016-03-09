@@ -12,11 +12,17 @@ class ProgramController extends Controller
 {
     public function index()
     {
+    	$status = FALSE;
+    	$msg = '';
         try {
-            $program = Program::all('id', 'name');
-            return Response::json($program);
+            $data['program'] = Program::all('id', 'name');
+            $status = TRUE;
         } catch (Exception $e) {
-            return Response::json([['error' => $e->getMessage()]]);
+            $msg = $e->getMessage();
         }
+        $data['status'] = $status;
+        $data['msg'] = $msg;
+
+        return array($data);
     }
 }

@@ -27,6 +27,8 @@ Route::get('allocate-budget.project', array('as' => 'allocate-budget.project', f
   return view('allocate-budget-project');
 }));
 
+Route::group(['middleware' => 'web'], function () {
+
 Route::post('/login', 'UserController@login');
 Route::get('/users', 'UserController@index');
 Route::get('/fetchUsers', 'UserController@retrieve');
@@ -37,11 +39,32 @@ Route::post('addUser', 'UserController@create');
 Route::get('getRoles', 'UserController@getRoles');
 Route::get('showUserDetails', 'UserController@getRoles');
 
+Route::get('user/getChampion', 'UserController@getChampion');
+Route::get('user/getResourcePerson', 'UserController@getResourcePerson');
+Route::resource('user', 'UserController');
+Route::resource('roles', 'RoleController');
 // RESTful resource route for Projects
 Route::get('projects/view-project', array('as' => 'view.project', function () {
     return view('view-project');
 }));
+Route::get('projects/view-project2', array('as' => 'view.project2', function () {
+  return view('projects');
+}));
+Route::get('projects/fetch/{id}', 'ProjectController@fetchProj');
+Route::post('projects/update', 'ProjectController@update');
 Route::resource('projects', 'ProjectController');
+
+
+Route::get('project-activities/details/{proj_id}/{id}', 'ProjectActivitiesController@fetch');
+Route::post('project-activities/update', 'ProjectActivitiesController@update');
+Route::post('project-activities/request', 'ProjectActivitiesController@updateStatus');
+Route::resource('project-activities', 'ProjectActivitiesController');
+
+Route::resource('budget', 'BudgetController');
+
+Route::get('budget-request/add', array(function () {
+  return view('modals/budget-request-form');
+}));
 
 // RESTful resource route for Resource Persons
 Route::get('resource-persons/view-resource-persons', array('as' => 'view.resource-persons', function () {
@@ -56,17 +79,35 @@ Route::resource('resource-persons', 'ResourcePersonController');
 // RESTful resource route for Schools
 Route::resource('schools', 'SchoolController');
 
+Route::post('budget-request/request', 'BudgetRequestController@updateStatus');
+Route::post('budget-request/update', 'BudgetRequestController@update');
+Route::resource('budget-request', 'BudgetRequestController');
+Route::resource('budget-request-status', 'BudgetRequestStatusController');
+
+Route::get('items/add', array(function () {
+  return view('modals/items-form');
+}));
+Route::post('items/update', 'ItemController@update');
+Route::resource('items', 'ItemController');
+
+Route::resource('categories', 'CategoryController');
+
 // RESTful resource route for Programs
 Route::resource('programs', 'ProgramController');
 
 // RESTful resource route for Project Status
 Route::resource('project-status', 'ProjectStatusController');
 
-Route::group(['middleware' => 'web'], function () {
+// RESTful resource route for Activity Status
+Route::resource('activity-status', 'ActivityStatusController');
+
     Route::get('showUserDetails/{id}', 'UserController@retrieveUser');
     Route::post('editUser', 'UserController@update');
     Route::delete('deleteUser/{id}', 'UserController@delete');
 });
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
