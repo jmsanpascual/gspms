@@ -63,16 +63,12 @@ Route::resource('project-activities', 'ProjectActivitiesController');
 Route::resource('budget', 'BudgetController');
 
 Route::get('budget-request/add', array(function () {
-  return view('modals/budget-request-form');
+    return view('modals/budget-request-form');
 }));
 
 // RESTful resource route for Resource Persons
-Route::get('resource-persons/view-resource-persons', array('as' => 'view.resource-persons', function () {
+Route::get('resource-persons/view-resource-persons', array('as' => 'resource-persons.view', function () {
     return view('resource-persons');
-}));
-Route::get('resource-persons/add-resource-person', array('as' => 'add-resource-persons', function () {
-  $data['action'] = $action;
-  return view('modals/resource-person', $data);
 }));
 Route::resource('resource-persons', 'ResourcePersonController');
 

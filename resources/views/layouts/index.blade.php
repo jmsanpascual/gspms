@@ -112,7 +112,7 @@
                 </a>
                 <ul class="nav-sub">
                     <li>
-                      <a href="{{ route('view.resource-persons') }}">View Resource Person</a>
+                      <a href="{{ route('resource-persons.view') }}">View Resource Person</a>
                     </li>
                     <li>
                       <a href="{{ route('resource-persons.create') }}">Create Resource Person</a>

@@ -30,8 +30,35 @@
                 <div>
                   <p class="text-danger"><strong>@{{rp.message}}</strong></p>
                   <br>
-                  <table datatable="" dt-options="rp.dtOptions" dt-columns="rp.dtColumns"
+                  <table datatable="ng" dt-options="rp.dtOptions" dt-columns="rp.dtColumns"
                   dt-instance="rp.dtInstance" class="table table-hover row-border hover">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Profession</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>School</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat = "person in rp.persons">
+                        <td>@{{person.name}}</td>
+                        <td>@{{person.profession}}</td>
+                        <td>@{{person.email}}</td>
+                        <td>@{{person.contact_num}}</td>
+                        <td>@{{person.school}}</td>
+                        <td>
+                          <button class="btn btn-warning" ng-click="rp.edit($index, person)">
+                          <i class="fa fa-edit"></i>
+                          </button>
+                          <button class="btn btn-danger" ng-click="rp.delete($index, person)">
+                             <i class="fa fa-trash-o"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
                   </table>
                 </div>
               </div>
@@ -42,6 +69,7 @@
 @endsection
 
 @section('scripts')
+{!! HTML::script('js/resource-person/services/school.js') !!}
 {!! HTML::script('js/resource-person/services/resource-person.js') !!}
 {!! HTML::script('js/resource-person/controllers/resource-person.js') !!}
 @endsection

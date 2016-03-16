@@ -18,12 +18,14 @@ class ResourcePersonController extends Controller
     {
         try {
             $resourcePersons = ResourcePerson::select(
-                'rp.id', 'rp.profession', 'pi.first_name',
-                'pi.last_name', 'pi.contact_num',
+                'resource_persons.id', 'resource_persons.profession',
+                'pi.first_name', 'pi.last_name', 'pi.contact_num',
                 'pi.email', 'pi.address', 's.name as school',
                 DB::raw('CONCAT(pi.first_name, " ", pi.last_name) as name')
-            )->join('personal_info as pi', 'pi.id', '=', 'rp.personal_info_id')
-            ->join('schools as s', 's.id', '=', 'rp.school_id')->get();
+            )->join('personal_info as pi', 'pi.id', '=',
+            'resource_persons.personal_info_id')
+            ->join('schools as s', 's.id', '=',
+            'resource_persons.school_id')->get();
 
             return Response::json($resourcePersons);
         } catch (Exception $e) {
@@ -33,7 +35,7 @@ class ResourcePersonController extends Controller
 
     public function create()
     {
-        return view('create-resource-person');
+        return view('modals/resource-person');
     }
 
     public function store(Request $request)
@@ -46,9 +48,29 @@ class ResourcePersonController extends Controller
             $personalInfoId = PersonalInfo::insertGetId($personalInfo);
             $resourcePerson['personal_info_id'] = $personalInfoId;
 
-            ResourcePerson::insert($resourcePerson);
-            return Response::json(true);
+            $resourcePersonId = ResourcePerson::insertGetId($resourcePerson);
+            return Response::json(['id' => $resourcePersonId]);
         } catch (Exception $e) {
+            return Response::json(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            $resourcePerson = ResourcePerson::where('id', $id)->first();
+            return Response::json($resourcePerson);
+        } catch (\Exception $e) {
+            return Response::json(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            ResourcePerson::where('id', $id)->delete();
+            return Response::json(true);
+        } catch (\Exception $e) {
             return Response::json(['error' => $e->getMessage()]);
         }
     }

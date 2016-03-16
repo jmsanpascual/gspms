@@ -1,55 +1,83 @@
 'use strict'
 
-angular.module('resourcePersons', ['datatables','common.service', 'ui.bootstrap', 'resourcePersonService'])
+angular.module('resourcePersons', [
+    'datatables',
+    'common.service',
+    'ui.bootstrap',
+    'resourcePersonService',
+    'schoolService'
+])
 
-.controller('resourcePersonDTCtrl', function($scope, $compile, ResourcePerson, DTOptionsBuilder, DTColumnBuilder, defaultModal) {
+.controller('resourcePersonDTCtrl', function($scope, $compile, ResourcePerson, SchoolRestApi,
+    DTOptionsBuilder, DTColumnDefBuilder, defaultModal) {
+
     var rp = this;
     rp.message = '';
-    rp.edit = edit;
-    rp.delete = deleteRow;
     rp.dtInstance = {};
-    rp.persons = {};
+    rp.persons = [];
 
-    // .fromSource('js/controllers/data.json')
-    rp.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
-        return ResourcePerson.getResourcePersons().then(function (resourcePersons) {
-            console.log('Resource Persons:', resourcePersons);
-            return resourcePersons;
-        }, function(err){
-            alert('Unable to load resource persons');
-        });
-    }).withPaginationType('full_numbers').withOption('createdRow', createdRow);
+    rp.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
 
-    rp.dtColumns = [
-        DTColumnBuilder.newColumn('name').withTitle('Name'),
-        DTColumnBuilder.newColumn('profession').withTitle('Profession'),
-        DTColumnBuilder.newColumn('email').withTitle('Email'),
-        DTColumnBuilder.newColumn('contact_num').withTitle('Contact'),
-        DTColumnBuilder.newColumn('school').withTitle('School'),
-        DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable()
-            .renderWith(actionsHtml)
+    rp.dtColumnDefs = [
+        DTColumnDefBuilder.newColumnDef(0),
+        DTColumnDefBuilder.newColumnDef(1),
+        DTColumnDefBuilder.newColumnDef(2),
+        DTColumnDefBuilder.newColumnDef(3),
+        DTColumnDefBuilder.newColumnDef(4),
+        DTColumnDefBuilder.newColumnDef(5).notSortable()
     ];
+
+    ResourcePerson.getResourcePersons().then(function (resourcePersons) {
+        console.log('Resource Persons:', resourcePersons);
+        rp.persons = resourcePersons;
+    }, function(error){
+        alert('Unable to load resource persons');
+        console.log('Error:', err);
+    });
+
+    SchoolRestApi.query().$promise.then(function (schools) {
+        console.log('Schools:', schools);
+        rp.schools = schools;
+        rp.school = rp.schools[0];
+    }, function (error) {
+        alert('Unable to load schools');
+        console.log('Error:', err);
+    });
 
     rp.add = function () {
         var attr = {
             size: 'lg',
-            templateUrl : 'add-resource-persons',
-            // saveUrl: '../resource-persons',
+            templateUrl : 'create',
+            resource: true,
             action: 'Add',
-            keepOpen : true, // keep open even after save
-            // programs : $scope.program,
-            // status : $scope.status,
-            // champions : $scope.champions,
-            // resource_person : $scope.resource_person
+            school: rp.schools[0],
+            schools : rp.schools
         };
         var modal = defaultModal.showModal(attr);
-        // add to datatable
-        modal.result.then(function(data){
-            // rp.projects.push(data);
-        });
-    }
 
-    function edit (resourcePerson) {
+        modal.result.then(function (data) {
+            console.log("Resource person:", data);
+            var request = {
+                personalInfo: data.person,
+                resourcePerson: {
+                    'school_id': data.resourcePerson.school.id,
+                    'profession': data.resourcePerson.profession
+                }
+            };
+
+            ResourcePerson.addResourcePerson(request).then(function (response) {
+                //  alert(resourcePerson.first_name + ' was succesfully added');
+                var person = data.person;
+                person.profession = data.resourcePerson.profession;
+                person.name = person.first_name + " " + person.last_name;
+                person.school = data.resourcePerson.school.name;
+                person.id = response.id;
+                rp.persons.push(person);
+            });
+        });
+    };
+
+    rp.edit = function (resourcePerson) {
         var attr = {
             size: 'md',
             templateUrl : 'addUser',
@@ -90,73 +118,27 @@ angular.module('resourcePersons', ['datatables','common.service', 'ui.bootstrap'
         // vm.dtInstance.reloadData();
     }
 
-    function deleteRow(resourcePerson) {
-        // vm.message = 'You are trying to remove the row: ' + JSON.stringify(person);
-        // Delete some data and call server to make changes...
-        // Then reload the data so that DT is refreshed
-        // vm.dtInstance.reloadData();
+    rp.delete = function (index, resourcePerson) {
         var attr = {
-            deleteName : resourcePerson.first_name,
-            deletedKey : resourcePerson.id
+            deleteName : resourcePerson.name
         }
         var del = defaultModal.delConfirm(attr);
 
-        del.result.then(function (id) {
-            // reqDef.delete('deleteUser/'+id).then(function(result){
-            //     if (result.status) {
-            //         console.log('successfully deleted');
-            //     } else {
-            //         console.log('not deleted');
-            //     }
-            // });
+        del.result.then(function () {
+            if (!resourcePerson.$delete) {
+                ResourcePerson.getResourcePerson({id: resourcePerson.id})
+                    .then(function (resource) {
+                        resource.$delete(function () {
+                            rp.persons.splice(index, 1);
+                        });
+                }, function (err) {
+                    console.log(err);
+                });
+            } else {
+                resourcePerson.$delete(function () {
+                    rp.persons.splice(index, 1);
+                });
+            }
         });
     }
-
-    function createdRow(row, data, dataIndex) {
-        // Recompiling so we can bind Angular directive to the DT
-        $compile(angular.element(row).contents())($scope);
-    }
-
-    function actionsHtml(data, type, full, meta) {
-        rp.persons[data.id] = data;
-        return '<button class="btn btn-warning" ng-click="showCase.edit(showCase.persons[' + data.id + '])">' +
-            '   <i class="fa fa-edit"></i>' +
-            '</button>&nbsp;' +
-            '<button class="btn btn-danger" ng-click="showCase.delete(showCase.persons[' + data.id + '])" )"="">' +
-            '   <i class="fa fa-trash-o"></i>' +
-            '</button>';
-    }
-})
-
-.controller('resourcePersonCtrl', function($scope, defaultModal, reqDef) {
-    var rp = this;
-    $scope.users = {};
-    $scope.add = function(){
-
-        var attr = {
-            size: 'md',
-            templateUrl : 'addUser',
-            saveUrl: 'addUser'
-        };
-
-        var openModal = function(attr){
-            var userModal = defaultModal.showModal(attr);
-
-            // when the modal opens
-            userModal.result.then(function(data){
-                console.log(data);
-                console.log('added');
-                // adding of user
-            });
-        }
-        // call open modal
-        reqDef.get('getRoles').then(function(result){
-            if(result.roles != undefined)
-                attr.roles = result.roles;
-
-            openModal(attr);
-        }, function(err){
-            openModal(attr);
-        });
-    };
 });

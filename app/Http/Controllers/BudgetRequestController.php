@@ -29,7 +29,7 @@ class BudgetRequestController extends Controller
     		Log::info($proj_id);
             if(EMPTY($proj_id))
                 return;
-            
+
             $br = (new App\ProjectBudgetRequest)->getTable();
             $br_status = (new App\BudgetRequestStatus)->getTable();
             $token = csrf_token();
@@ -65,6 +65,7 @@ class BudgetRequestController extends Controller
             Log::info('br');
             Log::info($br);
             unset($br['token']);
+						$br['status_id'] = 1;
             $id = App\ProjectBudgetRequest::insertGetId($br);
             // get status name
             $stat_name = App\BudgetRequestStatus::where('id', $br['status_id'])
@@ -73,9 +74,12 @@ class BudgetRequestController extends Controller
             $data['brequest']['id'] = $id;
             $data['brequest']['status'] = $stat_name;
             $status = TRUE;
-       } catch (Exception $e) {
+       } catch (\Exception $e) {
+				 Log::info(json_encode(DB::getQueryLog()));
             $msg = $e->getMessage();
+
         }
+					Log::info(json_encode(DB::getQueryLog()));
         $data['msg'] = $msg;
         $data['status'] = $status;
 
@@ -107,7 +111,7 @@ class BudgetRequestController extends Controller
             $data['brequest']['status'] = $stat_name;
             $status = TRUE;
         }
-        catch(Exception $e)
+        catch(\Exception $e)
         {
             $msg = $e->getMessage();
         }

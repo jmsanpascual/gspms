@@ -42,7 +42,7 @@ common.service('defaultModal', function($uibModal, $log){
         //     console.log('No config delete key yet.');
 
         // Declare the model instance
-        var templateUrl = 'js/templates/confirm.html'; 
+        var templateUrl = '/gspms/public/js/templates/confirm.html';
         var staticController = 'confirmModalInstanceCtrl';
         var staticVar = ['size', 'templateUrl', 'controller'];
         var resolveAttr = {};
@@ -127,6 +127,12 @@ common.controller('defaultModalInstanceCtrl', function ($scope, $uibModalInstanc
     $scope.save = function (formData) {
         console.log('formdata',formData);
         var data = (formData == undefined) ? $scope.submitData : $scope.submitData[formData];
+
+        if (data.resource) {
+            $uibModalInstance.close(data);
+            return;
+        }
+
         $http.post($scope.submitData.saveUrl, data).then(function(result){
             result = result.data;
             if(result.status)
@@ -151,7 +157,8 @@ common.controller('defaultModalInstanceCtrl', function ($scope, $uibModalInstanc
             {
                 alert(result.msg);
             }
-        },function(){
+        },function(e){
+            console.log(e);
             alert('Error. Internal server.');
         });
     };
