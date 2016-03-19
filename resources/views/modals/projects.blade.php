@@ -1,7 +1,7 @@
 @extends('layouts.defaultModal')
 
 @section('title')
-	@{{ submitData.action}} Project
+  @{{ submitData.action}} Project
 @stop
 @section('modal-content')
 	<form role="form" id = "projForm">
@@ -174,4 +174,5 @@
 		<button class = "btn btn-info" ng-click = "btnc.completed()" ng-if = "submitData.proj.proj_status_id == 1">Completed</button>
 	</span>
 	<button class = "btn btn-success" ng-if = "submitData.proj.proj_status_id != 3" ng-click="save('proj')">Save</button>
+
 @stop

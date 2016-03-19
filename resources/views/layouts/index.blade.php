@@ -12,6 +12,7 @@
     <title>Green School</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <!-- Bootstrap core CSS -->
@@ -59,7 +60,7 @@
                     </li>
                     <li class="dropdown settings">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                      <?php print_r(Session::all()) ?> 
+                      
                       <i class="fa fa-angle-down"></i>
                     </a>
                         <ul class="dropdown-menu animated fadeInDown">
@@ -107,6 +108,19 @@
                     </li>
                 </ul>
               </li>
+              <li class="nav-dropdown">
+                <a href="#" title="Forms">
+                    <i class="fa fa-user"></i> Resource Person
+                </a>
+                <ul class="nav-sub">
+                    <li>
+                      <a href="{{ route('resource-persons.view') }}">View Resource Person</a>
+                    </li>
+                    <li>
+                      <a href="{{ route('resource-persons.create') }}">Create Resource Person</a>
+                    </li>
+                </ul>
+              </li>
             </ul>
         </nav>
         <!--sidebar left end-->
@@ -121,7 +135,6 @@
 
     <!--Global JS-->
     <!-- // <script src="js/jquery-1.10.2.min.js"></script> -->
-
     {!! HTML::script('js/others/jquery-1.12.0.min.js') !!}
     {!! HTML::script('plugins/bootstrap/js/bootstrap.min.js') !!}
     {!! HTML::script('plugins/navgoco/jquery.navgoco.min.js') !!}

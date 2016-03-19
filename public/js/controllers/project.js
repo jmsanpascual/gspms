@@ -1,19 +1,19 @@
 'use strict'
 angular.module('project.controller', [
-   'project.service',
-   'program.service',
-   'projectStatus.service',
-   'dynamicElement',
-   'user.service',
-   'datatables',
-   'common.service', 
-   'ui.bootstrap',
-   'project.activites.controller',
-   'budget.request.controller',
-   'items.controller'
- ])
+    'project.service',
+    'program.service',
+    'projectStatus.service',
+    'dynamicElement',
+    'user.service',
+    'datatables',
+    'common.service',
+    'ui.bootstrap',
+    'project.activites.controller',
+    'budget.request.controller',
+    'items.controller'
+])
 
-.controller('projDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder, 
+.controller('projDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder,
   reqDef, defaultModal, Project, ProgramRestApi, ProjectStatusRestApi, UserRestApi) {
     var vm = this;
     vm.message = '';
@@ -60,7 +60,7 @@ angular.module('project.controller', [
           console.log(result.msg);
        }
     });
-    
+
     UserRestApi.getChampion().$promise.then(function(result){
         if(result.status)
         {
@@ -128,13 +128,13 @@ angular.module('project.controller', [
             proj : angular.copy(proj)
         };
 
-        var modal = defaultModal.showModal(attr); 
+        var modal = defaultModal.showModal(attr);
         modal.result.then(function(data){
           console.log(data);
           vm.projects.splice(index, 1, angular.copy(data.proj));
         });
     }
-        
+
 
     function deleteRow(index, proj) {
         // vm.message = 'You are trying to remove the row: ' + JSON.stringify(person);

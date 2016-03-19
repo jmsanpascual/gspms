@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PersonalInfo extends Model
 {
-    //
-	use SoftDeletes;
+    use SoftDeletes;
     protected $table = 'personal_info';
     
     public function scopejoinUserInfo($query)

@@ -26,7 +26,7 @@
                   </div>
               </div>
               <div class="panel-body">
-                    
+
                 <div ng-controller="projDTCtrl as proj">
                   <button class = "btn btn-success pull-right" ng-click = "proj.add()"> Add Project</button>
                   <p class="text-danger"><strong>@{{ proj.message }}</strong></p>
@@ -76,7 +76,6 @@
 {!! HTML::script('js/services/user.js') !!}
 {!! HTML::script('js/services/activity-status.js') !!}
 {!! HTML::script('js/controllers/dynamic-element.js') !!}
-{!! HTML::script('js/controllers/project.js') !!}
 {!! HTML::script('js/controllers/project-activities.js') !!}
 {!! HTML::script('js/services/budget-request.js') !!}
 {!! HTML::script('js/services/budget-request-status.js') !!}
@@ -84,4 +83,5 @@
 {!! HTML::script('js/services/item.js') !!}
 {!! HTML::script('js/services/categories.js') !!}
 {!! HTML::script('js/controllers/item.js') !!}
+{!! HTML::script('js/controllers/project.js') !!}
 @endsection

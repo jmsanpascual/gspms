@@ -48,7 +48,7 @@ Route::resource('user', 'UserController');
 Route::resource('roles', 'RoleController');
 // RESTful resource route for Projects
 Route::get('projects/view-project', array('as' => 'view.project', function () {
-  return view('view-project');
+    return view('view-project');
 }));
 Route::get('projects/view-project2', array('as' => 'view.project2', function () {
   return view('projects');
@@ -67,9 +67,17 @@ Route::resource('project-activities', 'ProjectActivitiesController');
 Route::resource('budget', 'BudgetController');
 
 Route::get('budget-request/add', array(function () {
-  return view('modals/budget-request-form');
+    return view('modals/budget-request-form');
 }));
 
+// RESTful resource route for Resource Persons
+Route::get('resource-persons/view-resource-persons', array('as' => 'resource-persons.view', function () {
+    return view('resource-persons');
+}));
+Route::resource('resource-persons', 'ResourcePersonController');
+
+// RESTful resource route for Schools
+Route::resource('schools', 'SchoolController');
 
 Route::post('budget-request/request', 'BudgetRequestController@updateStatus');
 Route::post('budget-request/update', 'BudgetRequestController@update');
