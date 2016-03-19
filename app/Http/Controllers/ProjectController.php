@@ -100,10 +100,13 @@ class ProjectController extends Controller
             Log::info('project');
             Log::info($project);
             unset($project['token']);
+            // unset($project['status_id']);
+            $project['proj_status_id'] = 2; // FOR APPROVAL
             $project['id'] = App\Project::insertGetId($project);
             // get status name
             $stat_name = App\ActivityStatus::where('id', $project['proj_status_id'])->value('name');
             $data['proj'] = $project;
+            $data['proj']['proj_status_id'] = $project['proj_status_id'];
             $data['proj']['status'] = $stat_name;
             $status = TRUE;
        } catch (Exception $e) {
@@ -129,9 +132,13 @@ class ProjectController extends Controller
             unset($upd_arr['id']);
             unset($upd_arr['status']);
             unset($upd_arr['token']);
+            unset($upd_arr['status_id']);
+            $upd_arr['proj_status_id'] = 2;
             App\Projects::where('id', $id)->update($upd_arr);
-
+            $stat = App\ProjectStatus::where('id', $upd_arr['proj_status_id'])->value('name');
             $data['proj'] = $request;
+            $data['proj']['proj_status_id'] = $upd_arr['proj_status_id'];
+            $data['proj']['status'] = $stat;
             $status = TRUE;
         }
         catch(Exception $e)
@@ -143,6 +150,35 @@ class ProjectController extends Controller
 
         return Response::json($data);
     }
+
+    public function updateStatus(Request $req)
+    {
+        $msg = '';
+        $status = FALSE;
+        try
+        {
+            // missing check if for approval
+            $stat = App\Project::where('id', $req->get('proj_id'))
+            ->update([
+                'proj_status_id' => $req->get('id'),
+                'remarks' => $req->get('remarks')
+            ]);
+
+            $data['stat'] = App\ProjectStatus::where('id', $req->get('id'))->first(['id','name']);
+            Log::info('stat' . json_encode($data['stat']));
+            $status = TRUE;
+        }
+        catch(Exception $e)
+        {
+            Log::info(json_encode(DB::getQueryLog()));
+            $msg = $e->getMessage();
+        }
+        $data['msg'] = $msg;
+        $data['status'] = $status;
+
+        return Response::json($data);
+    }
+    
 
     public function destroy($id)
     {

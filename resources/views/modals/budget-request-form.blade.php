@@ -11,7 +11,8 @@
 			<div class = "row">
 				<label class = "form-label col-md-4">Amount</label>
 				<div class = "col-md-6">
-					<input type = "text" class = "form-control" ng-model = "submitData.brequest.amount">
+					<input type = "text" class = "form-control" ng-model = "submitData.brequest.amount"
+					placeholder = "Enter Amount">
 				</div>
 
 			</div>
@@ -20,7 +21,8 @@
 			<div class = "row">
 				<label class = "form-label col-md-4">Reason</label>
 				<div class = "col-md-6">
-					<textarea class = "form-control" style ="resize:none" ng-model = "submitData.brequest.reason"></textarea>
+					<textarea class = "form-control" style ="resize:none" ng-model = "submitData.brequest.reason"
+					placeholder = "Enter Reason"></textarea>
 				</div>
 			</div>
 		</div>
@@ -38,7 +40,8 @@
 			<div class = "row">
 				<label class = "form-label col-md-4">Remarks</label>
 				<div class = "col-md-6">
-					<textarea class = "form-control" style ="resize:none" ng-model = "submitData.brequest.remarks"></textarea>
+					<textarea class = "form-control" style ="resize:none" ng-model = "submitData.brequest.remarks"
+					placeholder = "Enter Remarks"></textarea>
 				</div>
 			</div>
 		</div>

@@ -23,6 +23,7 @@ angular.module('budget.request.controller',
         console.log('proj_id');
         console.log($scope.proj_id);
         BudgetRequestRestApi.query({proj_id : $scope.proj_id}).$promise.then(function (result) {
+           console.log(result);
            result = result[0];
            console.log(result);
           if (result.status) {

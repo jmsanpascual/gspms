@@ -48,8 +48,15 @@ projectService.factory('ProjRestApi', function ($resource) {
                 method: 'GET',
                 params: '@id',
                 url: '../projects/fetch/:id'
+            },
+            request : {
+                method : 'POST',
+                url : '../projects/request',
+                params : {
+                    id : '@id',
+                    proj_id : '@proj_id',
+                }
             }
-
         });
 
     return restApi;

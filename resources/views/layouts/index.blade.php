@@ -59,7 +59,8 @@
                     </li>
                     <li class="dropdown settings">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                      Chester Tiongson <i class="fa fa-angle-down"></i>
+                      <?php print_r(Session::all()) ?> 
+                      <i class="fa fa-angle-down"></i>
                     </a>
                         <ul class="dropdown-menu animated fadeInDown">
                             <li>

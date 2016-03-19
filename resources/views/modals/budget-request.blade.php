@@ -27,7 +27,7 @@
                 <button class="btn btn-warning" ng-click="brc.edit($index, data)">
                 <i class="fa fa-edit"></i>
                 </button>
-                <button class="btn btn-danger" ng-click="brc.delete($index ,data)">
+                <button class="btn btn-danger" ng-if = "data.status_id != 2" ng-click="brc.delete($index ,data)">
                    <i class="fa fa-trash-o"></i>
                 </button>
               </td>

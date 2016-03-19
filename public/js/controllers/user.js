@@ -83,12 +83,14 @@ angular.module('users', ['datatables','common.service', 'ui.bootstrap', 'roles.s
     }
 
     function edit(index, person) {
+        var user = angular.copy(person);
+        // delete user.password;
         var attr = {
             size: 'md',
             templateUrl : 'addUser',
             saveUrl: 'editUser',
             action: 'Edit',
-            users : angular.copy(person), 
+            users : user, 
             roles : $scope.roles
         };
 

@@ -10,6 +10,8 @@ use Hash;
 use Auth;
 use Lang;
 use Response;
+use Session;
+
 class UserController extends Controller
 {
 
@@ -52,10 +54,11 @@ class UserController extends Controller
         $msg = '';
         try
         {
+            $user = (new App\User)->getTable();
             $personal_info = (new App\PersonalInfo)->getTable();
             $data['champions'] = App\User::joinUserRole()->joinPersonalInfo()
                                 ->where('role_id', config('constants.role_champion'))
-                                ->select($personal_info . '.id', 
+                                ->select($user . '.id', 
                                     DB::raw('CONCAT(last_name,", ",first_name, " ",middle_name) AS name'))->get();
             $status = TRUE;
         }
@@ -261,7 +264,12 @@ class UserController extends Controller
                 'address' => $input['address'],
                 'birth_date' => $input['bdate']
             ]);
-            App\UserRoles::where('user_id', $input['id'])->update(['role_id' => $input['selectedRole']]);
+            $user_role = App\UserRoles::where('user_id', $input['id']);
+            if(!EMPTY($user_role->first()))
+                $user_role->update(['role_id' => $input['selectedRole']]);
+            else
+                $user_role->insert(['user_id' => $input['id'], 'role_id' => $input['selectedRole']]);
+
             DB::commit();
             $data['users'] = $input;
             $status = TRUE;
@@ -314,8 +322,30 @@ class UserController extends Controller
     public function login()
     {
         $credentials = Request::all();
-
+        Log::info('credentials  - - - -  ' . json_encode($credentials));
         if (Auth::attempt($credentials)) {
+
+            $personal_info = (new App\PersonalInfo)->getTable();
+            $user_role = (new App\UserRoles)->getTable();
+            $user_tb = (new App\User)->getTable();
+            $user_info = (new App\UserInfo)->getTable();
+            $user = App\User::leftJoin($user_info, "$user_info.user_id", "=", "$user_tb.id")
+            ->leftJoin($personal_info, "$personal_info.id", "=", "$user_info.personal_info_id")
+            ->leftJoin($user_role, "$user_tb.id", "=", "$user_role.user_id")
+            ->where('username', $credentials['username'])
+            ->first(array("$user_tb.id",'first_name', "last_name", "middle_name", "email", 
+                "$user_role.role_id as role"));
+            // $role_id = $user['role_id'];
+            // unset($user['role_id']);
+            Session::set('first_name', $user->first_name);
+            Session::set('middle_name', $user->middle_name);
+            Session::set('last_name', $user->last_name);
+            Session::set('email', $user->email);
+            Session::set('role', $user->role);
+
+            Log::info(json_encode(Session::all()));
+            Log::info(session('first_name'));
+            // Session::put('role', );
             return array('status' => true);
         } else {
             return array('status' => false);

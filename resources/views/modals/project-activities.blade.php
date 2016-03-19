@@ -40,6 +40,16 @@
 			</div>
 			</div>
 		</div>
+		<div class = "form-group">
+			<div class = "row">
+				<div class = "col-md-12">
+				<label class = "form-label col-md-4">Description</label>
+				<div class = "col-md-6">
+					<textarea class = "form-control" style ="resize:none" ng-model = "submitData.projAct.description"></textarea>
+				</div>
+			</div>
+			</div>
+		</div>
 		<div class = "form-group" ng-if = "submitData.projAct.status_id">
 			<div class = "row">
 				<div class = "col-md-12">

@@ -44,6 +44,7 @@ angular.module('items.controller',
           console.log('request');
           console.log(result.categories);
           $scope.categories =  result.categories;
+          $scope.categories.push({id: 'NA', name : 'Not in the list'});
       } else {
           alert('Unable to load datatable');
       }
@@ -125,6 +126,25 @@ angular.module('items.controller',
     }
 
 })
+
+.controller('addItemCategory', function($scope, defaultModal){
+    var _self = this;
+    
+    _self.add_category = function()
+    {
+        var attr = {
+            action : 'Add',
+            templateUrl : '../categories/add',
+            size : 'md',
+            saveUrl : '../categories'
+        };
+
+        defaultModal.showModal(attr).result.then(function(data){
+            console.log(data);
+            $scope.submitData.categories.push(data.item_category);
+        });      
+    }
+});
 
 
 
