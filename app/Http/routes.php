@@ -11,8 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('login');
+
+
+
+
+Route::group(['middleware' => ['web','session_check']], function () {
+
+Route::get('index', function () {
+    return view('welcome');
 });
 
 Route::get('create.account', array('as' => 'create.account', function () {
@@ -23,7 +29,7 @@ Route::get('allocate-budget.project', array('as' => 'allocate-budget.project', f
   return view('allocate-budget-project');
 }));
 
-Route::group(['middleware' => 'web'], function () {
+// Route::group(['middleware' => 'web'], function () {
 
   Route::get('index', function () {
     return view('layouts/index');
@@ -129,4 +135,13 @@ Route::resource('activity-status', 'ActivityStatusController');
 
 Route::group(['middleware' => ['web']], function () {
     //
+
+  Route::post('/login', 'UserController@login');
+  Route::get('/', function () {
+
+      if(!Auth::check())
+        return view('login');
+      else
+        return view('welcome');
+  });
 });

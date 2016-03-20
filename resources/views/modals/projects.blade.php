@@ -73,12 +73,14 @@
     <div class = "form-group">
       <div class = "row">
         <div class = "col-md-12">
+        @if(Session::get('role') != config('constants.role_champion'))
         <label class = "form-label col-md-2">Champion</label>
         <div class = "col-md-4">
           <select class = "form-control" ng-init="submitData.proj.champion_id = submitData.champion.id" ng-model = "submitData.proj.champion_id"
           ng-options = "c.id as c.name for c in submitData.champions">
           </select>
         </div>
+        @endif
         <label class = "form-label col-md-2">Resource Person</label>
         <div class = "col-md-4">
           <select class = "form-control" ng-init="submitData.proj.resource_person_id = submitData.resource.id" ng-model = "submitData.proj.resource_person_id"
@@ -123,8 +125,10 @@
     <h3>Activities</h3>
     <hr>
      <div ng-controller="projActDTCtrl as padtc" ng-init = 'proj_id = submitData.proj.id; getProjActivities(submitData.proj.id)'>
+          @if(Session::get('role') == config('constants.role_champion'))
           <button class = "btn btn-success btn-sm pull-right" ng-click = "padtc.add()"
           ng-if = "submitData.proj.proj_status_id != 3"> Add Activity</button>
+          @endif
           <p class="text-danger"><strong>@{{ padtc.message }}</strong></p>
           <br>
           <table datatable="ng" dt-options="padtc.dtOptions" dt-columns="padtc.dtColumnDefs" dt-instance="padtc.dtInstance" class="table table-hover row-border hover">
@@ -148,9 +152,11 @@
                     <button class="btn btn-warning btn-sm" ng-click="padtc.edit($index, data)">
                     <i class="fa fa-edit"></i>
                     </button>
+                    @if(Session::get('role') == config('constants.role_champion'))
                     <button class="btn btn-danger btn-sm" ng-if = "data.status_id != 4" ng-click="padtc.delete($index ,data)">
                        <i class="fa fa-trash-o"></i>
                     </button>
+                    @endif
                 </span>
                 </td>
               </tr>
@@ -163,18 +169,32 @@
 @stop
 
 @section('btn')
+
 	<span ng-controller = "btnCtrl as btnc" ng-if = "submitData.proj.id"
 	ng-init = 'btnc.data.proj_id = submitData.proj.id;'>
 		<div class = "pull-left" ng-if = "submitData.proj.proj_status_id != 3">
-			<button class = "btn btn-info" ng-click="btnc.showItem()">Add Item/Expense</button>
+			<button class = "btn btn-info" ng-click="btnc.showItem()">
+        @if(Session::get('role') == config('constants.role_life'))
+        View Item/Expense
+        @else
+        Add Item/Expense
+        @endif
+      </button>
 			<button class = "btn btn-warning" ng-click="btnc.showReqBudget()">Request Budget</button>
 		</div>
+		@if(Session::get('role') == config('constants.role_life'))
 		<span ng-if = "submitData.proj.proj_status_id == 2">
 			<button class = "btn btn-primary" ng-click = "btnc.approve()">Approve</button>
 			<button class = "btn btn-danger" ng-click = "btnc.disapprove()">Disapprove</button>
 		</span>
+		@endif
+		@if(Session::get('role') == config('constants.role_champion') ||
+		Session::get('role') == config('constants.role_exec'))
 		<button class = "btn btn-info" ng-click = "btnc.completed()" ng-if = "submitData.proj.proj_status_id == 1">Completed</button>
+		@endif
 	</span>
+	@if(Session::get('role') == config('constants.role_champion') ||
+		Session::get('role') == config('constants.role_exec'))
 	<button class = "btn btn-success" ng-if = "submitData.proj.proj_status_id != 3" ng-click="save('proj')">Save</button>
-
+	@endif
 @stop

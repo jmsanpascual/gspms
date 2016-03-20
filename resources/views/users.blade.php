@@ -26,8 +26,10 @@
                   </div>
               </div>
               <div class="panel-body" ng-controller="userDTCtrl as showCase">
+                  @if(Session::get('role') == config('constants.role_life'))
                     <button class = "btn btn-success btn-sm pull-right" ng-click = "showCase.add()"> Add User</button>
-                <div >
+                  @endif
+                <div>
                   <p class="text-danger"><strong ng-bind="showCase.message"></strong></p>
                   <br>
                   <table datatable="ng" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table table-hover row-border hover">
@@ -50,9 +52,11 @@
                         <button class="btn btn-warning btn-sm" ng-click="showCase.edit($index, person)">
                         <i class="fa fa-edit"></i>
                         </button>
+                        @if(Session::get('role') == config('constants.role_life'))
                         <button class="btn btn-danger btn-sm" ng-click="showCase.delete($index ,person)">
                            <i class="fa fa-trash-o"></i>
                         </button>
+                        @endif
                       </td>
                     </tr>
                   </tbody>

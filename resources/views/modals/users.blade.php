@@ -136,5 +136,7 @@
 @stop
 
 @section('btn')
-	<button class = "btn btn-success" ng-click="save()">Save</button>
+	@if(Session::get('role') == config('constants.role_life'))
+		<button class = "btn btn-success" ng-click="save()">Save</button>
+	@endif
 @stop

@@ -6,7 +6,9 @@
 @section('modal-content')
 	<!-- DTable -->
 	 <div ng-controller="BudgetReqCtrl as brc" ng-init = 'proj_id = submitData.proj_id; getProjBudgetReq()'>
-        <button class = "btn btn-success btn-sm pull-right" ng-click = "brc.add()"> Request Budget</button>
+        @if(Session::get('role') == config('constants.role_champion'))
+        <button class = "btn btn-success pull-right" ng-click = "brc.add()"> Request Budget</button>
+        @endif
         <p class="text-danger"><strong>@{{ brc.message }}</strong></p>
         <br>
         <table datatable="ng" dt-options="brc.dtOptions" dt-columns="brc.dtColumnDefs" dt-instance="brc.dtInstance" class="table table-hover row-border hover">
@@ -27,9 +29,11 @@
                 <button class="btn btn-warning btn-sm" ng-click="brc.edit($index, data)">
                 <i class="fa fa-edit"></i>
                 </button>
-                <button class="btn btn-danger btn-sm" ng-if = "data.status_id != 2" ng-click="brc.delete($index ,data)">
+                @if(Session::get('role') == config('constants.role_champion'))
+                <button class="btn btn-danger" ng-if = "data.status_id != 2" ng-click="brc.delete($index ,data)">
                    <i class="fa fa-trash-o"></i>
                 </button>
+                @endif
               </td>
             </tr>
           </tbody>

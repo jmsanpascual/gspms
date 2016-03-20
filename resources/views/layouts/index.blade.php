@@ -60,7 +60,8 @@
                     </li>
                     <li class="dropdown settings">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-
+                      {{ Session::get('first_name') . ' ' . Session::get('middle_name') . ' ' .
+                      Session::get('last_name') }}
                       <i class="fa fa-angle-down"></i>
                     </a>
                         <ul class="dropdown-menu animated fadeInDown">
@@ -72,26 +73,22 @@
                 </ul>
             </div>
         </header>
+        <?php $page = !EMPTY($page) ? $page : ''; ?>
         <!--sidebar left start-->
         <nav class="sidebar sidebar-left">
             <h5 class="sidebar-header">Navigation</h5>
             <ul class="nav nav-pills nav-stacked">
               @if(Session::get('role') == config('constants.role_life'))
-              <li class="nav-dropdown">
-                  <a href="#" title="Forms">
+              <li ng-class = "{'active' : {{json_encode(($page == 'accounts'))}}; }">
+                  <a href="{{ URL::to('users') }}" title="Forms">
                     <i class="fa fa-list-alt"></i> Accounts
                   </a>
-                  <ul class="nav-sub">
-                    <li>
-                      <a href="{{ URL::to('users') }}">View List</a>
-                    </li>
-                  </ul>
               </li>
               @endif
 
               @if(Session::get('role') == config('constants.role_head')
                 || Session::get('role') == config('constants.role_life'))
-              <li class="nav-dropdown">
+              <li class="">
                 <a href="{{ URL::to('/funds/view') }}" title="Forms">
                     <i class="fa fa-money"></i> Funds
                 </a>
@@ -99,33 +96,21 @@
               @endif
 
               @if(Session::get('role') == config('constants.role_champion')
-                || Session::get('role') == config('constants.role_exec'))
-              <li class="nav-dropdown">
-                <a href="#" title="Forms">
-                    <i class="icon-doc"></i> Projects
-                </a>
-                <ul class="nav-sub">
-                    <li>
-                      <a href="{{ route('view.project2') }}">View Projects Projects</a>
-                    </li>
-                    <li>
-                      <a href="{{ route('allocate-budget.project') }}">Allocate Budget</a>
-                    </li>
-                </ul>
+                || Session::get('role') == config('constants.role_exec')
+                || Session::get('role') == config('constants.role_life'))
+                <li ng-class = "{active : {{json_encode(($page == 'projects'))}}; }">
+                  <a href="{{ route('view.project2') }}" title="Forms">
+                      <i class="icon-doc"></i> Projects
+                  </a>
               </li>
               @endif
 
               @if(Session::get('role') == config('constants.role_champion')
                 || Session::get('role') == config('constants.role_exec'))
-              <li class="nav-dropdown">
-                <a href="#" title="Forms">
+              <li class="">
+                <a href="{{ route('resource-persons.view') }}" title="Forms">
                     <i class="fa fa-user"></i> Resource Person
                 </a>
-                <ul class="nav-sub">
-                    <li>
-                      <a href="{{ route('resource-persons.view') }}">View Resource Person</a>
-                    </li>
-                </ul>
               </li>
               @endif
 

@@ -96,6 +96,10 @@ class ProjectActivitiesController extends Controller
             Log::info($activity);
             DB::beginTransaction();
             $activity['status_id'] = 1;
+            $activity['start_date'] = date('Y-m-d H:i:s', strtotime($activity['start_date']));
+            Log::info(' start date '. $activity['start_date']);
+            $activity['end_date'] = date('Y-m-d H:i:s', strtotime($activity['end_date']));
+            
             $id = App\Activities::insertGetId($activity);
             App\ProjectActivities::insert(['proj_id' => $proj_id, 'activity_id' => $id]);
             $stat = App\ActivityStatus::where('id', $req->get('status_id'))->value('name');

@@ -10,6 +10,8 @@ use App;
 use Response;
 use Log;
 use DB;
+use Session;
+
 class ProjectController extends Controller
 {
 
@@ -108,9 +110,15 @@ class ProjectController extends Controller
 
             $project['objective'] = $temp;
             $project['proj_status_id'] = 2; // FOR APPROVAL
+            if(EMPTY($project['champion_id'])  && Session::get('role') == config('constants.role_champion'))
+                $project['champion_id'] = Session::get('id');
+
+            $project['start_date'] = date('Y-m-d H:i:s', strtotime($project['start_date']));
+            Log::info(' start date '. $project['start_date']);
+            $project['end_date'] = date('Y-m-d H:i:s', strtotime($project['end_date']));
             $project['id'] = App\Project::insertGetId($project);
             // Get status name
-            $stat_name = App\ActivityStatus::where('id', $project['proj_status_id'])->value('name');
+            $stat_name = App\ProjectStatus::where('id', $project['proj_status_id'])->value('name');
 
             $project['objective'] = $objectives; // Reassign the array objectives
             $data['proj'] = $project;
@@ -151,7 +159,11 @@ class ProjectController extends Controller
             $upd_arr['objective'] = $temp; // Assign the concatenated objectives
             unset($upd_arr['status_id']);
             $upd_arr['proj_status_id'] = 2;
-
+            if(EMPTY($upd_arr['champion_id'])  && Session::get('role') == config('constants.role_champion'))
+                $upd_arr['champion_id'] = Session::get('id');
+            $upd_arr['start_date'] = date('Y-m-d H:i:s', strtotime($upd_arr['start_date']));
+            Log::info(' start date '. $upd_arr['start_date']);
+            $upd_arr['end_date'] = date('Y-m-d H:i:s', strtotime($upd_arr['end_date']));
             App\Projects::where('id', $id)->update($upd_arr);
             $stat = App\ProjectStatus::where('id', $upd_arr['proj_status_id'])->value('name');
             $data['proj'] = $request;
