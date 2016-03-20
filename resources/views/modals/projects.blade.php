@@ -18,7 +18,7 @@
         </div>
         <label class = "form-label col-md-2">Program</label>
         <div class = "col-md-4">
-          <select class = "form-control" ng-model = "submitData.proj.program_id"
+          <select class = "form-control" ng-init="submitData.proj.program_id = submitData.program.id" ng-model = "submitData.proj.program_id"
           ng-options = "p.id as p.name for p in submitData.programs">
           </select>
         </div>
@@ -75,25 +75,34 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-2">Champion</label>
         <div class = "col-md-4">
-          <select class = "form-control" ng-model = "submitData.proj.champion_id"
+          <select class = "form-control" ng-init="submitData.proj.champion_id = submitData.champion.id" ng-model = "submitData.proj.champion_id"
           ng-options = "c.id as c.name for c in submitData.champions">
           </select>
         </div>
         <label class = "form-label col-md-2">Resource Person</label>
         <div class = "col-md-4">
-          <select class = "form-control" ng-model = "submitData.proj.resource_person_id"
+          <select class = "form-control" ng-init="submitData.proj.resource_person_id = submitData.resource.id" ng-model = "submitData.proj.resource_person_id"
           ng-options = "rp.id as rp.name for rp in submitData.resource_person">
           </select>
         </div>
       </div>
       </div>
     </div>
-    <div class = "form-group">
+    <div class = "form-group" ng-controller='DynamicElementCtrl'>
       <div class = "row">
         <div class = "col-md-12">
-        <label class = "form-label col-md-2">Objective</label>
+        <label class = "form-label col-md-2">Objective(s)</label>
         <div class = "col-md-10">
-          <textarea class = "form-control" style ="resize:none" ng-model = "submitData.proj.objective"></textarea>
+          <input ng-model="submitData.proj.objective[$index]" ng-repeat='field in fields' type="text" class="form-control" ng-class="{'col-sm-12': $last}"
+          placeholder="Objective @{{$index + 1}}" style='margin-bottom: 15px;'>
+        </div>
+        <div class="col-sm-6" ng-class="{'col-sm-offset-2': fields.length}">
+          <button class="btn btn-primary btn-sm" type="button" ng-click="addField()">
+            Add Objective
+          </button>
+          <button class="btn btn-primary btn-sm" type="button" ng-click="removeField()" ng-show='fields.length'>
+            Remove Objective
+          </button>
         </div>
       </div>
       </div>

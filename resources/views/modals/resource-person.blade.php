@@ -12,7 +12,7 @@
       <div class = "row">
         <div class = "col-md-12">
         <label class = "form-label col-md-3">First Name</label>
-        <div class = "col-md-6">
+        <div class = "col-md-8">
           <input class="form-control" type = "text" ng-model = "submitData.person.first_name">
         </div>
       </div>
@@ -22,7 +22,7 @@
       <div class = "row">
         <div class = "col-md-12">
         <label class = "form-label col-md-3">Last Name</label>
-        <div class = "col-md-6">
+        <div class = "col-md-8">
           <input class="form-control" type = "text" ng-model = "submitData.person.last_name">
         </div>
       </div>
@@ -32,7 +32,7 @@
       <div class = "row">
         <div class = "col-md-12">
         <label class = "form-label col-md-3">Email</label>
-        <div class = "col-md-6">
+        <div class = "col-md-8">
           <input class="form-control" type = "text" ng-model = "submitData.person.email">
         </div>
       </div>
@@ -42,8 +42,8 @@
       <div class = "row">
         <div class = "col-md-12">
         <label class = "form-label col-md-3">Contact No</label>
-        <div class = "col-md-6">
-          <input class="form-control" type = "number" ng-model = "submitData.person.contact_num">
+        <div class = "col-md-8">
+          <input class="form-control" type = "text" ng-model = "submitData.person.contact_num">
         </div>
       </div>
       </div>
@@ -52,7 +52,7 @@
       <div class = "row ">
         <div class = "col-md-12">
         <label class = "form-label col-md-3">Address</label>
-        <div class = "col-md-6">
+        <div class = "col-md-8">
           <input class="form-control" type = "text" ng-model = "submitData.person.address">
         </div>
       </div>
@@ -62,7 +62,7 @@
       <div class = "row">
         <div class = "col-md-12">
         <label class = "form-label col-md-3">Profession</label>
-        <div class = "col-md-6">
+        <div class = "col-md-8">
           <input class="form-control" type = "text" ng-model = "submitData.resourcePerson.profession">
         </div>
       </div>
@@ -72,7 +72,7 @@
       <div class = "row">
         <div class = "col-md-12">
           <label class = "form-label col-md-3">School</label>
-          <div class = "col-md-6">
+          <div class = "col-md-8">
             <select class = "form-control" ng-init="submitData.resourcePerson.school = submitData.school" ng-model = "submitData.resourcePerson.school"
             ng-value="" ng-options = "school.name for school in submitData.schools">
             </select>

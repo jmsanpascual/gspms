@@ -19,8 +19,9 @@ class ResourcePersonController extends Controller
         try {
             $resourcePersons = ResourcePerson::select(
                 'resource_persons.id', 'resource_persons.profession',
-                'pi.first_name', 'pi.last_name', 'pi.contact_num',
-                'pi.email', 'pi.address', 's.name as school',
+                'resource_persons.personal_info_id', 'pi.first_name',
+                'pi.last_name', 'pi.contact_num', 'pi.email', 'pi.address',
+                's.name as school', 's.id as school_id',
                 DB::raw('CONCAT(pi.first_name, " ", pi.last_name) as name')
             )->join('personal_info as pi', 'pi.id', '=',
             'resource_persons.personal_info_id')
@@ -49,7 +50,15 @@ class ResourcePersonController extends Controller
             $resourcePerson['personal_info_id'] = $personalInfoId;
 
             $resourcePersonId = ResourcePerson::insertGetId($resourcePerson);
-            return Response::json(['id' => $resourcePersonId]);
+            $resourcePerson['id'] = $resourcePersonId;
+
+            // $person = [
+            //     'personalInfo' => $personalInfo,
+            //     'resourcePerson' => $resourcePerson
+            // ];
+
+            // return Response::json($person);
+            return Response::json(['id' => $resourcePersonId, 'personal_info_id' => $personalInfoId]);
         } catch (Exception $e) {
             return Response::json(['error' => $e->getMessage()]);
         }
@@ -61,6 +70,31 @@ class ResourcePersonController extends Controller
             $resourcePerson = ResourcePerson::where('id', $id)->first();
             return Response::json($resourcePerson);
         } catch (\Exception $e) {
+            return Response::json(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            $unsetArr = ['name', 'profession', 'school', 'personal_info_id'];
+            $personalInfo = $request->get('personalInfo'); // Personal info
+            $resourcePerson = $request->get('resourcePerson'); // Resource person info
+
+            $resourceId = $personalInfo['id'];
+            $personalInfo['id'] = $personalInfo['personal_info_id'];
+
+            for ($i = 0; $i < count($unsetArr); $i++) {
+                if (isset($personalInfo[$unsetArr[$i]])) {
+                    unset($personalInfo[$unsetArr[$i]]);
+                }
+            }
+
+            PersonalInfo::where('id', $personalInfo['id'])->update($personalInfo);
+            ResourcePerson::where('id', $resourceId)->update($resourcePerson);
+
+            return Response::json(['result' => true]);
+        } catch (Exception $e) {
             return Response::json(['error' => $e->getMessage()]);
         }
     }

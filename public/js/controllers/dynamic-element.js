@@ -1,8 +1,10 @@
 'use strict'
-var appModule = angular.module('dynamicElement', []);
 
-appModule.controller('DynamicElementCtrl', function ($scope) {
-    $scope.fields = [{id: 1}];
+angular.module('dynamicElement', [])
+
+.controller('DynamicElementCtrl', function ($scope) {
+    var arrayCount = getLen();
+    $scope.fields = arrayCount.length <= 0 ? [{id: 0}] : arrayCount;
 
     $scope.addField = function () {
         var id = $scope.fields.length + 1;
@@ -12,5 +14,17 @@ appModule.controller('DynamicElementCtrl', function ($scope) {
     $scope.removeField = function () {
         var index = $scope.fields.length - 1;
         $scope.fields.splice(index);
+        $scope.$parent.submitData.proj.objective.splice(index);
     };
+
+    function getLen() {
+        var arr = [];
+        var ctr = 0;
+
+        for(var obj in $scope.$parent.submitData.proj.objective) {
+            arr.push({id: ctr++});
+        }
+
+        return arr;
+    }
 });

@@ -26,9 +26,9 @@
                   </div>
               </div>
               <div class="panel-body" ng-controller="resourcePersonDTCtrl as rp">
-                <button class="btn btn-success pull-right" ng-click="rp.add()">Add Resource Person</button>
+                <button class="btn btn-success btn-sm pull-right" ng-click="rp.add()">Add Resource Person</button>
                 <div>
-                  <p class="text-danger"><strong>@{{rp.message}}</strong></p>
+                  <p class="text-danger"><strong ng-bind="rp.message"></strong></p>
                   <br>
                   <table datatable="ng" dt-options="rp.dtOptions" dt-columns="rp.dtColumns"
                   dt-instance="rp.dtInstance" class="table table-hover row-border hover">
@@ -44,16 +44,16 @@
                     </thead>
                     <tbody>
                       <tr ng-repeat = "person in rp.persons">
-                        <td>@{{person.name}}</td>
-                        <td>@{{person.profession}}</td>
-                        <td>@{{person.email}}</td>
-                        <td>@{{person.contact_num}}</td>
-                        <td>@{{person.school}}</td>
+                        <td ng-bind="person.name"></td>
+                        <td ng-bind="person.profession"></td>
+                        <td ng-bind="person.email"></td>
+                        <td ng-bind="person.contact_num"></td>
+                        <td ng-bind="person.school"></td>
                         <td>
-                          <button class="btn btn-warning" ng-click="rp.edit($index, person)">
+                          <button class="btn btn-warning btn-sm" ng-click="rp.edit($index, person)">
                           <i class="fa fa-edit"></i>
                           </button>
-                          <button class="btn btn-danger" ng-click="rp.delete($index, person)">
+                          <button class="btn btn-danger btn-sm" ng-click="rp.delete($index, person)">
                              <i class="fa fa-trash-o"></i>
                           </button>
                         </td>

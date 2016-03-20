@@ -10,11 +10,13 @@ angular.module('project.controller', [
     'ui.bootstrap',
     'project.activites.controller',
     'budget.request.controller',
-    'items.controller'
+    'items.controller',
+    'resourcePersonService',
+    'dynamicElement'
 ])
 
 .controller('projDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder,
-  reqDef, defaultModal, Project, ProgramRestApi, ProjectStatusRestApi, UserRestApi) {
+  reqDef, defaultModal, Project, ProgramRestApi, ProjectStatusRestApi, UserRestApi, ResourcePerson) {
     var vm = this;
     vm.message = '';
     vm.edit = edit;
@@ -23,65 +25,60 @@ angular.module('project.controller', [
     vm.projects = [];
 
     Project.getProjects().then(function (result) {
-         result = result[0];
+        result = result[0];
         if (result.status) {
-          console.log(result.proj);
+            console.log('Projects:', result.proj);
             vm.projects = result.proj;
         } else {
             alert('Unable to load datatable');
         }
-
      });
+
+    ResourcePerson.getResourcePersons().then(function (resourcePersons) {
+        console.log('Resource Persons:', resourcePersons);
+        $scope.resourcePersons = resourcePersons;
+    });
 
     // instantiate program
     ProgramRestApi.query().$promise.then(function (programs) {
        var result = programs[0];
        console.log('Programs:', result);
-       if(result.status)
-       {
-          $scope.program = result.program;
-       }
-       else
-       {
-        console.log(result.msg);
+
+       if (result.status) {
+           $scope.program = result.program;
+       } else {
+           console.log(result.msg);
        }
     });
 
     // instantiate project status
     ProjectStatusRestApi.query().$promise.then(function (projectStatus) {
-       var result = projectStatus[0];
-       console.log('Project Status:', result);
-       if(result.status)
-       {
-          $scope.status = result.projectStatus;
-       }
-       else
-       {
-          console.log(result.msg);
-       }
-    });
+        var result = projectStatus[0];
+        console.log('Project Status:', result);
 
-    UserRestApi.getChampion().$promise.then(function(result){
-        if(result.status)
-        {
-          $scope.champions = result.champions;
-        }
-        else
-        {
-          console.log(result.msg);
+        if (result.status) {
+            $scope.status = result.projectStatus;
+        } else {
+            console.log(result.msg);
         }
     });
 
-    UserRestApi.getResourcePerson().$promise.then(function(result){
-        if(result.status)
-        {
-          $scope.resource_person = result.resource_persons;
-        }
-        else
-        {
-          console.log(result.msg);
+    UserRestApi.getChampion().$promise.then(function (result) {
+        if (result.status) {
+            $scope.champions = result.champions;
+        } else {
+            console.log(result.msg);
         }
     });
+
+    // To be deleted, not Used anymore
+    // UserRestApi.getResourcePerson().$promise.then(function (result) {
+    //     if (result.status) {
+    //         $scope.resource_person = result.resource_persons;
+    //     } else {
+    //         console.log(result.msg);
+    //     }
+    // });
 
     vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
 
@@ -94,8 +91,7 @@ angular.module('project.controller', [
         DTColumnDefBuilder.newColumnDef(5).notSortable()
     ];
 
-    this.add = function()
-    {
+    this.add = function () {
         var attr = {
             size: 'lg',
             templateUrl : 'projects',
@@ -103,37 +99,45 @@ angular.module('project.controller', [
             action: 'Add',
             keepOpen : true, // keep open even after save
             programs : $scope.program,
+            program: $scope.program[0],
             status : $scope.status,
             champions : $scope.champions,
-            resource_person : $scope.resource_person
+            champion: $scope.champions[0],
+            resource_person : $scope.resourcePersons,
+            resource: $scope.resourcePersons[0],
+            proj: {objective: {}}
         };
         var modal = defaultModal.showModal(attr);
-        // add to datatable
+
+        // Add to datatable
         modal.result.then(function(data){
-          vm.projects.push(data);
+            vm.projects.push(data);
         });
     }
 
     function edit(index, proj) {
-       var attr = {
+        console.log(proj);
+        var attr = {
             size: 'lg',
             templateUrl : 'projects',
             saveUrl: '../projects/update',
             action: 'Edit',
             // keepOpen : true, // keep open even after save
             programs : $scope.program,
+            program: {id: proj.program_id},
             status : $scope.status,
             champions : $scope.champions,
-            resource_person : $scope.resource_person,
+            champion: {id: proj.champion_id},
+            resource_person : $scope.resourcePersons,
+            resource: {id: proj.resource_person_id},
             proj : angular.copy(proj)
         };
 
         var modal = defaultModal.showModal(attr);
-        modal.result.then(function(data){
-          vm.projects.splice(index, 1, angular.copy(data.proj));
+        modal.result.then(function (data) {
+            vm.projects.splice(index, 1, angular.copy(data.proj));
         });
     }
-
 
     function deleteRow(index, proj) {
         // vm.message = 'You are trying to remove the row: ' + JSON.stringify(person);
@@ -160,5 +164,4 @@ angular.module('project.controller', [
             });
         });
     }
-
 });

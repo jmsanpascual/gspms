@@ -2737,6 +2737,7 @@ h3.timeline-title {
     font-size: 12px;
   }
 }
+
 @media only screen and (max-width: 479px) {
   /* Main Content */
   #main-content .h1 {
@@ -2750,4 +2751,44 @@ h3.timeline-title {
 /* Angular JS CSS */
 [ng\:cloak], [ng-cloak], .ng-cloak {
   display: none !important;
+}
+
+input[type=search] {
+  color: #717171;
+  outline: 0;
+  /*height: 18px;*/
+  /*padding: 6px 11px;*/
+  /*line-height: 18px;*/
+  /*font-size: 13px;*/
+  /*background-color: #fafafa;*/
+  /*min-height: 36px;*/
+  filter: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
+
+select {
+  color: #717171;
+  outline: 0;
+  /*height: 18px;*/
+  /*padding: 6px 11px;*/
+  /*line-height: 18px;*/
+  /*font-size: 13px;*/
+  /*background-color: #fafafa;*/
+  /*min-height: 36px;*/
+  filter: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
 }

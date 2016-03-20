@@ -32,7 +32,7 @@ class UserController extends Controller
             $user_info = (new App\UserInfo)->getTable();
             $personal_info = (new App\PersonalInfo)->getTable();
             $data['resource_persons'] = App\PersonalInfo::joinUserInfo()->whereNull($user_info.'.user_id')
-                                ->select($personal_info . '.id', 
+                                ->select($personal_info . '.id',
                                     DB::raw('CONCAT(last_name,", ",first_name, " ",middle_name) AS name'))->get();
             $status = TRUE;
         }
@@ -52,10 +52,11 @@ class UserController extends Controller
         $msg = '';
         try
         {
+            $user = (new App\User)->getTable();
             $personal_info = (new App\PersonalInfo)->getTable();
             $data['champions'] = App\User::joinUserRole()->joinPersonalInfo()
                                 ->where('role_id', config('constants.role_champion'))
-                                ->select($personal_info . '.id', 
+                                ->select($user . '.id',
                                     DB::raw('CONCAT(last_name,", ",first_name, " ",middle_name) AS name'))->get();
             $status = TRUE;
         }

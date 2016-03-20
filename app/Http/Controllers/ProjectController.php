@@ -32,11 +32,17 @@ class ProjectController extends Controller
             Log::info($proj);
             $token = csrf_token();
             $data['proj'] = App\Projects::JoinStatus()
-                        ->select($proj . '.name', $stat . '.name AS status', $proj . '.id', 
-                        'start_date','end_date', 'objective', 'total_budget', 'champion_id', 
+                        ->select($proj . '.name', $stat . '.name AS status', $proj . '.id',
+                        'start_date','end_date', 'objective', 'total_budget', 'champion_id',
                         'program_id', 'proj_status_id', 'resource_person_id', 'partner_organization',
                         'partner_community', DB::Raw('"'. $token . '" AS token'))
                         ->get();
+
+            foreach($data['proj'] as $key => $value) {
+                $temp = explode('(#$;)', $value->objective);
+                $data['proj'][$key]->objective = $temp;
+            }
+
             $status = TRUE;
         }
         catch(Exception $e)
@@ -45,7 +51,7 @@ class ProjectController extends Controller
         }
         $data['status'] = $status;
         $data['msg'] = $msg;
-       
+
         return array($data);
     }
 
@@ -66,7 +72,7 @@ class ProjectController extends Controller
         try
         {
             $token = csrf_token();
-            $data['proj'] = App\Projects::select('id', 'name', 'start_date','end_date', 'objective', 
+            $data['proj'] = App\Projects::select('id', 'name', 'start_date','end_date', 'objective',
                 'total_budget', 'champion_id', 'program_id', 'proj_status_id', 'resource_person_id',
                 'partner_organization', 'partner_community', DB::Raw('"'. $token . '" AS token'))
             ->where('id', $id)->first();
@@ -81,34 +87,38 @@ class ProjectController extends Controller
 
         return Response::json($data);
     }
-    // public function index()
-    // {
-    //     try {
-    //         $project = App\Project::all();
-    //         return Response::json($project);
-    //     } catch (Exception $e) {
-    //         return Response::json(array('error' => $e->getMessage()));
-    //     }
-    // }
-    
+
     public function store(Request $request)
     {
         $status = FALSE;
         $msg = '';
+        $temp = ''; // Holds the new concatenated objectives
+        $delimiter = '(#$;)'; // Used for concatenation of objectives
+
         try {
             $project = $request->all();
-            Log::info('project');
-            Log::info($project);
+            $objectives = $project['objective']; // Store the array objectives
             unset($project['token']);
+
+            // Convert array obkectives to concatenated string using the delimiter
+            foreach($project['objective'] as $key => $value) {
+               if (empty($temp)) $temp .= $value;
+               else $temp .= $delimiter . $value;
+            }
+
+            $project['objective'] = $temp;
             $project['id'] = App\Project::insertGetId($project);
-            // get status name
+            // Get status name
             $stat_name = App\ActivityStatus::where('id', $project['proj_status_id'])->value('name');
+
+            $project['objective'] = $objectives; // Reassign the array objectives
             $data['proj'] = $project;
             $data['proj']['status'] = $stat_name;
             $status = TRUE;
-       } catch (Exception $e) {
+        } catch (Exception $e) {
             $msg = $e->getMessage();
         }
+
         $data['msg'] = $msg;
         $data['status'] = $status;
 
@@ -119,25 +129,32 @@ class ProjectController extends Controller
     {
         $status = FALSE;
         $msg = '';
-        try
-        {
+        $temp = ''; // Holds the new concatenated objectives
+        $delimiter = '(#$;)'; // Used for concatenation of objectives
+
+        try {
             $request = $request->all();
-            Log::info('update');
-            Log::info($request);
             $id = $request['id'];
             $upd_arr = $request;
             unset($upd_arr['id']);
             unset($upd_arr['status']);
             unset($upd_arr['token']);
+
+            // Convert array obkectives to concatenated string using the delimiter
+            foreach($upd_arr['objective'] as $key => $value) {
+               if (empty($temp)) $temp .= $value;
+               else $temp .= $delimiter . $value;
+            }
+
+            $upd_arr['objective'] = $temp; // Assign the concatenated objectives
             App\Projects::where('id', $id)->update($upd_arr);
 
             $data['proj'] = $request;
             $status = TRUE;
-        }
-        catch(Exception $e)
-        {
+        } catch(Exception $e) {
             $msg = $e->getMessage();
         }
+
         $data['status'] = $status;
         $data['msg'] = $msg;
 

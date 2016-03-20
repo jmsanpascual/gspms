@@ -27,9 +27,11 @@ Route::get('allocate-budget.project', array('as' => 'allocate-budget.project', f
   return view('allocate-budget-project');
 }));
 
+// If inside middleware=>web, InvalidMismatchToken error occurs
+Route::post('/login', 'UserController@login');
+
 Route::group(['middleware' => 'web'], function () {
 
-Route::post('/login', 'UserController@login');
 Route::get('/users', 'UserController@index');
 Route::get('/fetchUsers', 'UserController@retrieve');
 
@@ -70,6 +72,7 @@ Route::get('budget-request/add', array(function () {
 Route::get('resource-persons/view-resource-persons', array('as' => 'resource-persons.view', function () {
     return view('resource-persons');
 }));
+Route::post('resource-persons/update', 'ResourcePersonController@update');
 Route::resource('resource-persons', 'ResourcePersonController');
 
 // RESTful resource route for Schools

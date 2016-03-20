@@ -20,20 +20,32 @@ angular.module('resourcePersonService', ['ngResource'])
     var addResourcePerson = function (params) {
         var person = new ResourcePersonApi(params);
 
-        return ResourcePersonApi.save(person).$promise.then(function (id) {
-            return id;
+        return ResourcePersonApi.save(person).$promise.then(function (response) {
+            return response;
         });
     };
+
+    var update = function (params) {
+        return ResourcePersonApi.update(params).$promise.then(function (response) {
+            return response;
+        });
+    }
 
     return {
         getResourcePerson: getResourcePerson,
         getResourcePersons: getResourcePersons,
-        addResourcePerson: addResourcePerson
+        addResourcePerson: addResourcePerson,
+        update: update
     };
 })
 
 .factory('ResourcePersonApi', function ($resource) {
-    var restApi = $resource('../resource-persons/:id', {id: '@id'});
+    var restApi = $resource('../resource-persons/:id', {id: '@id'}, {
+        update : {
+            url: '../resource-persons/update',
+            method: 'POST'
+        }
+    });
 
     return restApi;
 });

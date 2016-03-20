@@ -66,56 +66,72 @@ angular.module('resourcePersons', [
             };
 
             ResourcePerson.addResourcePerson(request).then(function (response) {
-                //  alert(resourcePerson.first_name + ' was succesfully added');
+                console.log('Add:', response);
                 var person = data.person;
                 person.profession = data.resourcePerson.profession;
                 person.name = person.first_name + " " + person.last_name;
                 person.school = data.resourcePerson.school.name;
                 person.id = response.id;
+                person.personal_info_id = response.personal_info_id;
                 rp.persons.push(person);
+                //  alert(resourcePerson.first_name + ' was succesfully added');
             });
         });
     };
 
-    rp.edit = function (resourcePerson) {
+    rp.edit = function (index, resourcePerson) {
         var attr = {
             size: 'md',
-            templateUrl : 'addUser',
-            saveUrl: 'editUser'
+            templateUrl : 'create',
+            action: 'Edit',
+            resource: true,
+            person: resourcePerson,
+            schools : rp.schools,
+            school: getSchool(),
+            // school: {
+            //     id: resourcePerson.school_id,
+            //     name: resourcePerson.school
+            // },
+            resourcePerson: {
+                profession: resourcePerson.profession
+            }
         };
+
+
+            console.log(attr.school);
+
+        function getSchool() {
+            var len = rp.schools.length;
+            var school;
+
+            for (var i = 0; i < len; i++) {
+                if (rp.schools[i].name == resourcePerson.school)
+                    return rp.schools[i];
+            }
+        }
 
         console.log('Resource Person:', resourcePerson);
 
-        var openModal = function (attr) {
-            var userModal = defaultModal.showModal(attr);
+        var userModal = defaultModal.showModal(attr);
 
-            // when the modal opens
-            userModal.result.then(function (data) {
-                console.log(data);
-                console.log('updating');
-                rp.dtInstance.reloadData();
+        // when the modal opens
+        userModal.result.then(function (data) {
+            var request = {
+                personalInfo: data.person,
+                resourcePerson: {
+                    'school_id': data.resourcePerson.school.id,
+                    'profession': data.resourcePerson.profession
+                }
+            };
+
+            ResourcePerson.update(request).then(function (result) {
+                console.log('Update yeah!', result);
+                var person = data.person;
+                person.profession = data.resourcePerson.profession;
+                person.name = person.first_name + " " + person.last_name;
+                person.school = data.resourcePerson.school.name;
             });
-        }
-
-        // call open modal
-        // showUserDetails
-        reqDef.get('showUserDetails/' + person.id).then(function(result){
-            console.log(result);
-            console.log('show user details');
-            if(result.roles != undefined)
-                attr.roles = result.roles;
-
-            if(result.users != undefined)
-                attr.users = result.users;
-
-            openModal(attr);
-        }, function(err){
-            openModal(attr);
         });
-
-        // Edit some data and call server to make changes...
-        // Then reload the data so that DT is refreshed
-        // vm.dtInstance.reloadData();
     }
 
     rp.delete = function (index, resourcePerson) {

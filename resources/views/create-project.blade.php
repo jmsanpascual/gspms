@@ -93,7 +93,7 @@
                       <div class="form-group" ng-controller='DynamicElementCtrl' ng-cloak>
                           <label class="col-sm-3 control-label" >Objective(s)</label>
                           <div class="col-sm-6">
-                              <input ng-model="project.objective" ng-repeat='field in fields' type="text" class="form-control" ng-class="{'col-sm-12': $last}"
+                              <input ng-model="field.objective" ng-repeat='field in fields' type="text" class="form-control" ng-class="{'col-sm-12': $last}"
                               placeholder="Objective @{{field.id}}" style='margin-bottom: 15px;'>
                           </div>
                           <div class="col-sm-6" ng-class="{'col-sm-offset-3': fields.length}">

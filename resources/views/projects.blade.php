@@ -28,8 +28,8 @@
               <div class="panel-body">
 
                 <div ng-controller="projDTCtrl as proj">
-                  <button class = "btn btn-success pull-right" ng-click = "proj.add()"> Add Project</button>
-                  <p class="text-danger"><strong>@{{ proj.message }}</strong></p>
+                  <button class = "btn btn-success btn-sm pull-right" ng-click = "proj.add()"> Add Project</button>
+                  <p class="text-danger"><strong ng-bind="proj.message"></strong></p>
                   <br>
                   <table datatable="ng" dt-options="proj.dtOptions" dt-columns="proj.dtColumnDefs" dt-instance="proj.dtInstance" class="table table-hover row-border hover">
                   <thead>
@@ -44,16 +44,16 @@
                   </thead>
                   <tbody>
                     <tr ng-repeat = "data in proj.projects">
-                      <td>@{{data.name}}</td>
-                      <td>@{{data.start_date}}</td>
-                      <td>@{{data.end_date}}</td>
-                      <td>@{{data.total_budget}}</td>
-                      <td>@{{data.status}}</td>
+                      <td ng-bind="data.name"></td>
+                      <td ng-bind="data.start_date"></td>
+                      <td ng-bind="data.end_date"></td>
+                      <td ng-bind="data.total_budget"></td>
+                      <td ng-bind="data.status"></td>
                       <td>
-                        <button class="btn btn-warning" ng-click="proj.edit($index, data)">
+                        <button class="btn btn-warning btn-sm" ng-click="proj.edit($index, data)">
                         <i class="fa fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger" ng-click="proj.delete($index ,data)">
+                        <button class="btn btn-danger btn-sm" ng-click="proj.delete($index ,data)">
                            <i class="fa fa-trash-o"></i>
                         </button>
                       </td>
@@ -69,6 +69,7 @@
 @endsection
 
 @section('scripts')
+{!! HTML::script('js/resource-person/services/resource-person.js') !!}
 {!! HTML::script('js/services/project-status.js') !!}
 {!! HTML::script('js/services/program.js') !!}
 {!! HTML::script('js/services/project.js') !!}
@@ -82,6 +83,7 @@
 {!! HTML::script('js/controllers/budget-request.js') !!}
 {!! HTML::script('js/services/item.js') !!}
 {!! HTML::script('js/services/categories.js') !!}
+{!! HTML::script('js/controllers/dynamic-element.js') !!}
 {!! HTML::script('js/controllers/item.js') !!}
 {!! HTML::script('js/controllers/project.js') !!}
 @endsection

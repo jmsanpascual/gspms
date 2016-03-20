@@ -26,9 +26,9 @@
                   </div>
               </div>
               <div class="panel-body" ng-controller="userDTCtrl as showCase">
-                    <button class = "btn btn-success pull-right" ng-click = "showCase.add()"> Add User</button>
+                    <button class = "btn btn-success btn-sm pull-right" ng-click = "showCase.add()"> Add User</button>
                 <div >
-                  <p class="text-danger"><strong>@{{ showCase.message }}</strong></p>
+                  <p class="text-danger"><strong ng-bind="showCase.message"></strong></p>
                   <br>
                   <table datatable="ng" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumnDefs" dt-instance="showCase.dtInstance" class="table table-hover row-border hover">
                   <thead>
@@ -42,15 +42,15 @@
                   </thead>
                   <tbody>
                     <tr ng-repeat = "person in showCase.persons">
-                      <td>@{{person.username}}</td>
-                      <td>@{{person.fname}}</td>
-                      <td>@{{person.lname}}</td>
-                      <td>@{{person.email}}</td>
+                      <td ng-bind="person.username"></td>
+                      <td ng-bind="person.fname"></td>
+                      <td ng-bind="person.lname"></td>
+                      <td ng-bind="person.email"></td>
                       <td>
-                        <button class="btn btn-warning" ng-click="showCase.edit($index, person)">
+                        <button class="btn btn-warning btn-sm" ng-click="showCase.edit($index, person)">
                         <i class="fa fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger" ng-click="showCase.delete($index ,person)">
+                        <button class="btn btn-danger btn-sm" ng-click="showCase.delete($index ,person)">
                            <i class="fa fa-trash-o"></i>
                         </button>
                       </td>

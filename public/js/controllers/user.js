@@ -2,7 +2,7 @@
 
 angular.module('users', ['datatables','common.service', 'ui.bootstrap', 'roles.service'])
 
-.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder, reqDef, defaultModal,rolesRestApi) {
+.controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder, reqDef, defaultModal, rolesRestApi) {
     var vm = this;
     vm.message = '';
     vm.edit = edit;
@@ -79,7 +79,7 @@ angular.module('users', ['datatables','common.service', 'ui.bootstrap', 'roles.s
             openModal(attr);
         });
 
-        
+
     }
 
     function edit(index, person) {
@@ -88,7 +88,7 @@ angular.module('users', ['datatables','common.service', 'ui.bootstrap', 'roles.s
             templateUrl : 'addUser',
             saveUrl: 'editUser',
             action: 'Edit',
-            users : angular.copy(person), 
+            users : angular.copy(person),
             roles : $scope.roles
         };
 
@@ -101,7 +101,7 @@ angular.module('users', ['datatables','common.service', 'ui.bootstrap', 'roles.s
 
             vm.persons.splice(index, 1, angular.copy(data.users));
         });
-        
+
     }
 
     function deleteRow(index, person) {
