@@ -1,14 +1,14 @@
 'use strict'
-angular.module('items.controller', 
+angular.module('items.controller',
     [
-    'items.service', 
-    'datatables', 
-    'common.service', 
+    'items.service',
+    'datatables',
+    'common.service',
     'ui.bootstrap',
     'categories.service'
     ])
-  
-.controller('ItemCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder, 
+
+.controller('ItemCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder,
     defaultModal, ItemsRestApi, CategoriesRestApi) {
     // $scope.proj_id = 1; //declared in modals/projects.blade.php
     var vm = this;
@@ -44,6 +44,7 @@ angular.module('items.controller',
           console.log('request');
           console.log(result.categories);
           $scope.categories =  result.categories;
+          $scope.categories.push({id: 'NA', name : 'Not in the list'});
       } else {
           alert('Unable to load datatable');
       }
@@ -70,14 +71,14 @@ angular.module('items.controller',
             saveUrl: '../items',
             action: 'Add',
             categories : $scope.categories,
+            category: $scope.categories[0].id,
             items : {proj_id : $scope.proj_id}
-
         };
 
         defaultModal.showModal(attr).result.then(function(data){
             console.log(data);
             vm.items.push(data.items);
-        });      
+        });
 
     }
 
@@ -88,14 +89,15 @@ angular.module('items.controller',
             saveUrl: '../items/update',
             action: 'Edit',
             categories : $scope.categories,
+            category: act.category_id,
             items : angular.copy(act)
         };
         attr.items.proj_id = $scope.proj_id;
-        
+
         defaultModal.showModal(attr).result.then(function(data){
             console.log(data);
             vm.items.splice(index, 1, angular.copy(data.items));
-        });   
+        });
     }
 
     function deleteRow(index, act) {
@@ -126,5 +128,21 @@ angular.module('items.controller',
 
 })
 
+.controller('addItemCategory', function($scope, defaultModal){
+    var _self = this;
 
+    _self.add_category = function()
+    {
+        var attr = {
+            action : 'Add',
+            templateUrl : '../categories/add',
+            size : 'md',
+            saveUrl : '../categories'
+        };
 
+        defaultModal.showModal(attr).result.then(function(data){
+            console.log(data);
+            $scope.submitData.categories.push(data.item_category);
+        });
+    }
+});

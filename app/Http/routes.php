@@ -15,10 +15,6 @@ Route::get('/', function () {
     return view('login');
 });
 
-Route::get('index', function () {
-  return view('layouts/index');
-});
-
 Route::get('create.account', array('as' => 'create.account', function () {
   return view('create-account');
 }));
@@ -27,11 +23,14 @@ Route::get('allocate-budget.project', array('as' => 'allocate-budget.project', f
   return view('allocate-budget-project');
 }));
 
-// If inside middleware=>web, InvalidMismatchToken error occurs
-Route::post('/login', 'UserController@login');
-
 Route::group(['middleware' => 'web'], function () {
 
+  Route::get('index', function () {
+    return view('layouts/index');
+  });
+
+Route::post('/login', 'UserController@login');
+Route::get('/logout', 'UserController@logout');
 Route::get('/users', 'UserController@index');
 Route::get('/fetchUsers', 'UserController@retrieve');
 
@@ -45,6 +44,13 @@ Route::get('user/getChampion', 'UserController@getChampion');
 Route::get('user/getResourcePerson', 'UserController@getResourcePerson');
 Route::resource('user', 'UserController');
 Route::resource('roles', 'RoleController');
+
+// RESTful resource route for Funds
+Route::get('funds/view', function () {
+    return view('funds');
+});
+Route::resource('funds', 'FundController');
+
 // RESTful resource route for Projects
 Route::get('projects/view-project', array('as' => 'view.project', function () {
     return view('view-project');
@@ -53,6 +59,7 @@ Route::get('projects/view-project2', array('as' => 'view.project2', function () 
   return view('projects');
 }));
 Route::get('projects/fetch/{id}', 'ProjectController@fetchProj');
+Route::post('projects/request/', 'ProjectController@updateStatus');
 Route::post('projects/update', 'ProjectController@update');
 Route::resource('projects', 'ProjectController');
 
@@ -89,6 +96,9 @@ Route::get('items/add', array(function () {
 Route::post('items/update', 'ItemController@update');
 Route::resource('items', 'ItemController');
 
+Route::get('categories/add', function(){
+  return view('modals/items-category');
+});
 Route::resource('categories', 'CategoryController');
 
 // RESTful resource route for Programs
@@ -104,7 +114,6 @@ Route::resource('activity-status', 'ActivityStatusController');
     Route::post('editUser', 'UserController@update');
     Route::delete('deleteUser/{id}', 'UserController@delete');
 });
-
 
 
 /*

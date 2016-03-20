@@ -14,7 +14,7 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-2">Project Name</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.name">
+          <input type = "text" class = "form-control" ng-model = "submitData.proj.name" placeholder="Project Name">
         </div>
         <label class = "form-label col-md-2">Program</label>
         <div class = "col-md-4">
@@ -30,11 +30,11 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-2">Start Date</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.start_date">
+          <input type = "text" class = "form-control" ng-model = "submitData.proj.start_date" placeholder="Start Date">
         </div>
         <label class = "form-label col-md-2">End Date</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.end_date">
+          <input type = "text" class = "form-control" ng-model = "submitData.proj.end_date" placeholder="End Date">
         </div>
       </div>
       </div>
@@ -44,11 +44,11 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-2">Partner Organization</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.partner_organization">
+          <input type = "text" class = "form-control" ng-model = "submitData.proj.partner_organization" placeholder="Partner Organization">
         </div>
         <label class = "form-label col-md-2">Partner Community</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.partner_community">
+          <input type = "text" class = "form-control" ng-model = "submitData.proj.partner_community" placeholder="Partner Community">
         </div>
       </div>
       </div>
@@ -56,15 +56,15 @@
     <div class = "form-group">
       <div class = "row">
         <div class = "col-md-12">
-        <label class = "form-label col-md-2">Status</label>
+        <!-- <label class = "form-label col-md-2">Status</label>
         <div class = "col-md-4">
           <select class = "form-control" ng-model = "submitData.proj.proj_status_id"
           ng-options = "c.id as c.name for c in submitData.status">
           </select>
-        </div>
+        </div> -->
         <label class = "form-label col-md-2">Total Budget</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.total_budget">
+          <input type = "text" class = "form-control" ng-model = "submitData.proj.total_budget" placeholder="Total Budget">
         </div>
       </div>
       </div>
@@ -105,14 +105,26 @@
           </button>
         </div>
       </div>
+    </div>
+    <div class = "form-group" ng-if = "submitData.proj.proj_status_id">
+      <div class = "row">
+        <div class = "col-md-12">
+        <label class = "form-label col-md-2">Remarks</label>
+        <div class = "col-md-10">
+          <textarea class = "form-control" style ="resize:none" ng-model = "submitData.proj.remarks"
+          placeholder = "Enter Remarks"></textarea>
+        </div>
       </div>
+      </div>
+    </div>
     </div>
     <!-- Activities -->
     <div ng-if = "submitData.proj.id">
     <h3>Activities</h3>
     <hr>
      <div ng-controller="projActDTCtrl as padtc" ng-init = 'proj_id = submitData.proj.id; getProjActivities(submitData.proj.id)'>
-          <button class = "btn btn-success pull-right" ng-click = "padtc.add()"> Add Activity</button>
+          <button class = "btn btn-success btn-sm pull-right" ng-click = "padtc.add()"
+          ng-if = "submitData.proj.proj_status_id != 3"> Add Activity</button>
           <p class="text-danger"><strong>@{{ padtc.message }}</strong></p>
           <br>
           <table datatable="ng" dt-options="padtc.dtOptions" dt-columns="padtc.dtColumnDefs" dt-instance="padtc.dtInstance" class="table table-hover row-border hover">
@@ -132,12 +144,14 @@
                 <td>@{{data.end_date}}</td>
                 <td>@{{data.status}}</td>
                 <td>
-                  <button class="btn btn-warning" ng-click="padtc.edit($index, data)">
-                  <i class="fa fa-edit"></i>
-                  </button>
-                  <button class="btn btn-danger" ng-click="padtc.delete($index ,data)">
-                     <i class="fa fa-trash-o"></i>
-                  </button>
+                  <span ng-if ="submitData.proj.proj_status_id != 3">
+                    <button class="btn btn-warning btn-sm" ng-click="padtc.edit($index, data)">
+                    <i class="fa fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" ng-if = "data.status_id != 4" ng-click="padtc.delete($index ,data)">
+                       <i class="fa fa-trash-o"></i>
+                    </button>
+                </span>
                 </td>
               </tr>
             </tbody>
@@ -149,9 +163,18 @@
 @stop
 
 @section('btn')
-  <div class = "pull-left" ng-controller = "btnCtrl" ng-init = 'proj_id = submitData.proj.id;'>
-    <button class = "btn btn-info" ng-click="showItem()">Add Item/Expense</button>
-    <button class = "btn btn-warning" ng-click="showReqBudget()">Request Budget</button>
-  </div>
-  <button class = "btn btn-success" ng-click="save('proj')">Save</button>
+	<span ng-controller = "btnCtrl as btnc" ng-if = "submitData.proj.id"
+	ng-init = 'btnc.data.proj_id = submitData.proj.id;'>
+		<div class = "pull-left" ng-if = "submitData.proj.proj_status_id != 3">
+			<button class = "btn btn-info" ng-click="btnc.showItem()">Add Item/Expense</button>
+			<button class = "btn btn-warning" ng-click="btnc.showReqBudget()">Request Budget</button>
+		</div>
+		<span ng-if = "submitData.proj.proj_status_id == 2">
+			<button class = "btn btn-primary" ng-click = "btnc.approve()">Approve</button>
+			<button class = "btn btn-danger" ng-click = "btnc.disapprove()">Disapprove</button>
+		</span>
+		<button class = "btn btn-info" ng-click = "btnc.completed()" ng-if = "submitData.proj.proj_status_id == 1">Completed</button>
+	</span>
+	<button class = "btn btn-success" ng-if = "submitData.proj.proj_status_id != 3" ng-click="save('proj')">Save</button>
+
 @stop

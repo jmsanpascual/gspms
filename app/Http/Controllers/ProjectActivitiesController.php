@@ -34,8 +34,8 @@ class ProjectActivitiesController extends Controller
             $token = csrf_token();
     		$data['proj_activities'] = App\ProjectActivities::joinActivityStatus()
                                     ->select("$activity.id","$activity.name", "$activity.start_date", 
-                                    "$activity.end_date", "$activity.remarks", "$act_status.name AS status", "$activity.status_id",
-                                    DB::Raw('"'. $token . '" AS token'))
+                                    "$activity.end_date", "$activity.remarks", "$act_status.name AS status", 
+                                    "$activity.status_id", "$activity.description", DB::Raw('"'. $token . '" AS token'))
     								->where('proj_id', $proj_id)->get();
             Log::info(' lINE 33 - - - - -');
             Log::info(json_encode(DB::getQueryLog()));
@@ -95,6 +95,7 @@ class ProjectActivitiesController extends Controller
             Log::info($proj_id);
             Log::info($activity);
             DB::beginTransaction();
+            $activity['status_id'] = 1;
             $id = App\Activities::insertGetId($activity);
             App\ProjectActivities::insert(['proj_id' => $proj_id, 'activity_id' => $id]);
             $stat = App\ActivityStatus::where('id', $req->get('status_id'))->value('name');

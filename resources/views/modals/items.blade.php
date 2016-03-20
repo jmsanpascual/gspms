@@ -6,7 +6,7 @@
 @section('modal-content')
 	<!-- DTable -->
 	 <div ng-controller="ItemCtrl as ic" ng-init = 'proj_id = submitData.proj_id; getProjItems()'>
-        <button class = "btn btn-success pull-right" ng-click = "ic.add()"> Add Item/Expense</button>
+        <button class = "btn btn-success btn-sm pull-right" ng-click = "ic.add()"> Add Item/Expense</button>
         <p class="text-danger"><strong>@{{ ic.message }}</strong></p>
         <br>
         <table datatable="ng" dt-options="ic.dtOptions" dt-columns="ic.dtColumnDefs" dt-instance="ic.dtInstance" class="table table-hover row-border hover">
@@ -28,10 +28,10 @@
               <td>@{{data.price}}</td>
               <td>@{{ ((data.price) * (data.quantity)) }}</td>
               <td>
-                <button class="btn btn-warning" ng-click="ic.edit($index, data)">
+                <button class="btn btn-warning btn-sm" ng-click="ic.edit($index, data)">
                 <i class="fa fa-edit"></i>
                 </button>
-                <button class="btn btn-danger" ng-click="ic.delete($index ,data)">
+                <button class="btn btn-danger btn-sm" ng-click="ic.delete($index ,data)">
                    <i class="fa fa-trash-o"></i>
                 </button>
               </td>

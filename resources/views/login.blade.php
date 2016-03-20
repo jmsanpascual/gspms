@@ -48,6 +48,7 @@
                     <div class="panel-body">
                        <p> Login to access your account.</p>
                         <form class="form-horizontal" role="form" ng-submit='login()'>
+                            <input type ="hidden" ng-model = "user._token" ng-value = "{{ csrf_token()}}">
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <input type="text" class="form-control" id='email' placeholder="Username"

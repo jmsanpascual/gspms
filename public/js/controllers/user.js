@@ -54,7 +54,8 @@ angular.module('users', ['datatables','common.service', 'ui.bootstrap', 'roles.s
             templateUrl : 'addUser',
             saveUrl: 'addUser',
             action: 'Add',
-            roles : $scope.roles
+            roles : $scope.roles,
+            selectedRole: $scope.roles[0].id
         };
 
         var openModal = function(attr){
@@ -83,13 +84,16 @@ angular.module('users', ['datatables','common.service', 'ui.bootstrap', 'roles.s
     }
 
     function edit(index, person) {
+        var user = angular.copy(person);
+        // delete user.password;
         var attr = {
             size: 'md',
             templateUrl : 'addUser',
             saveUrl: 'editUser',
             action: 'Edit',
-            users : angular.copy(person),
-            roles : $scope.roles
+            users : user,
+            roles : $scope.roles,
+            selectedRole: person.selectedRole
         };
 
         var userModal = defaultModal.showModal(attr);

@@ -5,7 +5,7 @@
 @stop
 @section('modal-content')
 	<form role="form" id = "projForm">
-		
+
 		<input type ="hidden" ng-model = "submitData.projAct.id">
 		<input type ="hidden" ng-model = "submitData.projAct.proj_id">
 		<input type ="hidden" ng-model = "submitData.projAct.token">
@@ -14,9 +14,9 @@
 				<div class = "col-md-12">
 				<label class = "form-label col-md-4">Activity Name</label>
 				<div class = "col-md-6">
-					<input type = "text" class = "form-control" ng-model = "submitData.projAct.name">
+					<input type = "text" class = "form-control" ng-model = "submitData.projAct.name" placeholder="Activity Name">
 				</div>
-				
+
 			</div>
 			</div>
 		</div>
@@ -25,7 +25,7 @@
 				<div class = "col-md-12">
 				<label class = "form-label col-md-4">Start Date</label>
 				<div class = "col-md-6">
-					<input type = "text" class = "form-control" ng-model = "submitData.projAct.start_date">
+					<input type = "text" class = "form-control" ng-model = "submitData.projAct.start_date" placeholder="Start Date">
 				</div>
 			</div>
 			</div>
@@ -35,7 +35,17 @@
 				<div class = "col-md-12">
 				<label class = "form-label col-md-4">End Date</label>
 				<div class = "col-md-6">
-					<input type = "text" class = "form-control" ng-model = "submitData.projAct.end_date">
+					<input type = "text" class = "form-control" ng-model = "submitData.projAct.end_date" placeholder="End Date">
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class = "form-group">
+			<div class = "row">
+				<div class = "col-md-12">
+				<label class = "form-label col-md-4">Description</label>
+				<div class = "col-md-6">
+					<textarea class = "form-control" style ="resize:none" ng-model = "submitData.projAct.description" placeholder="Description"></textarea>
 				</div>
 			</div>
 			</div>
@@ -45,7 +55,7 @@
 				<div class = "col-md-12">
 				<label class = "form-label col-md-4">Remarks</label>
 				<div class = "col-md-6">
-					<textarea class = "form-control" style ="resize:none" ng-model = "submitData.projAct.remarks"></textarea>
+					<textarea class = "form-control" style ="resize:none" ng-model = "submitData.projAct.remarks" placeholder="Remarks"></textarea>
 				</div>
 			</div>
 			</div>
@@ -55,10 +65,10 @@
 				<div class = "col-md-12">
 				<label class = "form-label col-md-4">Status</label>
 				<div class = "col-md-6">
-					<select class = "form-control" ng-model = "submitData.projAct.status_id" 
+					<select class = "form-control" ng-model = "submitData.projAct.status_id"
 					ng-options = "c.id as c.name for c in submitData.status">
 					</select>
-				</div>	
+				</div>
 			</div>
 			</div>
 		</div> -->

@@ -13,7 +13,7 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-3">First Name</label>
         <div class = "col-md-8">
-          <input class="form-control" type = "text" ng-model = "submitData.person.first_name">
+          <input class="form-control" type = "text" ng-model = "submitData.person.first_name" placeholder="First Name">
         </div>
       </div>
       </div>
@@ -23,7 +23,7 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-3">Last Name</label>
         <div class = "col-md-8">
-          <input class="form-control" type = "text" ng-model = "submitData.person.last_name">
+          <input class="form-control" type = "text" ng-model = "submitData.person.last_name" placeholder="Last Name">
         </div>
       </div>
       </div>
@@ -33,7 +33,7 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-3">Email</label>
         <div class = "col-md-8">
-          <input class="form-control" type = "text" ng-model = "submitData.person.email">
+          <input class="form-control" type = "text" ng-model = "submitData.person.email" placeholder="Email">
         </div>
       </div>
       </div>
@@ -43,7 +43,7 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-3">Contact No</label>
         <div class = "col-md-8">
-          <input class="form-control" type = "text" ng-model = "submitData.person.contact_num">
+          <input class="form-control" type = "text" ng-model = "submitData.person.contact_num" placeholder="Contact">
         </div>
       </div>
       </div>
@@ -53,7 +53,7 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-3">Address</label>
         <div class = "col-md-8">
-          <input class="form-control" type = "text" ng-model = "submitData.person.address">
+          <input class="form-control" type = "text" ng-model = "submitData.person.address" placeholder="Address">
         </div>
       </div>
       </div>
@@ -63,7 +63,7 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-3">Profession</label>
         <div class = "col-md-8">
-          <input class="form-control" type = "text" ng-model = "submitData.resourcePerson.profession">
+          <input class="form-control" type = "text" ng-model = "submitData.resourcePerson.profession" placeholder="Profession">
         </div>
       </div>
       </div>

@@ -12,6 +12,7 @@
     <title>Green School</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <!-- Bootstrap core CSS -->
@@ -59,11 +60,12 @@
                     </li>
                     <li class="dropdown settings">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                      Chester Tiongson <i class="fa fa-angle-down"></i>
+
+                      <i class="fa fa-angle-down"></i>
                     </a>
                         <ul class="dropdown-menu animated fadeInDown">
                             <li>
-                                <a href="#"><i class="fa fa-power-off"></i> Logout</a>
+                                <a href="{{ URL::to('logout') }}"><i class="fa fa-power-off"></i> Logout</a>
                             </li>
                         </ul>
                     </li>
@@ -74,38 +76,47 @@
         <nav class="sidebar sidebar-left">
             <h5 class="sidebar-header">Navigation</h5>
             <ul class="nav nav-pills nav-stacked">
+              @if(Session::get('role') == config('constants.role_life'))
               <li class="nav-dropdown">
                   <a href="#" title="Forms">
                     <i class="fa fa-list-alt"></i> Accounts
                   </a>
                   <ul class="nav-sub">
                     <li>
-                      <a href="{{ route('create.account') }}">Create Account</a>
-                    </li>
-                    <li>
                       <a href="{{ URL::to('users') }}">View List</a>
                     </li>
                   </ul>
               </li>
+              @endif
+
+              @if(Session::get('role') == config('constants.role_head')
+                || Session::get('role') == config('constants.role_life'))
+              <li class="nav-dropdown">
+                <a href="{{ URL::to('/funds/view') }}" title="Forms">
+                    <i class="fa fa-money"></i> Funds
+                </a>
+              </li>
+              @endif
+
+              @if(Session::get('role') == config('constants.role_champion')
+                || Session::get('role') == config('constants.role_exec'))
               <li class="nav-dropdown">
                 <a href="#" title="Forms">
                     <i class="icon-doc"></i> Projects
                 </a>
                 <ul class="nav-sub">
                     <li>
-                      <a href="{{ route('view.project') }}">View Projects</a>
-                    </li>
-                    <li>
-                      <a href="{{ route('view.project2') }}">View Projects2</a>
-                    </li>
-                    <li>
-                      <a href="{{ route('projects.create') }}">Create Proposal</a>
+                      <a href="{{ route('view.project2') }}">View Projects Projects</a>
                     </li>
                     <li>
                       <a href="{{ route('allocate-budget.project') }}">Allocate Budget</a>
                     </li>
                 </ul>
               </li>
+              @endif
+
+              @if(Session::get('role') == config('constants.role_champion')
+                || Session::get('role') == config('constants.role_exec'))
               <li class="nav-dropdown">
                 <a href="#" title="Forms">
                     <i class="fa fa-user"></i> Resource Person
@@ -114,11 +125,10 @@
                     <li>
                       <a href="{{ route('resource-persons.view') }}">View Resource Person</a>
                     </li>
-                    <li>
-                      <a href="{{ route('resource-persons.create') }}">Create Resource Person</a>
-                    </li>
                 </ul>
               </li>
+              @endif
+
             </ul>
         </nav>
         <!--sidebar left end-->

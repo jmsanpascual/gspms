@@ -53,7 +53,7 @@
                         <button class="btn btn-warning btn-sm" ng-click="proj.edit($index, data)">
                         <i class="fa fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger btn-sm" ng-click="proj.delete($index ,data)">
+                        <button class="btn btn-danger btn-sm" ng-if = "data.proj_status_id != 3" ng-click="proj.delete($index ,data)">
                            <i class="fa fa-trash-o"></i>
                         </button>
                       </td>

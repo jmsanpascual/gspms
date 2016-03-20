@@ -46,7 +46,7 @@ angular.module('resourcePersons', [
 
     rp.add = function () {
         var attr = {
-            size: 'lg',
+            size: 'md',
             templateUrl : 'create',
             resource: true,
             action: 'Add',

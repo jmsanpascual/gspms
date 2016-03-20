@@ -42,7 +42,7 @@ common.service('defaultModal', function($uibModal, $log){
         //     console.log('No config delete key yet.');
 
         // Declare the model instance
-        var templateUrl = '/gspms/public/js/templates/confirm.html';
+        var templateUrl = '/gspms/public/js/templates/confirm.html'; 
         var staticController = 'confirmModalInstanceCtrl';
         var staticVar = ['size', 'templateUrl', 'controller'];
         var resolveAttr = {};

@@ -39,7 +39,7 @@ class ItemController extends Controller
             $token = csrf_token();
             $data['items'] = App\ProjectItemCategory::JoinCategory()
                         ->select('item_name', $category . '.name AS category', $item . '.id', 
-                        'description','category_id', 'quantity', 'price',
+                        $item.'.description','category_id', 'quantity', 'price',
                         DB::Raw('"'. $token . '" AS token'))->where('proj_id', $proj_id)
                         ->get();
             $status = TRUE;

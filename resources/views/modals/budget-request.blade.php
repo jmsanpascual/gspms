@@ -6,7 +6,7 @@
 @section('modal-content')
 	<!-- DTable -->
 	 <div ng-controller="BudgetReqCtrl as brc" ng-init = 'proj_id = submitData.proj_id; getProjBudgetReq()'>
-        <button class = "btn btn-success pull-right" ng-click = "brc.add()"> Request Budget</button>
+        <button class = "btn btn-success btn-sm pull-right" ng-click = "brc.add()"> Request Budget</button>
         <p class="text-danger"><strong>@{{ brc.message }}</strong></p>
         <br>
         <table datatable="ng" dt-options="brc.dtOptions" dt-columns="brc.dtColumnDefs" dt-instance="brc.dtInstance" class="table table-hover row-border hover">
@@ -24,10 +24,10 @@
               <td>@{{data.reason}}</td>
               <td>@{{data.status}}</td>
               <td>
-                <button class="btn btn-warning" ng-click="brc.edit($index, data)">
+                <button class="btn btn-warning btn-sm" ng-click="brc.edit($index, data)">
                 <i class="fa fa-edit"></i>
                 </button>
-                <button class="btn btn-danger" ng-click="brc.delete($index ,data)">
+                <button class="btn btn-danger btn-sm" ng-if = "data.status_id != 2" ng-click="brc.delete($index ,data)">
                    <i class="fa fa-trash-o"></i>
                 </button>
               </td>

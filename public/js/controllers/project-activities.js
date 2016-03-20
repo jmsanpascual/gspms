@@ -173,27 +173,77 @@ angular.module('project.activites.controller',
     }
 })
 
+.constant('projStatus', {
+    PROJ_STAT_ONGOING : 1,
+    PROJ_STAT_FOR_APPROVAL : 2,
+    PROJ_STAT_COMPLETED : 3,
+    PROJ_STAT_DISAPPROVED : 4
+})
 
-.controller('btnCtrl', function($scope, defaultModal){
-    $scope.showItem = function()
+.controller('btnCtrl', function($scope, defaultModal, ProjRestApi, projStatus){
+    var _self = this;
+    _self.data = {};
+    _self.data.remarks = $scope.submitData.proj.remarks
+    var changeStatus = function()
+    {
+        // if(!confirm('Are you sure you want to '))
+        //     return;
+
+        ProjRestApi.request(_self.data).$promise.then(function(result){
+            if(!result.status)
+            {
+                alert(result.msg);
+                return;
+            }
+            // alert('approved');
+            // from modal scope
+            console.log(result);
+            $scope.submitData.proj.proj_status_id = result.stat.id;
+            $scope.submitData.proj.status = result.stat.name;
+            console.log('status');
+            console.log($scope.submitData);
+            $scope.closeSubmit($scope.submitData);
+        });
+    }
+
+    _self.approve = function()
+    {
+        _self.data.id = projStatus.PROJ_STAT_ONGOING; // approved
+        console.log(_self.data);
+        changeStatus();
+    }
+
+    _self.disapprove = function()
+    {
+        _self.data.id = projStatus.PROJ_STAT_DISAPPROVED; // approved
+        changeStatus();
+    }
+
+    _self.completed = function()
+    {
+        _self.data.id = projStatus.PROJ_STAT_COMPLETED; // completed
+        changeStatus();
+    }
+
+    _self.showItem = function()
     {
         var attr = {
             size: 'lg',
             templateUrl : '../items/items',
-            proj_id : $scope.proj_id
+            proj_id : _self.data.proj_id
         };
         
         defaultModal.showModal(attr);      
     }
 
-    $scope.showReqBudget = function()
+    _self.showReqBudget = function()
     {
         console.log('proj id');
-        console.log($scope.proj_id);
+        console.log(_self.proj_id);
         var attr = {
             size: 'md',
             templateUrl : '../budget-request/budget-request',
-            proj_id : $scope.proj_id
+            proj_id : _self.data.proj_id
         };
         
         defaultModal.showModal(attr);      
