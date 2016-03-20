@@ -29,5 +29,7 @@
 @stop
 
 @section('btn')
+	@if(Session::get('role') == config('constants.role_champion'))
 	<button class = "btn btn-success" ng-click="save('item_category')">Save</button>
+	@endif
 @stop

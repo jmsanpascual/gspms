@@ -6,7 +6,9 @@
 @section('modal-content')
 	<!-- DTable -->
 	 <div ng-controller="ItemCtrl as ic" ng-init = 'proj_id = submitData.proj_id; getProjItems()'>
+        @if(Session::get('role') == config('constants.role_champion'))
         <button class = "btn btn-success pull-right" ng-click = "ic.add()"> Add Item/Expense</button>
+        @endif
         <p class="text-danger"><strong>@{{ ic.message }}</strong></p>
         <br>
         <table datatable="ng" dt-options="ic.dtOptions" dt-columns="ic.dtColumnDefs" dt-instance="ic.dtInstance" class="table table-hover row-border hover">
@@ -31,9 +33,11 @@
                 <button class="btn btn-warning" ng-click="ic.edit($index, data)">
                 <i class="fa fa-edit"></i>
                 </button>
+                @if(Session::get('role') == config('constants.role_champion'))
                 <button class="btn btn-danger" ng-click="ic.delete($index ,data)">
                    <i class="fa fa-trash-o"></i>
                 </button>
+                @endif
               </td>
             </tr>
           </tbody>

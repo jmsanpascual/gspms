@@ -25,8 +25,10 @@
 					ng-options = "c.id as c.name for c in submitData.categories">
 					</select>
 					<br>
+					@if(Session::get('role') == config('constants.role_champion'))
 					<button class = "btn btn-warning" ng-if = "submitData.items.category_id == 'NA'"
 					ng-click = "aic.add_category()">Add Category</button>
+					@endif
 				</div>	
 
 			</div>
@@ -62,5 +64,7 @@
 @stop
 
 @section('btn')
+	@if(Session::get('role') == config('constants.role_champion'))
 	<button class = "btn btn-success" ng-click="save('items')">Save</button>
+	@endif
 @stop

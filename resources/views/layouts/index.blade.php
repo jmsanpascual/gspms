@@ -60,7 +60,8 @@
                     </li>
                     <li class="dropdown settings">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                      
+                      {{ Session::get('first_name') . ' ' . Session::get('middle_name') . ' ' .
+                      Session::get('last_name') }}
                       <i class="fa fa-angle-down"></i>
                     </a>
                         <ul class="dropdown-menu animated fadeInDown">
@@ -72,41 +73,21 @@
                 </ul>
             </div>
         </header>
+        <?php $page = !EMPTY($page) ? $page : ''; ?>
         <!--sidebar left start-->
         <nav class="sidebar sidebar-left">
             <h5 class="sidebar-header">Navigation</h5>
             <ul class="nav nav-pills nav-stacked">
-              <li class="nav-dropdown">
-                  <a href="#" title="Forms">
+           
+              <li ng-class = "{'active' : {{json_encode(($page == 'accounts'))}}; }">
+                  <a href="{{ URL::to('users') }}" title="Forms">
                     <i class="fa fa-list-alt"></i> Accounts
                   </a>
-                  <ul class="nav-sub">
-                    <li>
-                      <a href="{{ route('create.account') }}">Create Account</a>
-                    </li>
-                    <li>
-                      <a href="{{ URL::to('users') }}">View List</a>
-                    </li>
-                  </ul>
               </li>
-              <li class="nav-dropdown">
-                <a href="#" title="Forms">
+              <li ng-class = "{active : {{json_encode(($page == 'projects'))}}; }">
+                <a href="{{ route('view.project2') }}" title="Forms">
                     <i class="icon-doc"></i> Projects
                 </a>
-                <ul class="nav-sub">
-                    <li>
-                      <a href="{{ route('view.project') }}">View Projects</a>
-                    </li>
-                    <li>
-                      <a href="{{ route('view.project2') }}">View Projects2</a>
-                    </li>
-                    <li>
-                      <a href="{{ route('projects.create') }}">Create Proposal</a>
-                    </li>
-                    <li>
-                      <a href="{{ route('allocate-budget.project') }}">Allocate Budget</a>
-                    </li>
-                </ul>
               </li>
               <li class="nav-dropdown">
                 <a href="#" title="Forms">

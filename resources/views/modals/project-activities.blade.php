@@ -78,13 +78,23 @@
 @stop
 
 @section('btn')
+	
 	<span ng-controller = "ActivityStatusCtrl as asc" ng-init = "asc.data.proj_id = submitData.projAct.proj_id;
 	asc.data.act_id = submitData.projAct.id" style ="margin-right: 5px;" ng-if = "submitData.projAct.id">
+		@if(Session::get('role') == config('constants.role_life'))
 		<span ng-if = "submitData.projAct.status_id == 1">
 			<button class = "btn btn-primary" ng-click = "asc.approve()">Approve</button>
 			<button class = "btn btn-danger" ng-click = "asc.disapprove()">Disapprove</button>
+			
 		</span>
+		@endif
+		@if(Session::get('role') == config('constants.role_champion'))
 		<button class = "btn btn-info" ng-click = "asc.completed()" ng-if = "submitData.projAct.status_id == 2">Completed</button>
+		@endif
 	</span>
+	
+	
+	@if(Session::get('role') == config('constants.role_champion'))
 	<button class = "btn btn-success" ng-if = "submitData.projAct.status_id != 4" ng-click="save('projAct')">Save</button>
+	@endif
 @stop

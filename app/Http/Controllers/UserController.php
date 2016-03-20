@@ -22,7 +22,8 @@ class UserController extends Controller
 
     public function index()
     {
-        return view('users');
+        $data['page'] = 'accounts';
+        return view('users', $data);
     }
 
     public function getResourcePerson()
@@ -321,7 +322,7 @@ class UserController extends Controller
 
     public function login()
     {
-        $credentials = Request::all();
+    $credentials = Request::all();
         Log::info('credentials  - - - -  ' . json_encode($credentials));
         if (Auth::attempt($credentials)) {
 
@@ -337,14 +338,13 @@ class UserController extends Controller
                 "$user_role.role_id as role"));
             // $role_id = $user['role_id'];
             // unset($user['role_id']);
+            Session::set('id', $user->id);
             Session::set('first_name', $user->first_name);
             Session::set('middle_name', $user->middle_name);
             Session::set('last_name', $user->last_name);
             Session::set('email', $user->email);
             Session::set('role', $user->role);
 
-            Log::info(json_encode(Session::all()));
-            Log::info(session('first_name'));
             // Session::put('role', );
             return array('status' => true);
         } else {

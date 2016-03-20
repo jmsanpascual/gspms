@@ -11,12 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('login');
-});
 
+
+
+
+Route::group(['middleware' => ['web','session_check']], function () {
+  
 Route::get('index', function () {
-  return view('layouts/index');
+    return view('welcome');
 });
 
 Route::get('create.account', array('as' => 'create.account', function () {
@@ -28,13 +30,8 @@ Route::get('allocate-budget.project', array('as' => 'allocate-budget.project', f
 }));
 
 
-
-
-Route::group(['middleware' => 'web'], function () {
-  
-Route::post('/login', 'UserController@login');
-Route::get('/users', 'UserController@index');
-Route::get('/fetchUsers', 'UserController@retrieve');
+Route::get('/users', 'UserController@index', 'name');
+Route::get('/fetchUsers', 'UserController@retrieve');//->name(config('constants.role_life'));
 
 Route::get('addUser', 'UserController@showModal');
 Route::post('addUser', 'UserController@create');
@@ -45,7 +42,7 @@ Route::get('showUserDetails', 'UserController@getRoles');
 Route::get('user/getChampion', 'UserController@getChampion');
 Route::get('user/getResourcePerson', 'UserController@getResourcePerson');
 Route::resource('user', 'UserController');
-Route::resource('roles', 'RoleController');
+Route::resource('roles','RoleController');
 // RESTful resource route for Projects
 Route::get('projects/view-project', array('as' => 'view.project', function () {
     return view('view-project');
@@ -123,4 +120,13 @@ Route::resource('activity-status', 'ActivityStatusController');
 
 Route::group(['middleware' => ['web']], function () {
     //
+  
+  Route::post('/login', 'UserController@login');
+  Route::get('/', function () {
+
+      if(!Auth::check())
+        return view('login');
+      else
+        return view('welcome');
+  });
 });

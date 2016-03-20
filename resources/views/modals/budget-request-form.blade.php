@@ -49,6 +49,7 @@
 @stop
 
 @section('btn')
+	@if(Session::get('role') == config('constants.role_life'))
 	<span ng-controller = "BudgetRequestStatusCtrl as brsc" ng-init = "brsc.data.proj_id = submitData.brequest.proj_id;
 	brsc.data.br_id = submitData.brequest.id" style ="margin-right: 5px;" ng-if = "submitData.brequest.id">
 		<span ng-if = "submitData.brequest.status_id == 1">
@@ -56,5 +57,8 @@
 			<button class = "btn btn-danger" ng-click = "brsc.disapprove()">Disapprove</button>
 		</span>
 	</span>
+	@endif
+	@if(Session::get('role') == config('constants.role_champion'))
 	<button class = "btn btn-success" ng-if = "submitData.brequest.status_id != 2" ng-click="save('brequest')">Save</button>
+	@endif
 @stop
