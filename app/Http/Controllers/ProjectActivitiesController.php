@@ -33,8 +33,8 @@ class ProjectActivitiesController extends Controller
             $act_status = (new App\ActivityStatus)->getTable();
             $token = csrf_token();
     		$data['proj_activities'] = App\ProjectActivities::joinActivityStatus()
-                                    ->select("$activity.id","$activity.name", "$activity.start_date", 
-                                    "$activity.end_date", "$activity.remarks", "$act_status.name AS status", 
+                                    ->select("$activity.id","$activity.name", "$activity.start_date",
+                                    "$activity.end_date", "$activity.remarks", "$act_status.name AS status",
                                     "$activity.status_id", "$activity.description", DB::Raw('"'. $token . '" AS token'))
     								->where('proj_id', $proj_id)->get();
             Log::info(' lINE 33 - - - - -');
@@ -99,10 +99,10 @@ class ProjectActivitiesController extends Controller
             $activity['start_date'] = date('Y-m-d H:i:s', strtotime($activity['start_date']));
             Log::info(' start date '. $activity['start_date']);
             $activity['end_date'] = date('Y-m-d H:i:s', strtotime($activity['end_date']));
-            
+
             $id = App\Activities::insertGetId($activity);
             App\ProjectActivities::insert(['proj_id' => $proj_id, 'activity_id' => $id]);
-            $stat = App\ActivityStatus::where('id', $req->get('status_id'))->value('name');
+            $stat = App\ActivityStatus::where('id', $activity['status_id'])->value('name');
             $data['projAct'] = $req->all();
             $data['projAct']['id'] = $id;
             $data['projAct']['status'] = $stat;
@@ -137,7 +137,7 @@ class ProjectActivitiesController extends Controller
             unset($activity['token']);
             DB::beginTransaction();
             $activity['status_id'] = 1;
-            
+
             Log::info($activity);
             $id = App\Activities::where('id', $act_id)->update($activity);
             $stat = App\ActivityStatus::where('id', $activity['status_id'])->value('name');
@@ -185,7 +185,7 @@ class ProjectActivitiesController extends Controller
 
         return Response::json($data);
     }
-    
+
     public function destroy($id)
     {
         $msg = '';
@@ -193,7 +193,7 @@ class ProjectActivitiesController extends Controller
         try
         {
             Log::info($id);
-            
+
             App\ProjectActivities::where('activity_id', $id)->delete();
             App\Activities::where('id', $id)->delete();
             $status = TRUE;

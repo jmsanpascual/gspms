@@ -25,10 +25,6 @@ Route::get('create.account', array('as' => 'create.account', function () {
   return view('create-account');
 }));
 
-Route::get('allocate-budget.project', array('as' => 'allocate-budget.project', function () {
-  return view('allocate-budget-project');
-}));
-
 // Route::group(['middleware' => 'web'], function () {
 
   Route::get('index', function () {
@@ -57,6 +53,13 @@ Route::get('funds/view', function () {
 });
 Route::resource('funds', 'FundController');
 
+// RESTful resource route for Fund Allocation
+Route::get('funds-allocation/view', function () {
+  return view('funds-allocation');
+});
+Route::post('funds-allocation/update', 'FundAllocationController@update');
+Route::resource('funds-allocation', 'FundAllocationController');
+
 // RESTful resource route for Projects
 Route::get('projects/view-project', array('as' => 'view.project', function () {
     return view('view-project');
@@ -64,6 +67,8 @@ Route::get('projects/view-project', array('as' => 'view.project', function () {
 Route::get('projects/view-project2', array('as' => 'view.project2', function () {
   return view('projects');
 }));
+Route::get('projects/get-on-going-projects', 'ProjectController@getOnGoingProjects');
+Route::post('projects/update-total-budget', 'ProjectController@updateTotalBudget');
 Route::get('projects/fetch/{id}', 'ProjectController@fetchProj');
 Route::post('projects/request/', 'ProjectController@updateStatus');
 Route::post('projects/update', 'ProjectController@update');

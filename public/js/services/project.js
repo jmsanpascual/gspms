@@ -11,6 +11,10 @@ projectService.factory('Project', function (ProjRestApi) {
         });
     };
 
+    var getOnGoingProjects = function () {
+        return ProjRestApi.getOnGoingProjects().$promise;
+    };
+
     var addProject = function (params) {
         var project = new ProjRestApi(params);
 
@@ -31,13 +35,19 @@ projectService.factory('Project', function (ProjRestApi) {
         {
             return response;
         });
-    }
+    };
+
+    var updateTotalBudget = function (params) {
+        return ProjRestApi.updateTotalBudget(params).$promise;
+    };
 
     return {
         getProjects: getProjects,
+        getOnGoingProjects: getOnGoingProjects,
         addProject: addProject,
         fetchProject : fetchProject,
-        remove : remove
+        remove : remove,
+        updateTotalBudget: updateTotalBudget
     };
 });
 
@@ -56,6 +66,15 @@ projectService.factory('ProjRestApi', function ($resource) {
                     id : '@id',
                     proj_id : '@proj_id',
                 }
+            },
+            getOnGoingProjects: {
+                method: 'GET',
+                url: '../projects/get-on-going-projects',
+                isArray: true
+            },
+            updateTotalBudget: {
+                method: 'POST',
+                url: '../projects/update-total-budget'
             }
         });
 

@@ -11,8 +11,7 @@ angular.module('dynamicElement', [])
         $scope.fields.push({id: id});
     };
 
-    $scope.removeField = function () {
-        var index = $scope.fields.length - 1;
+    $scope.removeField = function (index) {
         $scope.fields.splice(index);
         $scope.$parent.submitData.proj.objective.splice(index);
     };

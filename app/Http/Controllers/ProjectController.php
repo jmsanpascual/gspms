@@ -208,6 +208,17 @@ class ProjectController extends Controller
         return Response::json($data);
     }
 
+    public function updateTotalBudget(Request $request)
+    {
+        try {
+            $project = $request->all();
+
+            App\Project::where('id', $project['id'])->update($project);
+            return Response::json(['result' => true]);
+        } catch (\Exception $e) {
+            return Response::json(['error' => $e->getMessage()]);
+        }
+    }
 
     public function destroy($id)
     {
@@ -231,5 +242,11 @@ class ProjectController extends Controller
         $data['msg'] = $msg;
         $data['status'] = $status;
         return Response::json($data);
+    }
+
+    public function getOnGoingProjects()
+    {
+        $projects = App\Projects::where('proj_status_id', '1')->get();
+        return Response::json($projects);
     }
 }

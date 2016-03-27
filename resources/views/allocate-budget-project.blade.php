@@ -68,3 +68,7 @@
   </div>
 
 @endsection
+
+{!! HTML::script('js/funds-allocation/module.js') !!}
+{!! HTML::script('js/funds-allocation/controllers/funds-allocation.js') !!}
+{!! HTML::script('js/funds-allocation/services/funds-allocation.js') !!}

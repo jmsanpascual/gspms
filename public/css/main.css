@@ -2792,3 +2792,13 @@ select {
   -o-border-radius: 3px;
   border-radius: 3px;
 }
+
+.objectives {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.objectives input {
+  margin-right: 5px;
+}

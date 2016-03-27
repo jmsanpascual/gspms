@@ -14,12 +14,13 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-2">Project Name</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.name" placeholder="Project Name">
+          <input type = "text" class = "form-control" ng-model = "submitData.proj.name" placeholder="Project Name"
+          ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
         </div>
         <label class = "form-label col-md-2">Program</label>
         <div class = "col-md-4">
           <select class = "form-control" ng-init="submitData.proj.program_id = submitData.program.id" ng-model = "submitData.proj.program_id"
-          ng-options = "p.id as p.name for p in submitData.programs">
+          ng-options = "p.id as p.name for p in submitData.programs" ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
           </select>
         </div>
       </div>
@@ -30,11 +31,13 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-2">Start Date</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.start_date" placeholder="Start Date">
+          <input type = "text" class = "form-control" ng-model = "submitData.proj.start_date" placeholder="Start Date"
+          ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
         </div>
         <label class = "form-label col-md-2">End Date</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.end_date" placeholder="End Date">
+          <input type = "text" class = "form-control" ng-model = "submitData.proj.end_date" placeholder="End Date"
+          ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
         </div>
       </div>
       </div>
@@ -44,11 +47,13 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-2">Partner Organization</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.partner_organization" placeholder="Partner Organization">
+          <input type = "text" class = "form-control" ng-model = "submitData.proj.partner_organization" placeholder="Partner Organization"
+          ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
         </div>
         <label class = "form-label col-md-2">Partner Community</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.partner_community" placeholder="Partner Community">
+          <input type = "text" class = "form-control" ng-model = "submitData.proj.partner_community" placeholder="Partner Community"
+          ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
         </div>
       </div>
       </div>
@@ -64,7 +69,8 @@
         </div> -->
         <label class = "form-label col-md-2">Total Budget</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.total_budget" placeholder="Total Budget">
+          <input type = "text" class = "form-control" ng-model = "submitData.proj.total_budget" placeholder="Total Budget"
+          ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
         </div>
       </div>
       </div>
@@ -77,14 +83,14 @@
         <label class = "form-label col-md-2">Champion</label>
         <div class = "col-md-4">
           <select class = "form-control" ng-init="submitData.proj.champion_id = submitData.champion.id" ng-model = "submitData.proj.champion_id"
-          ng-options = "c.id as c.name for c in submitData.champions">
+          ng-options = "c.id as c.name for c in submitData.champions" ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
           </select>
         </div>
         @endif
         <label class = "form-label col-md-2">Resource Person</label>
         <div class = "col-md-4">
           <select class = "form-control" ng-init="submitData.proj.resource_person_id = submitData.resource.id" ng-model = "submitData.proj.resource_person_id"
-          ng-options = "rp.id as rp.name for rp in submitData.resource_person">
+          ng-options = "rp.id as rp.name for rp in submitData.resource_person" ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
           </select>
         </div>
       </div>
@@ -95,15 +101,18 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-2">Objective(s)</label>
         <div class = "col-md-10">
-          <input ng-model="submitData.proj.objective[$index]" ng-repeat='field in fields' type="text" class="form-control" ng-class="{'col-sm-12': $last}"
-          placeholder="Objective @{{$index + 1}}" style='margin-bottom: 15px;'>
+          <div class="objectives" ng-repeat='field in fields'>
+            <input class="form-control" ng-model="submitData.proj.objective[$index]" type="text" ng-class="{'col-sm-12': $last}"
+            placeholder="Objective @{{$index + 1}}" ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+            <button class="btn btn-primary btn-sm" type="button" ng-click="removeField($index)"
+            ng-if="{{Session::get('role') != config('constants.role_life')}}">
+              <i class="fa fa-remove"></i>
+            </button>
+          </div>
         </div>
-        <div class="col-sm-6" ng-class="{'col-sm-offset-2': fields.length}">
+        <div class="col-sm-6" ng-class="{'col-sm-offset-2': fields.length}" ng-if="{{Session::get('role') != config('constants.role_life')}}">
           <button class="btn btn-primary btn-sm" type="button" ng-click="addField()">
             Add Objective
-          </button>
-          <button class="btn btn-primary btn-sm" type="button" ng-click="removeField()" ng-show='fields.length'>
-            Remove Objective
           </button>
         </div>
       </div>
@@ -174,13 +183,21 @@
 	ng-init = 'btnc.data.proj_id = submitData.proj.id;'>
 		<div class = "pull-left" ng-if = "submitData.proj.proj_status_id != 3">
 			<button class = "btn btn-info" ng-click="btnc.showItem()">
-        @if(Session::get('role') == config('constants.role_life'))
+        @if(Session::get('role') == config('constants.role_life')
+          || Session::get('role') == config('constants.role_head'))
         View Item/Expense
         @else
         Add Item/Expense
         @endif
       </button>
-			<button class = "btn btn-warning" ng-click="btnc.showReqBudget()">Request Budget</button>
+			<button class = "btn btn-warning" ng-click="btnc.showReqBudget()">
+        @if(Session::get('role') == config('constants.role_life')
+          || Session::get('role') == config('constants.role_head'))
+        View Budget Request
+        @else
+        Request Budget
+        @endif
+      </button>
 		</div>
 		@if(Session::get('role') == config('constants.role_life'))
 		<span ng-if = "submitData.proj.proj_status_id == 2">
@@ -194,7 +211,8 @@
 		@endif
 	</span>
 	@if(Session::get('role') == config('constants.role_champion') ||
-		Session::get('role') == config('constants.role_exec'))
+		Session::get('role') == config('constants.role_exec') ||
+    Session::get('role') == config('constants.role_life'))
 	<button class = "btn btn-success" ng-if = "submitData.proj.proj_status_id != 3" ng-click="save('proj')">Save</button>
 	@endif
 @stop
