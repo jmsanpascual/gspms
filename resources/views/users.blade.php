@@ -29,6 +29,7 @@
                   @if(Session::get('role') == config('constants.role_life'))
                     <button class = "btn btn-success btn-sm pull-right" ng-click = "showCase.add()"> Add User</button>
                   @endif
+                   <button class = "btn btn-danger btn-sm pull-right" ng-click = "showCase.refresh()"> Refresh</button>
                 <div>
                   <p class="text-danger"><strong ng-bind="showCase.message"></strong></p>
                   <br>

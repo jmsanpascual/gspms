@@ -232,4 +232,59 @@ class ProjectController extends Controller
         $data['status'] = $status;
         return Response::json($data);
     }
+
+    public function report($id)
+    {
+        $status = FALSE;
+        $msg = '';
+        try
+        {
+            $data['proj'] = App\Projects::leftJoin('programs', 'programs.id','=','projects.program_id')
+            ->leftJoin('personal_info AS rp', 'rp.id', '=', 'projects.resource_person_id')
+            ->leftJoin('users', 'users.id', '=', 'projects.champion_id')
+            ->leftJoin('user_info', 'user_info.user_id','=','users.id')
+            ->leftJoin('personal_info AS champ', 'champ.id', '=','user_info.personal_info_id')
+            ->where('projects.id', $id)->first(['projects.*','programs.name AS program', 
+                DB::raw('CONCAT(rp.first_name, " ", rp.middle_name, " ", rp.last_name) AS rp_name'),
+                DB::raw('CONCAT(champ.first_name, " ", champ.middle_name, " ", champ.last_name) AS champ_name')]);
+
+            $data['total_expense'] = App\ProjectItemCategory::where('proj_id', $id)
+            ->sum(DB::raw('quantity * price'));
+            
+            $data['proj_id'] = $id;
+            // $data['chart'] = $this->createChart($id);
+            $html = view('reports/project', $data);
+            $html = utf8_encode($html);
+            $pdf = new \mPDF();
+            $pdf->writeHTML($html);
+            $pdf->SetFooter('Generated date: ' . date('F d, Y'));
+            $pdf->Output();
+            exit();
+        }
+        catch(\Exception $e)
+        {
+            $msg = $e->getMessage();
+        }
+        $data['status'] = $status;
+        $data['msg'] = $msg;
+
+        return Response::json($data);
+    }
+
+    public function createChart($id)
+    {
+        Log::info('create chart');
+        header("Content-type: image/png");
+
+        $chart = new \PieChart(500, 260);
+
+        $dataSet = new \XYDataSet();
+        $dataSet->addPoint(new \Point("tessst", 80));
+        $dataSet->addPoint(new \Point("eyayt", 12));
+        $dataSet->addPoint(new \Point("ababa", 8));
+        $chart->setDataSet($dataSet);
+
+        $chart->setTitle(" TESTING . com - - - ");
+        return $chart->render('test.png');
+    }
 }

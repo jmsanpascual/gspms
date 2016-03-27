@@ -8,7 +8,6 @@ angular.module('users', ['datatables','common.service', 'ui.bootstrap', 'roles.s
     vm.edit = edit;
     vm.delete = deleteRow;
     vm.dtInstance = {};
-    vm.persons = [];
     $scope.roles = {};
 
     rolesRestApi.query().$promise.then(function(result){
@@ -16,22 +15,27 @@ angular.module('users', ['datatables','common.service', 'ui.bootstrap', 'roles.s
         $scope.roles = result.roles;
     });
 
-    reqDef.get('fetchUsers').then(function(result){
+    this.refresh = function(){
 
-            console.log(result);
+        vm.persons = [];
+        console.log('reset');
+        reqDef.get('fetchUsers').then(function(result){
 
-            if (result.status) {
-                // console.log('users');
-                // console.log(result.users);
-                vm.persons = result.users;
-            } else {
+                console.log(result);
+
+                if (result.status) {
+                    // console.log('users');
+                    // console.log(result.users);
+                    vm.persons = result.users;
+                } else {
+                    alert('Unable to load datatable');
+                }
+
+            }, function(err){
                 alert('Unable to load datatable');
-            }
-
-        }, function(err){
-            alert('Unable to load datatable');
-        });
-
+            });
+    }
+    vm.refresh();
     console.log('persons');
     console.log(vm.persons);
 

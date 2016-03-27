@@ -56,6 +56,13 @@ projectService.factory('ProjRestApi', function ($resource) {
                     id : '@id',
                     proj_id : '@proj_id',
                 }
+            },
+            report : {
+                method : 'GET',
+                url : '../projects/report/:proj_id',
+                params : {
+                    proj_id : '@proj_id'
+                }
             }
         });
 

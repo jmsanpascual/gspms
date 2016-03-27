@@ -1,4 +1,5 @@
 /public/js/vendor/*
+/public/mpdf
 /vendor
 /node_modules
 Homestead.yaml

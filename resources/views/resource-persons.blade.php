@@ -26,7 +26,8 @@
                   </div>
               </div>
               <div class="panel-body" ng-controller="resourcePersonDTCtrl as rp">
-                <button class="btn btn-success btn-sm pull-right" ng-click="rp.add()">Add Resource Person</button>
+                <button class="btn btn-success pull-right" ng-click="rp.add()">Add Resource Person</button>
+                <button class = "btn btn-danger pull-right" ng-click = "rp.getResourcePersons()"> Refresh</button>
                 <div>
                   <p class="text-danger"><strong ng-bind="rp.message"></strong></p>
                   <br>
