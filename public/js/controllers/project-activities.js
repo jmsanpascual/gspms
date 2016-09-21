@@ -18,7 +18,7 @@ angular.module('project.activites.controller',
     vm.dtInstance = {};
     vm.project_activities = [];
 
-    $scope.getProjActivities = function(proj_id)
+    this.getProjActivities = function(proj_id)
     {
         ProjectActivitiesRestApi.query({proj_id : $scope.proj_id}).$promise.then(function (result) {
            result = result[0];
@@ -180,7 +180,7 @@ angular.module('project.activites.controller',
     PROJ_STAT_DISAPPROVED : 4
 })
 
-.controller('btnCtrl', function($scope, defaultModal, ProjRestApi, projStatus){
+.controller('btnCtrl', function($scope, defaultModal, ProjRestApi, projStatus, $window){
     var _self = this;
     _self.data = {};
     _self.data.remarks = $scope.submitData.proj.remarks
@@ -247,6 +247,23 @@ angular.module('project.activites.controller',
         };
         
         defaultModal.showModal(attr);      
+    }
+
+    _self.showReport = function()
+    {
+        ProjRestApi.report({proj_id : 1}).$promise.then(function(result){
+            // console.log(result);
+            // if(!result.status)
+            // {
+            //     alert(result.msg);
+            //     return;
+            // }
+
+            var file = new Blob([result], {type : 'application/pdf'});
+            var fileURL = URL.createObjectURL(file);
+            $window.open(fileURL);
+        });
+        console.log('report');
     }
 });
 

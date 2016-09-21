@@ -133,11 +133,13 @@
     <div ng-if = "submitData.proj.id">
     <h3>Activities</h3>
     <hr>
-     <div ng-controller="projActDTCtrl as padtc" ng-init = 'proj_id = submitData.proj.id; getProjActivities(submitData.proj.id)'>
+     <div ng-controller="projActDTCtrl as padtc" ng-init = 'proj_id = submitData.proj.id; padtc.getProjActivities(submitData.proj.id)'>
           @if(Session::get('role') == config('constants.role_champion'))
           <button class = "btn btn-success btn-sm pull-right" ng-click = "padtc.add()"
           ng-if = "submitData.proj.proj_status_id != 3"> Add Activity</button>
           @endif
+          <button class = "btn btn-danger btn-sm pull-right" ng-click = "padtc.getProjActivities()"
+          ng-if = "submitData.proj.proj_status_id != 3"> Refresh</button>
           <p class="text-danger"><strong>@{{ padtc.message }}</strong></p>
           <br>
           <table datatable="ng" dt-options="padtc.dtOptions" dt-columns="padtc.dtColumnDefs" dt-instance="padtc.dtInstance" class="table table-hover row-border hover">
@@ -173,6 +175,7 @@
           </table>
         </div>
     </div>
+
     <!-- End Activities -->
   </form>
 @stop
@@ -190,7 +193,7 @@
         Add Item/Expense
         @endif
       </button>
-			<button class = "btn btn-warning" ng-click="btnc.showReqBudget()">
+      <button class = "btn btn-warning" ng-click="btnc.showReqBudget()">
         @if(Session::get('role') == config('constants.role_life')
           || Session::get('role') == config('constants.role_head'))
         View Budget Request
@@ -198,6 +201,7 @@
         Request Budget
         @endif
       </button>
+      <a class = "btn btn-default" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">Progress Report</a>
 		</div>
 		@if(Session::get('role') == config('constants.role_life'))
 		<span ng-if = "submitData.proj.proj_status_id == 2">

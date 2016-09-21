@@ -18,7 +18,7 @@ angular.module('items.controller',
     vm.dtInstance = {};
     vm.items = [];
 
-    $scope.getProjItems = function()
+    this.getProjItems = function()
     {
         console.log('proj_id');
         console.log($scope.proj_id);

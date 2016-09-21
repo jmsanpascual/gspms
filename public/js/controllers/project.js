@@ -12,10 +12,9 @@ angular.module('project.controller', [
     'budget.request.controller',
     'items.controller',
     'resourcePersonService',
-    'dynamicElement'
 ])
 
-.controller('projDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder,
+.controller('projDTCtrl', function($scope, DTOptionsBuilder, DTColumnDefBuilder,
   reqDef, defaultModal, Project, ProgramRestApi, ProjectStatusRestApi, UserRestApi, ResourcePerson) {
     var vm = this;
     vm.message = '';
@@ -24,15 +23,20 @@ angular.module('project.controller', [
     vm.dtInstance = {};
     vm.projects = [];
 
-    Project.getProjects().then(function (result) {
-        result = result[0];
-        if (result.status) {
-            console.log('Projects:', result.proj);
-            vm.projects = result.proj;
-        } else {
-            alert('Unable to load datatable');
-        }
-     });
+    this.refresh = function()
+    {
+        console.log('refresh ');
+        Project.getProjects().then(function (result) {
+            result = result[0];
+            if (result.status) {
+                console.log('Projects:', result.proj);
+                vm.projects = result.proj;
+            } else {
+                alert('Unable to load datatable');
+            }
+         });
+    }
+    this.refresh();
 
     ResourcePerson.getResourcePersons().then(function (resourcePersons) {
         console.log('Resource Persons:', resourcePersons);

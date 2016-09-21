@@ -18,7 +18,7 @@ angular.module('budget.request.controller',
     vm.dtInstance = {};
     vm.budget_requests = [];
 
-    $scope.getProjBudgetReq = function()
+    this.getProjBudgetReq = function()
     {
         console.log('proj_id');
         console.log($scope.proj_id);

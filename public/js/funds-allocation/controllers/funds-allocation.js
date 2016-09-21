@@ -57,12 +57,13 @@ angular.module('fundsAllocation')
                 var project = {
                     id: data.allocatedFund.project.id,
                     name: data.allocatedFund.project.name,
+                    total_budget: data.allocatedFund.project.total_budget
                 };
 
                 allocatedFund.project = project;
                 fa.allocatedFunds.push(allocatedFund);
 
-                project.total_budget = allocatedFund.amount;
+                project.total_budget += parseInt(allocatedFund.amount);
                 Project.updateTotalBudget(project).then(function (result) {
                     console.log('Total Budget of project is updated successfully!', result);
                 });
@@ -111,7 +112,7 @@ angular.module('fundsAllocation')
                 fund.project = data.allocatedFund.project;
 
                 var project = data.allocatedFund.project;
-                project.total_budget = data.allocatedFund.amount;
+                project.total_budget += parseInt(data.allocatedFund.amount);
                 Project.updateTotalBudget(project).then(function (result) {
                     console.log('Total Budget of project is updated successfully!', result);
                 });

@@ -75,6 +75,13 @@ projectService.factory('ProjRestApi', function ($resource) {
             updateTotalBudget: {
                 method: 'POST',
                 url: '../projects/update-total-budget'
+            },
+            report : {
+                method : 'GET',
+                url : '../projects/report/:proj_id',
+                params : {
+                    proj_id : '@proj_id'
+                }
             }
         });
 

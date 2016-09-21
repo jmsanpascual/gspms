@@ -11,10 +11,6 @@
 |
 */
 
-
-
-
-
 Route::group(['middleware' => ['web','session_check']], function () {
 
 Route::get('index', function () {
@@ -67,8 +63,11 @@ Route::get('projects/view-project', array('as' => 'view.project', function () {
 Route::get('projects/view-project2', array('as' => 'view.project2', function () {
   return view('projects');
 }));
+
 Route::get('projects/get-on-going-projects', 'ProjectController@getOnGoingProjects');
 Route::post('projects/update-total-budget', 'ProjectController@updateTotalBudget');
+Route::get('projects/chart/{id}', 'ProjectController@createChart')->name('proj_chart');
+Route::get('projects/report/{id}', 'ProjectController@report')->name('proj_report');
 Route::get('projects/fetch/{id}', 'ProjectController@fetchProj');
 Route::post('projects/request/', 'ProjectController@updateStatus');
 Route::post('projects/update', 'ProjectController@update');

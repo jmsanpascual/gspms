@@ -147,7 +147,9 @@
     {!! HTML::script('js/vendor/node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js') !!}
     {!! HTML::script('js/others/angular-datatable.min.js') !!}
     {!! HTML::script('js/services/common_service.js') !!}
-
+    
+    {!! HTML::script('plugins/chartjs/Chart.min.js') !!}
+    {!! HTML::script('plugins/chartjs/chartjs-demo.js') !!}
     @yield('scripts')
 
 </body>

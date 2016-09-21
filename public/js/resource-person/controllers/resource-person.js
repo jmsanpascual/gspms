@@ -27,13 +27,19 @@ angular.module('resourcePersons', [
         DTColumnDefBuilder.newColumnDef(5).notSortable()
     ];
 
-    ResourcePerson.getResourcePersons().then(function (resourcePersons) {
-        console.log('Resource Persons:', resourcePersons);
-        rp.persons = resourcePersons;
-    }, function(error){
-        alert('Unable to load resource persons');
-        console.log('Error:', err);
-    });
+    this.getResourcePersons = function()
+    {
+        console.log('resss');
+        ResourcePerson.getResourcePersons().then(function (resourcePersons) {
+            console.log('Resource Persons:', resourcePersons);
+            rp.persons = resourcePersons;
+        }, function(error){
+            alert('Unable to load resource persons');
+            console.log('Error:', err);
+        });
+        
+    }
+    this.getResourcePersons();
 
     SchoolRestApi.query().$promise.then(function (schools) {
         console.log('Schools:', schools);

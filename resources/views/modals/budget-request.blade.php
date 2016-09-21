@@ -5,10 +5,12 @@
 @stop
 @section('modal-content')
 	<!-- DTable -->
-	 <div ng-controller="BudgetReqCtrl as brc" ng-init = 'proj_id = submitData.proj_id; getProjBudgetReq()'>
+	 <div ng-controller="BudgetReqCtrl as brc" ng-init = 'proj_id = submitData.proj_id; brc.getProjBudgetReq()'>
         @if(Session::get('role') == config('constants.role_champion'))
         <button class = "btn btn-success pull-right" ng-click = "brc.add()"> Request Budget</button>
         @endif
+        <button class = "btn btn-danger pull-right" ng-click = "brc.getProjBudgetReq()"> Refresh</button>
+        
         <p class="text-danger"><strong>@{{ brc.message }}</strong></p>
         <br>
         <table datatable="ng" dt-options="brc.dtOptions" dt-columns="brc.dtColumnDefs" dt-instance="brc.dtInstance" class="table table-hover row-border hover">

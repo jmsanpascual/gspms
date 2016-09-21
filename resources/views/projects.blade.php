@@ -1,7 +1,6 @@
 @extends('layouts.index')
 
 @section('content')
-
   <div class="row">
       <div class="col-md-12">
           <!--breadcrumbs start -->
@@ -32,6 +31,7 @@
                   Session::get('role') == config('constants.role_exec'))
                   <button class = "btn btn-success btn-sm pull-right" ng-click = "proj.add()"> Add Project</button>
                   @endif
+                  <button class = "btn btn-danger btn-sm pull-right" ng-click = "proj.refresh()">Refresh</button>
                   <p class="text-danger"><strong ng-bind="proj.message"></strong></p>
                   <br>
                   <table datatable="ng" dt-options="proj.dtOptions" dt-columns="proj.dtColumnDefs" dt-instance="proj.dtInstance" class="table table-hover row-border hover">
