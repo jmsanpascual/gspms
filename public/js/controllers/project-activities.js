@@ -1,14 +1,14 @@
 'use strict'
-angular.module('project.activites.controller', 
+angular.module('project.activites.controller',
     [
-    'projectActivities.service', 
-    'datatables', 
-    'common.service', 
+    'projectActivities.service',
+    'datatables',
+    'common.service',
     'ui.bootstrap',
     'activityStatus.service'
     ])
-  
-.controller('projActDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder, 
+
+.controller('projActDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder,
     reqDef, defaultModal, ProjectActivitiesRestApi, activityStatusRestApi) {
     // $scope.proj_id = 1; //declared in modals/projects.blade.php
     var vm = this;
@@ -69,11 +69,11 @@ angular.module('project.activites.controller',
             projAct : {proj_id : $scope.proj_id}
 
         };
-        
+
         defaultModal.showModal(attr).result.then(function(data){
             console.log(data);
             vm.project_activities.push(data.projAct);
-        });      
+        });
 
     }
 
@@ -87,11 +87,11 @@ angular.module('project.activites.controller',
             projAct : angular.copy(act)
         };
         attr.projAct.proj_id = $scope.proj_id;
-        
+
         defaultModal.showModal(attr).result.then(function(data){
             console.log(data);
             vm.project_activities.splice(index, 1, angular.copy(data.projAct));
-        });   
+        });
     }
 
     function deleteRow(index, act) {
@@ -232,21 +232,31 @@ angular.module('project.activites.controller',
             templateUrl : '../items/items',
             proj_id : _self.data.proj_id
         };
-        
-        defaultModal.showModal(attr);      
+
+        defaultModal.showModal(attr);
     }
 
     _self.showReqBudget = function()
     {
-        console.log('proj id');
-        console.log(_self.proj_id);
+        // console.log('proj id');
+        // console.log(_self.proj_id);
         var attr = {
             size: 'md',
             templateUrl : '../budget-request/budget-request',
             proj_id : _self.data.proj_id
         };
-        
-        defaultModal.showModal(attr);      
+
+        defaultModal.showModal(attr);
+    }
+
+    _self.showAttachments = function() {
+        var attr = {
+            size: 'md',
+            templateUrl : '../project-attachments/project-attachments',
+            proj_id : _self.data.proj_id
+        };
+
+        defaultModal.showModal(attr);
     }
 
     _self.showReport = function()
@@ -266,5 +276,3 @@ angular.module('project.activites.controller',
         console.log('report');
     }
 });
-
-

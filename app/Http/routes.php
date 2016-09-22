@@ -111,6 +111,13 @@ Route::get('categories/add', function(){
 });
 Route::resource('categories', 'CategoryController');
 
+// RESTful resource route for Attachments
+Route::get('project-attachments/add', array(function () {
+  return view('modals/project-attachments-form');
+}));
+Route::post('project-attachments/update', 'ProjectAttachmentController@update');
+Route::resource('project-attachments', 'ProjectAttachmentController');
+
 // RESTful resource route for Programs
 Route::resource('programs', 'ProgramController');
 

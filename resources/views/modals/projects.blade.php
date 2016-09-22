@@ -202,6 +202,16 @@
         @endif
       </button>
       <a class = "btn btn-default" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">Progress Report</a>
+
+      <button class = "btn btn-primary" ng-click="btnc.showAttachments()">
+          @if(Session::get('role') == config('constants.role_life')
+            || Session::get('role') == config('constants.role_head'))
+          View Attachments
+          @else
+          Add Attachments
+          @endif
+      </button>
+
 		</div>
 		@if(Session::get('role') == config('constants.role_life'))
 		<span ng-if = "submitData.proj.proj_status_id == 2">

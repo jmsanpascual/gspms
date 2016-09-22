@@ -12,6 +12,8 @@ angular.module('project.controller', [
     'budget.request.controller',
     'items.controller',
     'resourcePersonService',
+    'project.attachment',
+    'upload'
 ])
 
 .controller('projDTCtrl', function($scope, DTOptionsBuilder, DTColumnDefBuilder,

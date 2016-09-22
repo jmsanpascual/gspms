@@ -1,5 +1,9 @@
 @extends('layouts.index')
 
+@section('css')
+{!! HTML::style('js/upload/upload.css'); !!}
+@endsection
+
 @section('content')
   <div class="row">
       <div class="col-md-12">
@@ -73,7 +77,6 @@
           </div>
       </div>
   </div>
-
 @endsection
 
 @section('scripts')
@@ -94,4 +97,12 @@
 {!! HTML::script('js/controllers/dynamic-element.js') !!}
 {!! HTML::script('js/controllers/item.js') !!}
 {!! HTML::script('js/controllers/project.js') !!}
+
+{!! HTML::script('js/project-attachments/project-attachment.module.js') !!}
+{!! HTML::script('js/project-attachments/project-attachment.controller.js') !!}
+{!! HTML::script('js/project-attachments/project-attachment.service.js') !!}
+
+<!-- UPLOAD -->
+{!! HTML::script('js/upload/upload.js') !!}
+<!-- END UPLOAD -->
 @endsection

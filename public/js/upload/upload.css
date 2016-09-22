@@ -1,0 +1,34 @@
+.pic-container {
+    padding-right: 10px;
+    float:right;
+    background-color: #E0E0E0;
+    width:100%;
+    height: 110px;
+    position: relative;
+    margin-bottom: 15px;
+    word-wrap : break-word;
+}
+
+.pic-container-img {
+    height: 90px;
+    width: 100px;
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.pic-container-right {
+    position: relative;
+    height: 100%;
+}
+.pic-container-right > span {
+    position: relative;
+    display:block !important;
+    margin-top: 30px;
+}
+
+.pic-container-close {
+    position: absolute;
+    right:5px;
+    z-index: 10;
+}
