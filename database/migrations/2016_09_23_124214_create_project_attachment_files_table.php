@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectAttachmentsTable extends Migration
+class CreateProjectAttachmentFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,11 @@ class CreateProjectAttachmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('project_attachments', function (Blueprint $table) {
+        Schema::create('project_attachment_files', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('project_id')->unsigned();
-            $table->string('subject');
-            $table->string('description');
-            // $table->string('file');
-            $table->string('created_by');
+            $table->integer('project_attachment_id')->unsigned();
+            $table->string('name');
+            $table->string('file');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateProjectAttachmentsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('project_attachments');
+        Schema::drop('project_attachment_files');
     }
 }

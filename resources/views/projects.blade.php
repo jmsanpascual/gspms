@@ -105,4 +105,7 @@
 <!-- UPLOAD -->
 {!! HTML::script('js/upload/upload.js') !!}
 <!-- END UPLOAD -->
+<!-- Toast -->
+{!! HTML::script('js/others/toast.js') !!}
+<!-- End Toast -->
 @endsection

@@ -9,6 +9,12 @@
 
     /* @ngInject */
     function ProjectAttachment($resource) {
-        return $resource('../project-attachments');
+        return $resource('../project-attachments/:id', {id : '@id'}, {
+            'deleteFile' : {
+                'url' : '../project-attachments/deleteFile/:id',
+                'method' : 'DELETE',
+                'params' : { 'id' : '@id'}
+            }
+        });
     }
 })();

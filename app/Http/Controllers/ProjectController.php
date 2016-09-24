@@ -99,6 +99,8 @@ class ProjectController extends Controller
 
         try {
             $project = $request->all();
+            logger('projects');
+            logger($project);
             $objectives = $project['objective']; // Store the array objectives
             unset($project['token']);
 
@@ -150,7 +152,7 @@ class ProjectController extends Controller
             unset($upd_arr['status']);
             unset($upd_arr['token']);
 
-            // Convert array obkectives to concatenated string using the delimiter
+            // Convert array objectives to concatenated string using the delimiter
             foreach($upd_arr['objective'] as $key => $value) {
                if (empty($temp)) $temp .= $value;
                else $temp .= $delimiter . $value;
@@ -176,6 +178,25 @@ class ProjectController extends Controller
 
         $data['status'] = $status;
         $data['msg'] = $msg;
+
+        return Response::json($data);
+    }
+
+    public function approveStatus(Request $req)
+    {
+        $msg = '';
+        $status = FALSE;
+        try {
+            // fetch the highest budget and lowest budget with same category
+
+            return view();
+        } catch(\Exception $e) {
+            Log::info(json_encode(DB::getQueryLog()));
+            $msg = $e->getMessage();
+        }
+
+        $data['msg'] = $msg;
+        $data['status'] = $status;
 
         return Response::json($data);
     }
@@ -208,17 +229,6 @@ class ProjectController extends Controller
         return Response::json($data);
     }
 
-    public function updateTotalBudget(Request $request)
-    {
-        try {
-            $project = $request->all();
-
-            App\Project::where('id', $project['id'])->update($project);
-            return Response::json(['result' => true]);
-        } catch (\Exception $e) {
-            return Response::json(['error' => $e->getMessage()]);
-        }
-    }
 
     public function destroy($id)
     {
@@ -297,11 +307,5 @@ class ProjectController extends Controller
 
         $chart->setTitle(" TESTING . com - - - ");
         return $chart->render('test.png');
-    }
-
-    public function getOnGoingProjects()
-    {
-        $projects = App\Projects::where('proj_status_id', '1')->get();
-        return Response::json($projects);
     }
 }

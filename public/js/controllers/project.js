@@ -13,7 +13,8 @@ angular.module('project.controller', [
     'items.controller',
     'resourcePersonService',
     'project.attachment',
-    'upload'
+    'upload',
+    'toast'
 ])
 
 .controller('projDTCtrl', function($scope, DTOptionsBuilder, DTColumnDefBuilder,

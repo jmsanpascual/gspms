@@ -3,7 +3,8 @@
 
     angular
         .module('project.attachment')
-        .controller('ProjectAttachmentController', ProjectAttachmentController);
+        .controller('ProjectAttachmentController', ProjectAttachmentController)
+        .controller('ProjectAttachmentFormController', ProjectAttachmentFormController);
 
     ProjectAttachmentController.$inject = [
         'ProjectAttachment',
@@ -11,11 +12,12 @@
         'DTOptionsBuilder',
         'DTColumnDefBuilder',
         'defaultModal',
+        'toast'
     ];
 
     /* @ngInject */
     function ProjectAttachmentController(ProjectAttachment, $scope,
-        DTOptionsBuilder, DTColumnDefBuilder, defaultModal) {
+        DTOptionsBuilder, DTColumnDefBuilder, defaultModal, toast) {
         var vm = this;
         vm.message = '';
         vm.edit = edit;
@@ -49,29 +51,33 @@
                 templateUrl : '../project-attachments/add',
                 saveUrl: '../project-attachments',
                 action: 'Add',
-                keepOpen : true, // keep open even after save
+                // keepOpen : true, // keep open even after save
+                attachment : {
+                    project_id : vm.proj_id
+                }
             };
             var modal = defaultModal.showModal(attr);
 
             // Add to datatable
             modal.result.then(function(data){
-                vm.attachments.push(data);
+                toast.success(data.msg);
+                vm.attachments.push(data.attachment);
             });
         }
 
         function edit(index, attachment) {
-            console.log(attachment);
             var attr = {
                 size: 'lg',
                 templateUrl : '../project-attachments/add',
                 saveUrl: '../project-attachments/update',
                 action: 'Edit',
                 // keepOpen : true, // keep open even after save
-                proj : angular.copy(attachment)
+                attachment : angular.copy(attachment)
             };
 
             var modal = defaultModal.showModal(attr);
             modal.result.then(function (data) {
+                toast.success(data.msg);
                 vm.attachments.splice(index, 1, angular.copy(data.attachment));
             });
         }
@@ -88,16 +94,45 @@
             var del = defaultModal.delConfirm(attr);
 
             del.result.then(function(id){
-                ProjectAttachment.remove({id: id}).then(function(result){
+                ProjectAttachment.remove({id: id}).$promise.then(function(result){
                     if(result.status)
                     {
                         console.log('successfully deleted');
+                        toast.success(result.msg);
                         vm.attachments.splice(index, 1);
                     }
                     else
                     {
                         console.log('not deleted');
                     }
+                });
+            });
+        }
+    }
+
+    ProjectAttachmentFormController.$inject = [
+        'toast',
+        'ProjectAttachment',
+        'defaultModal'
+    ];
+
+    function ProjectAttachmentFormController(toast, ProjectAttachment, defaultModal) {
+        var vm = this;
+
+        vm.delete = function(files, file, index) {
+            var attr = {
+                deleteName : file.name,
+                deletedKey : file.id
+            }
+            var del = defaultModal.delConfirm(attr);
+
+            del.result.then(function(id){
+                // delete file;
+                ProjectAttachment.deleteFile({id : file.id}).$promise.then(function(result){
+                    if(!result.status) return;
+
+                    toast.success(result.msg);
+                    files.splice(index, 1);
                 });
             });
         }

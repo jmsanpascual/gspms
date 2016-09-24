@@ -118,7 +118,9 @@
 			// if(vm.progress[result.ctr] == undefined) {
 			//
 			// }
+
 			vm.progress[result.ctr] = (result.loaded / result.total) * 100;
+			console.log(vm.progress);
 		});
 
 		var file_list = {};

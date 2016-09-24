@@ -25,12 +25,9 @@
           <tbody>
             <tr ng-repeat = "data in pac.attachments">
               <td>@{{data.subject }}</td>
-              <td>@{{data.name}}</td>
+              <td>@{{data.description}}</td>
               <td>
-                <a class="btn btn-default btn-sm" href="@{{data.link}}" download>
-                  <i class="fa fa-download"></i>
-                </a>
-                <button class="btn btn-warning btn-sm" ng-click="pac.edit($index, data)">
+                <button class="btn btn-warning" ng-click="pac.edit($index, data)">
                 <i class="fa fa-edit"></i>
                 </button>
                 @if(Session::get('role') == config('constants.role_champion'))

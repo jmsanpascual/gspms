@@ -116,6 +116,7 @@ Route::get('project-attachments/add', array(function () {
   return view('modals/project-attachments-form');
 }));
 Route::post('project-attachments/update', 'ProjectAttachmentController@update');
+Route::delete('project-attachments/deleteFile/{id}', 'ProjectAttachmentController@destroyAttachment');
 Route::resource('project-attachments', 'ProjectAttachmentController');
 
 // RESTful resource route for Programs

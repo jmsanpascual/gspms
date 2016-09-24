@@ -6,8 +6,12 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
 use App\ProjectAttachment;
+use App\ProjectAttachmentFile;
 
 use DB;
+use File;
+use Exception;
+
 class ProjectAttachmentController extends Controller
 {
     public function __construct()
@@ -24,8 +28,16 @@ class ProjectAttachmentController extends Controller
             if(EMPTY($proj_id))
                 return;
 
+            $token = csrf_token();
             $attachment = ProjectAttachment::where('project_id', $proj_id)->select('*',
-            DB::Raw('"'. $token . '" AS token'))->get();
+            DB::Raw('"'. $token . '" AS token'))
+            ->get();
+
+            foreach($attachment AS $key => &$val) {
+                $val['files'] = ProjectAttachmentFile::where('project_attachment_id', $val->id)
+                  ->get(['id', 'project_attachment_id','file', 'name'])->toArray();
+            }
+
             logger(' lINE 25 - - - - -');
             logger(json_encode(DB::getQueryLog()));
 
@@ -54,15 +66,50 @@ class ProjectAttachmentController extends Controller
         $status = FALSE;
         $msg = '';
         try {
-            // $br = $request->all();
-            // unset($br['token']);
-            // $br['created_by'] = auth()->id();
-            // $id = ProjectAttachment::insertGetId($br);
-            //
+            logger(' request ');
+            logger($request);
+            $params = $request->all();
+
+            $data['attachment'] = DB::transaction(function() use ($params, $request){
+                $proj_attachment = new ProjectAttachment();
+                $proj_attachment->project_id = $params['project_id'];
+                $proj_attachment->subject = $params['subject'];
+                $proj_attachment->description = $params['description'];
+                $proj_attachment->created_by = auth()->id();
+                $proj_attachment->save();
+
+                //set name of the creator
+                $proj_attachment->name = auth()->user()->name;
+
+                // save the files
+                if($request->has('upload_files')) {
+                    // check or create first the directory
+                    $path = $this->_getAttachmentPath();
+                    $files = [];
+                    foreach($request->file('upload_files') AS $key => $val) {
+                        $fileName = sha1($val->getClientOriginalName() . time());
+                        $fileName = $fileName . '.' . $val->getClientOriginalExtension();
+                        $files[] = [
+                            'project_attachment_id' => $proj_attachment->id,
+                            'file' => $fileName,
+                            'name' => $val->getClientOriginalName()
+                        ];
+
+                        $val->move($path, $fileName);
+                    }
+                    ProjectAttachmentFile::insert($files);
+
+                    $proj_attachment->files = ProjectAttachmentFile::where('project_attachment_id', $proj_attachment->id)
+                        ->get(['id','project_attachment_id', 'name', 'file'])->toArray();
+                }
+
+                return $proj_attachment;
+            });
+
             // $data['attachment'] = $br;
             // $data['attachment']['id'] = $id;
             // $data['attachment']['name'] = $creator;
-
+            $msg = trans('notifications.data_saved');
             $status = TRUE;
        } catch (Exception $e) {
             $msg = $e->getMessage();
@@ -70,36 +117,98 @@ class ProjectAttachmentController extends Controller
         $data['msg'] = $msg;
         $data['status'] = $status;
 
-        return Response::json($data);
+        return response()->json($data);
+    }
+
+    private function _getAttachmentPath() {
+        $path = $this->_getPath();
+        if(!File::isDirectory($path)) {
+            File::makeDirectory($path, 0777, TRUE);
+        }
+        return $path;
+    }
+
+    private function _getPath() {
+        return public_path() . DIRECTORY_SEPARATOR . 'attachments' . DIRECTORY_SEPARATOR;
     }
 
     public function update(Request $request)
     {
         $status = FALSE;
         $msg = '';
-        try
-        {
-            $request = $request->all();
-            Log::info('update');
-            Log::info($request);
-            $id = $request['id'];
-            $upd_arr = $request;
-            unset($upd_arr['id']);
-            unset($upd_arr['category']);
-            unset($upd_arr['token']);
-            App\ProjectItemCategory::where('id', $id)->update($upd_arr);
+        try {
+            $params = $request->all();
 
-            $data['items'] = $request;
+            $data['attachment'] = DB::transaction(function() use ($params, $request){
+                $proj_attachment = ProjectAttachment::find($params['id']);
+                $proj_attachment->project_id = $params['project_id'];
+                $proj_attachment->subject = $params['subject'];
+                $proj_attachment->description = $params['description'];
+                $proj_attachment->created_by = auth()->id();
+                $proj_attachment->save();
+
+                //set name of the creator
+                $proj_attachment->name = auth()->user()->name;
+
+                // save the files
+                if($request->has('upload_files')) {
+                    // check or create first the directory
+                    $path = $this->_getAttachmentPath();
+                    $files = [];
+                    foreach($request->file('upload_files') AS $key => $val) {
+                        $fileName = sha1($val->getClientOriginalName() . time());
+                        $fileName = $fileName . '.' . $val->getClientOriginalExtension();
+                        $files[] = [
+                            'project_attachment_id' => $proj_attachment->id,
+                            'file' => $fileName,
+                            'name' => $val->getClientOriginalName()
+                        ];
+
+                        $val->move($path, $fileName);
+                    }
+                    ProjectAttachmentFile::insert($files);
+
+                    $proj_attachment->files = ProjectAttachmentFile::where('project_attachment_id', $proj_attachment->id)
+                        ->get(['id','project_attachment_id', 'name', 'file'])->toArray();
+                }
+
+                return $proj_attachment;
+            });
+
+            // $data['attachment'] = $br;
+            // $data['attachment']['id'] = $id;
+            // $data['attachment']['name'] = $creator;
+            $msg = trans('notifications.data_saved');
             $status = TRUE;
+       } catch (Exception $e) {
+            $msg = $e->getMessage();
+            logger($e);
         }
-        catch(Exception $e)
-        {
+        $data['msg'] = $msg;
+        $data['status'] = $status;
+
+        return response()->json($data);
+    }
+
+    public function destroyAttachment($id) {
+        $status = FALSE;
+        try{
+            //remove first the file
+            $attachment = ProjectAttachmentFile::where('id', $id)->first()->makeVisible('dirFile')->toArray();
+            File::delete($attachment['dirFile']);
+            // delete from database
+            ProjectAttachmentFile::destroy($id);
+            $msg = trans('notifications.data_deleted', ['str' => 'Attachmemnt']);
+            $status = TRUE;
+        } catch(Exception $e) {
             $msg = $e->getMessage();
         }
-        $data['status'] = $status;
-        $data['msg'] = $msg;
+        $data = [
+            'status' => $status,
+            'msg' => $msg
+        ];
 
-        return Response::json($data);
+        return $data;
     }
 
     public function destroy($id)
@@ -108,21 +217,33 @@ class ProjectAttachmentController extends Controller
         $status = FALSE;
         try
         {
-            Log::info($id);
             DB::beginTransaction();
+            $attachment = ProjectAttachmentFile::where('project_attachment_id', $id)
+              ->get()->makeVisible('dirFile')->toArray();
 
-            App\ProjectItemCategory::where('id', $id)->delete();
-            // DB::rollback();
-            DB::commit();
+            $ids = array_column($attachment, 'id');
+            $files = array_column($attachment, 'dirFile');
+
+            // destroy the files
+            if(!EMPTY($files)) {
+                File::delete($files);
+            }
+
+            ProjectAttachmentFile::whereIn('id', $ids)->delete();
+            // destroy the parent
+            ProjectAttachment::destroy($id);
             $status = TRUE;
+            $msg = trans('notifications.data_deleted', ['str' => 'Attachment']);
+            DB::commit();
         }
         catch(Exception $e)
         {
             $msg = $e->getMessage();
+            DB::rollback();
+            logger($e);
         }
-        Log::info(json_encode(DB::getQueryLog()));
         $data['msg'] = $msg;
         $data['status'] = $status;
-        return Response::json($data);
+        return response()->json($data);
     }
 }
