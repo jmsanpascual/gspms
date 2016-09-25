@@ -64,6 +64,10 @@ Route::get('projects/view-project2', array('as' => 'view.project2', function () 
   return view('projects');
 }));
 
+Route::get('projects/view-related', function() {
+    return view('modals/project-related');
+});
+
 Route::get('projects/get-on-going-projects', 'ProjectController@getOnGoingProjects');
 Route::post('projects/update-total-budget', 'ProjectController@updateTotalBudget');
 Route::get('projects/chart/{id}', 'ProjectController@createChart')->name('proj_chart');
@@ -71,6 +75,7 @@ Route::get('projects/report/{id}', 'ProjectController@report')->name('proj_repor
 Route::get('projects/fetch/{id}', 'ProjectController@fetchProj');
 Route::post('projects/request/', 'ProjectController@updateStatus');
 Route::post('projects/update', 'ProjectController@update');
+Route::get('projects/related/{id}', 'ProjectController@getRelated');
 Route::resource('projects', 'ProjectController');
 
 

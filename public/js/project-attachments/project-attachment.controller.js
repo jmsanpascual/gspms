@@ -42,7 +42,7 @@
         vm.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0),
             DTColumnDefBuilder.newColumnDef(1),
-            DTColumnDefBuilder.newColumnDef(5).notSortable()
+            DTColumnDefBuilder.newColumnDef(2).notSortable()
         ];
 
         this.add = function () {

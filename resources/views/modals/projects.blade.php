@@ -131,8 +131,8 @@
     </div>
     <!-- Activities -->
     <div ng-if = "submitData.proj.id">
-    <h3>Activities</h3>
-    <hr>
+        <h3>Activities</h3>
+        <hr>
      <div ng-controller="projActDTCtrl as padtc" ng-init = 'proj_id = submitData.proj.id; padtc.getProjActivities(submitData.proj.id)'>
           @if(Session::get('role') == config('constants.role_champion'))
           <button class = "btn btn-success btn-sm pull-right" ng-click = "padtc.add()"
@@ -175,7 +175,6 @@
           </table>
         </div>
     </div>
-
     <!-- End Activities -->
   </form>
 @stop
@@ -203,6 +202,10 @@
       </button>
       <a class = "btn btn-default btn-sm" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">Progress Report</a>
 
+      @if(Session::get('role') == config('constants.role_life')
+        || Session::get('role') == config('constants.role_head'))
+      <button class = "btn btn-success btn-sm" ng-click = "btnc.showRelated()">View Related Projects</button>
+      @endif
 
       @if(Session::get('role') == config('constants.role_life')
         || Session::get('role') == config('constants.role_head'))
@@ -214,8 +217,7 @@
           Add Attachments
       </button>
       @endif
-
-		</div>
+  </div>
 		@if(Session::get('role') == config('constants.role_life'))
 		<span ng-if = "submitData.proj.proj_status_id == 2">
 			<button class = "btn btn-primary btn-sm" ng-click = "btnc.approve()">Approve</button>

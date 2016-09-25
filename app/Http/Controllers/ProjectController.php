@@ -11,6 +11,7 @@ use Response;
 use Log;
 use DB;
 use Session;
+use Exception;
 
 class ProjectController extends Controller
 {
@@ -20,7 +21,7 @@ class ProjectController extends Controller
         DB::connection()->enableQueryLog();
     }
 
-    public function index()
+    public function index($related = NULL)
     {
         $status = FALSE;
         $msg = '';
@@ -33,12 +34,23 @@ class ProjectController extends Controller
             Log::info('line 24 - - - -');
             Log::info($proj);
             $token = csrf_token();
-            $data['proj'] = App\Projects::JoinStatus()
-                        ->select($proj . '.name', $stat . '.name AS status', $proj . '.id',
-                        'start_date','end_date', 'objective', 'total_budget', 'champion_id',
-                        'program_id', 'proj_status_id', 'resource_person_id', 'partner_organization',
-                        'partner_community', DB::Raw('"'. $token . '" AS token'))
-                        ->get();
+            $data['proj'] = App\Projects::JoinStatus();
+
+            // search related projects
+            if(!EMPTY($related)) {
+                // find related projects within 5 years
+                $getMinYear = date('Y-m-d H:i:s', strtotime('-5 years'));
+
+                $data['proj']->where('program_id', $related->program_id)
+                  ->where($proj.'.created_at', '>', $getMinYear);
+                //   ->where($proj.'.id', '!=', $related->id);
+            }
+
+            $data['proj'] = $data['proj']->select($proj . '.name', $stat . '.name AS status', $proj . '.id',
+                'start_date','end_date', 'objective', 'total_budget', 'champion_id',
+                'program_id', 'proj_status_id', 'resource_person_id', 'partner_organization',
+                'partner_community', DB::Raw('"'. $token . '" AS token'))
+                ->get();
 
             foreach($data['proj'] as $key => $value) {
                 $temp = explode('(#$;)', $value->objective);
@@ -307,5 +319,22 @@ class ProjectController extends Controller
 
         $chart->setTitle(" TESTING . com - - - ");
         return $chart->render('test.png');
+    }
+
+    public function getRelated($id) {
+        $status = FALSE;
+        $msg = '';
+        try {
+            $proj = App\Project::find($id);
+            $data['related'] = $this->index($proj)[0]['proj'];
+            $status = TRUE;
+        } catch(Exception $e) {
+            $msg = $e->getMessage();
+        }
+
+        $data['status'] = $status;
+        $data['msg'] = $msg;
+
+        return $data;
     }
 }

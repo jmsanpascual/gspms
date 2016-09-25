@@ -259,6 +259,16 @@ angular.module('project.activites.controller',
         defaultModal.showModal(attr);
     }
 
+    _self.showRelated = function() {
+        var attr = {
+            size: 'md',
+            templateUrl : '../projects/view-related',
+            proj_id : _self.data.proj_id
+        };
+
+        defaultModal.showModal(attr);
+    }
+
     _self.showReport = function()
     {
         ProjRestApi.report({proj_id : 1}).$promise.then(function(result){
