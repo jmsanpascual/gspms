@@ -42,8 +42,9 @@ class ProjectController extends Controller
                 $getMinYear = date('Y-m-d H:i:s', strtotime('-5 years'));
 
                 $data['proj']->where('program_id', $related->program_id)
-                  ->where($proj.'.created_at', '>', $getMinYear);
-                //   ->where($proj.'.id', '!=', $related->id);
+                  ->where($proj.'.created_at', '>', $getMinYear)
+                  ->whereIn('proj_status_id', [1,3])
+                  ->where($proj.'.id', '!=', $related->id);
             }
 
             $data['proj'] = $data['proj']->select($proj . '.name', $stat . '.name AS status', $proj . '.id',
