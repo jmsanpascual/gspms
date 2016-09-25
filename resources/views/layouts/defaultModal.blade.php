@@ -6,5 +6,5 @@
 </div>
 <div class="modal-footer">
   @yield('btn')
-  <button class="btn btn-warning" type="button" ng-click="close()">Close</button>
+  <button class="btn btn-warning @yield('closeClass')" type="button" ng-click="close()">Close</button>
 </div>
