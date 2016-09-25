@@ -183,24 +183,36 @@
 
 	<span ng-controller = "btnCtrl as btnc" ng-if = "submitData.proj.id"
 	ng-init = 'btnc.data.proj_id = submitData.proj.id;'>
-		<div class = "pull-left" ng-if = "submitData.proj.proj_status_id != 3">
-			<button class = "btn btn-info btn-sm" ng-click="btnc.showItem()">
+		<div class = "pull-left">
+
         @if(Session::get('role') == config('constants.role_life')
           || Session::get('role') == config('constants.role_head'))
-        View Item/Expense
+          <button class = "btn btn-info btn-sm" ng-click="btnc.showItem()">
+            View Item/Expense
+        </button>
         @else
-        Add Item/Expense
+        <button class = "btn btn-info btn-sm" ng-click="btnc.showItem()"
+        ng-if = "submitData.proj.proj_status_id != 3">
+            Add Item/Expense
+        </button>
         @endif
-      </button>
-      <button class = "btn btn-warning btn-sm" ng-click="btnc.showReqBudget()">
+
         @if(Session::get('role') == config('constants.role_life')
           || Session::get('role') == config('constants.role_head'))
-        View Budget Request
+           <button class = "btn btn-warning btn-sm" ng-click="btnc.showReqBudget()">
+            View Budget Request
+        </button>
         @else
-        Request Budget
+         <button class = "btn btn-warning btn-sm" ng-click="btnc.showReqBudget()"
+         ng-if = "submitData.proj.proj_status_id != 3">
+            Request Budget
+        </button>
         @endif
-      </button>
+
+        @if(Session::get('role') == config('constants.role_life')
+          || Session::get('role') == config('constants.role_head'))
       <a class = "btn btn-default btn-sm" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">Progress Report</a>
+      @endif
 
       @if(Session::get('role') == config('constants.role_life')
         || Session::get('role') == config('constants.role_head'))
