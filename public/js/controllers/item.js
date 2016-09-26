@@ -125,7 +125,6 @@ angular.module('items.controller',
             });
         });
     }
-
 })
 
 .controller('addItemCategory', function($scope, defaultModal){
@@ -145,4 +144,22 @@ angular.module('items.controller',
             $scope.submitData.categories.push(data.item_category);
         });
     }
+})
+
+.controller('PriceRecommendationController', function ($http) {
+    var vm = this;
+
+    vm.getPriceRecommendation = function (item) {
+        console.log('Price recommendation:', item);
+
+        $http.get('../items/price-recommendation', {
+            params: item
+        }).then(function (response) {
+            console.log('Price recommendation success:', response);
+            vm.priceRecommendation = 'Recommended Price: ' + response.data.recommendedPrice;
+        }, function (error) {
+            console.log('Price recommendation error:', error);
+            vm.priceRecommendation = 'Recommended Price: Unavailable';
+        });
+    };
 });

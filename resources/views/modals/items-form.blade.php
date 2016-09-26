@@ -65,6 +65,10 @@
 
 @section('btn')
 	@if(Session::get('role') == config('constants.role_champion'))
+	<span ng-controller="PriceRecommendationController as prc">
+		<span class="pull-left">@{{ prc.priceRecommendation }}</span>
+		<button class = "btn btn-info" ng-click="prc.getPriceRecommendation(submitData.items)">Price Recommendation</button>
+	</span>
 	<button class = "btn btn-success" ng-click="save('items')">Save</button>
 	@endif
 @stop
