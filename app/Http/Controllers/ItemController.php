@@ -145,6 +145,7 @@ class ItemController extends Controller
         $forApproval = 2;
         $recommendedPrice = 'Unavailable';
         $categoryId = $item['category_id'];
+        $yearAgo = date('Y-m-d', strtotime('-1 years'));
 
         logger('////////////////////////'.json_encode($item));
 
@@ -152,7 +153,8 @@ class ItemController extends Controller
             return compact('recommendedPrice');
         }
 
-        $projectIds = Project::where('proj_status_id', '!=', $forApproval)->pluck('id');
+        $projectIds = Project::where('proj_status_id', '!=', $forApproval)
+                    ->where('start_date', '>', $yearAgo)->pluck('id');
         logger($projectIds);
 
         $recommendedPrice = ProjectItemCategory::select(DB::raw('avg(price) as averagePrice'))
@@ -163,6 +165,7 @@ class ItemController extends Controller
                       ->where('item_name', 'like', '%' . $item['item_name'] . '%')
                       ->value('averagePrice');
 
+        $recommendedPrice = round($recommendedPrice, 2);
         return compact('recommendedPrice');
     }
 
