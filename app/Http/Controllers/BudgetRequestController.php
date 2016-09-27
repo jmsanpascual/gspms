@@ -23,10 +23,10 @@ class BudgetRequestController extends Controller
     	try
     	{
     		// Log::info('line 24 - - -  PROJACT');
-    		Log::info($request->all());
+    		// Log::info($request->all());
     		$proj_id = $request->get('proj_id');
-    		Log::info('proj_id');
-    		Log::info($proj_id);
+    		// Log::info('proj_id');
+    		// Log::info($proj_id);
             if(EMPTY($proj_id))
                 return;
 
@@ -37,8 +37,8 @@ class BudgetRequestController extends Controller
     			->select("$br.id", "proj_id", "amount", "reason", "status_id",
                 DB::Raw('"'. $token . '" AS token'), $br_status . ".name AS status", "$br.remarks")
     			->where('proj_id', $proj_id)->get();
-            Log::info(' lINE 33 - - - - -');
-            Log::info(json_encode(DB::getQueryLog()));
+            // Log::info(' lINE 33 - - - - -');
+            // Log::info(json_encode(DB::getQueryLog()));
     		$status = TRUE;
     	}
     	catch(Exception $e)

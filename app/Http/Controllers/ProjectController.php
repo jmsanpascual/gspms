@@ -11,6 +11,7 @@ use Response;
 use Log;
 use DB;
 use Session;
+use Exception;
 
 class ProjectController extends Controller
 {
@@ -20,7 +21,7 @@ class ProjectController extends Controller
         DB::connection()->enableQueryLog();
     }
 
-    public function index()
+    public function index($related = NULL)
     {
         $status = FALSE;
         $msg = '';
@@ -33,12 +34,24 @@ class ProjectController extends Controller
             Log::info('line 24 - - - -');
             Log::info($proj);
             $token = csrf_token();
-            $data['proj'] = App\Projects::JoinStatus()
-                        ->select($proj . '.name', $stat . '.name AS status', $proj . '.id',
-                        'start_date','end_date', 'objective', 'total_budget', 'champion_id',
-                        'program_id', 'proj_status_id', 'resource_person_id', 'partner_organization',
-                        'partner_community', DB::Raw('"'. $token . '" AS token'))
-                        ->get();
+            $data['proj'] = App\Projects::JoinStatus();
+
+            // search related projects
+            if(!EMPTY($related)) {
+                // find related projects within 5 years
+                $getMinYear = date('Y-m-d H:i:s', strtotime('-5 years'));
+
+                $data['proj']->where('program_id', $related->program_id)
+                  ->where($proj.'.created_at', '>', $getMinYear)
+                  ->whereIn('proj_status_id', [1,3])
+                  ->where($proj.'.id', '!=', $related->id);
+            }
+
+            $data['proj'] = $data['proj']->select($proj . '.name', $stat . '.name AS status', $proj . '.id',
+                'start_date','end_date', 'objective', 'total_budget', 'champion_id',
+                'program_id', 'proj_status_id', 'resource_person_id', 'partner_organization',
+                'partner_community', DB::Raw('"'. $token . '" AS token'))
+                ->get();
 
             foreach($data['proj'] as $key => $value) {
                 $temp = explode('(#$;)', $value->objective);
@@ -99,6 +112,8 @@ class ProjectController extends Controller
 
         try {
             $project = $request->all();
+            logger('projects');
+            logger($project);
             $objectives = $project['objective']; // Store the array objectives
             unset($project['token']);
 
@@ -150,7 +165,7 @@ class ProjectController extends Controller
             unset($upd_arr['status']);
             unset($upd_arr['token']);
 
-            // Convert array obkectives to concatenated string using the delimiter
+            // Convert array objectives to concatenated string using the delimiter
             foreach($upd_arr['objective'] as $key => $value) {
                if (empty($temp)) $temp .= $value;
                else $temp .= $delimiter . $value;
@@ -176,6 +191,25 @@ class ProjectController extends Controller
 
         $data['status'] = $status;
         $data['msg'] = $msg;
+
+        return Response::json($data);
+    }
+
+    public function approveStatus(Request $req)
+    {
+        $msg = '';
+        $status = FALSE;
+        try {
+            // fetch the highest budget and lowest budget with same category
+
+            return view();
+        } catch(\Exception $e) {
+            Log::info(json_encode(DB::getQueryLog()));
+            $msg = $e->getMessage();
+        }
+
+        $data['msg'] = $msg;
+        $data['status'] = $status;
 
         return Response::json($data);
     }
@@ -208,17 +242,6 @@ class ProjectController extends Controller
         return Response::json($data);
     }
 
-    public function updateTotalBudget(Request $request)
-    {
-        try {
-            $project = $request->all();
-
-            App\Project::where('id', $project['id'])->update($project);
-            return Response::json(['result' => true]);
-        } catch (\Exception $e) {
-            return Response::json(['error' => $e->getMessage()]);
-        }
-    }
 
     public function destroy($id)
     {
@@ -299,9 +322,20 @@ class ProjectController extends Controller
         return $chart->render('test.png');
     }
 
-    public function getOnGoingProjects()
-    {
-        $projects = App\Projects::where('proj_status_id', '1')->get();
-        return Response::json($projects);
+    public function getRelated($id) {
+        $status = FALSE;
+        $msg = '';
+        try {
+            $proj = App\Project::find($id);
+            $data['related'] = $this->index($proj)[0]['proj'];
+            $status = TRUE;
+        } catch(Exception $e) {
+            $msg = $e->getMessage();
+        }
+
+        $data['status'] = $status;
+        $data['msg'] = $msg;
+
+        return $data;
     }
 }

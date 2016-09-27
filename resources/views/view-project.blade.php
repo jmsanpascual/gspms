@@ -63,4 +63,8 @@
 {!! HTML::script('js/controllers/dynamic-element.js') !!}
 {!! HTML::script('js/controllers/project.js') !!}
 {!! HTML::script('js/controllers/project-activities.js') !!}
+
+{!! HTML::script('js/project-attachments/project-attachment.module.js') !!}
+{!! HTML::script('js/project-attachments/project-attachment.controller.js') !!}
+{!! HTML::script('js/project-attachments/project-attachment.service.js') !!}
 @endsection

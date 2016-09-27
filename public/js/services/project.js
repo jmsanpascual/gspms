@@ -82,6 +82,13 @@ projectService.factory('ProjRestApi', function ($resource) {
                 params : {
                     proj_id : '@proj_id'
                 }
+            },
+            related : {
+                metohd : 'GET',
+                url : '../projects/related/:proj_id',
+                params : {
+                    proj_id : '@proj_id'
+                }
             }
         });
 

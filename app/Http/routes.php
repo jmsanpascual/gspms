@@ -64,6 +64,10 @@ Route::get('projects/view-project2', array('as' => 'view.project2', function () 
   return view('projects');
 }));
 
+Route::get('projects/view-related', function() {
+    return view('modals/project-related');
+});
+
 Route::get('projects/get-on-going-projects', 'ProjectController@getOnGoingProjects');
 Route::post('projects/update-total-budget', 'ProjectController@updateTotalBudget');
 Route::get('projects/chart/{id}', 'ProjectController@createChart')->name('proj_chart');
@@ -71,6 +75,7 @@ Route::get('projects/report/{id}', 'ProjectController@report')->name('proj_repor
 Route::get('projects/fetch/{id}', 'ProjectController@fetchProj');
 Route::post('projects/request/', 'ProjectController@updateStatus');
 Route::post('projects/update', 'ProjectController@update');
+Route::get('projects/related/{id}', 'ProjectController@getRelated');
 Route::resource('projects', 'ProjectController');
 
 
@@ -111,6 +116,14 @@ Route::get('categories/add', function(){
   return view('modals/items-category');
 });
 Route::resource('categories', 'CategoryController');
+
+// RESTful resource route for Attachments
+Route::get('project-attachments/add', array(function () {
+  return view('modals/project-attachments-form');
+}));
+Route::post('project-attachments/update', 'ProjectAttachmentController@update');
+Route::delete('project-attachments/deleteFile/{id}', 'ProjectAttachmentController@destroyAttachment');
+Route::resource('project-attachments', 'ProjectAttachmentController');
 
 // RESTful resource route for Programs
 Route::resource('programs', 'ProgramController');

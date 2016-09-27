@@ -42,7 +42,7 @@ common.service('defaultModal', function($uibModal, $log){
         //     console.log('No config delete key yet.');
 
         // Declare the model instance
-        var templateUrl = '/gspms/public/js/templates/confirm.html'; 
+        var templateUrl = '/gspms/public/js/templates/confirm.html';
         var staticController = 'confirmModalInstanceCtrl';
         var staticVar = ['size', 'templateUrl', 'controller'];
         var resolveAttr = {};
@@ -117,14 +117,52 @@ common.service('defaultModal', function($uibModal, $log){
 });
 
 
+/**
+*   Convert normal object/ array data to Form Data for submission of form with files
+*   @param data = the object/ array data to be submitted
+*   <!-- optional (also used by itself(recursion))-->
+*   @param formData = contain the current form data to be appended
+*   @param otherKey = contain the existing key to be used
+*/
+
+common.service('formDataAPI', function(){
+    this.build = function(data, formData, otherKey)
+    {
+
+        if(!data)
+            return;
+        var fd = (formData) ? formData : new FormData();
+        var temp; // identifier
+
+        for(var key in data)
+        {
+            // use to prevent prototypes to be included in loop (eg. obj.length)
+            if(!data.hasOwnProperty(key))
+                continue;
+
+
+            if(typeof data[key] == 'object') // array or object
+            {
+                //recursion call itself change the data
+                fd = this.build(data[key], fd, key);
+            }
+            // if other key exist means multi array
+            var field = (!otherKey) ? key : otherKey + '['+ key +']';
+            fd.append(field, data[key]);
+        }
+
+        return fd;
+    }
+});
+
 // used by service
-common.controller('defaultModalInstanceCtrl', function ($scope, $uibModalInstance, attr, $http) {
+common.controller('defaultModalInstanceCtrl', function ($scope, $uibModalInstance, attr, $http, formDataAPI) {
     console.log('attr');
     console.log(attr);
     $scope.submitData = (attr != undefined) ? attr : {};
     var changeClose = false;
     var postData;
-    $scope.save = function (formData) {
+    $scope.save = function (formData, withFile) {
         console.log('formdata',formData);
         var data = (formData == undefined) ? $scope.submitData : $scope.submitData[formData];
 
@@ -133,7 +171,17 @@ common.controller('defaultModalInstanceCtrl', function ($scope, $uibModalInstanc
             return;
         }
 
-        $http.post($scope.submitData.saveUrl, data).then(function(result){
+        var config = {};
+
+        if(withFile) {
+            data = formDataAPI.build(data);
+            config = {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            };
+        }
+
+        $http.post($scope.submitData.saveUrl, data, config).then(function(result){
             result = result.data;
             if(result.status)
             {

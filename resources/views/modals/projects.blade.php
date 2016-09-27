@@ -131,8 +131,8 @@
     </div>
     <!-- Activities -->
     <div ng-if = "submitData.proj.id">
-    <h3>Activities</h3>
-    <hr>
+        <h3>Activities</h3>
+        <hr>
      <div ng-controller="projActDTCtrl as padtc" ng-init = 'proj_id = submitData.proj.id; padtc.getProjActivities(submitData.proj.id)'>
           @if(Session::get('role') == config('constants.role_champion'))
           <button class = "btn btn-success btn-sm pull-right" ng-click = "padtc.add()"
@@ -175,7 +175,6 @@
           </table>
         </div>
     </div>
-
     <!-- End Activities -->
   </form>
 @stop
@@ -184,39 +183,71 @@
 
 	<span ng-controller = "btnCtrl as btnc" ng-if = "submitData.proj.id"
 	ng-init = 'btnc.data.proj_id = submitData.proj.id;'>
-		<div class = "pull-left" ng-if = "submitData.proj.proj_status_id != 3">
-			<button class = "btn btn-info" ng-click="btnc.showItem()">
+		<div class = "pull-left">
+
         @if(Session::get('role') == config('constants.role_life')
           || Session::get('role') == config('constants.role_head'))
-        View Item/Expense
+          <button class = "btn btn-info btn-sm" ng-click="btnc.showItem()">
+            View Item/Expense
+        </button>
         @else
-        Add Item/Expense
+        <button class = "btn btn-info btn-sm" ng-click="btnc.showItem()"
+        ng-if = "submitData.proj.proj_status_id != 3">
+            Add Item/Expense
+        </button>
         @endif
-      </button>
-      <button class = "btn btn-warning" ng-click="btnc.showReqBudget()">
+
         @if(Session::get('role') == config('constants.role_life')
           || Session::get('role') == config('constants.role_head'))
-        View Budget Request
+           <button class = "btn btn-warning btn-sm" ng-click="btnc.showReqBudget()">
+            View Budget Request
+        </button>
         @else
-        Request Budget
+         <button class = "btn btn-warning btn-sm" ng-click="btnc.showReqBudget()"
+         ng-if = "submitData.proj.proj_status_id != 3">
+            Request Budget
+        </button>
         @endif
+
+        @if(Session::get('role') == config('constants.role_life')
+          || Session::get('role') == config('constants.role_head'))
+      <a class = "btn btn-default btn-sm" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">Progress Report</a>
+      @endif
+
+      @if(Session::get('role') == config('constants.role_life')
+        || Session::get('role') == config('constants.role_head'))
+      <button class = "btn btn-success btn-sm" ng-click = "btnc.showRelated()">View Related Projects</button>
+      @endif
+
+      @if(Session::get('role') == config('constants.role_life')
+        || Session::get('role') == config('constants.role_head'))
+      <button class = "btn btn-primary btn-sm" ng-click="btnc.showAttachments()">
+          View Attachments
       </button>
-      <a class = "btn btn-default" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">Progress Report</a>
-		</div>
+      @else
+      <button class = "btn btn-primary btn-sm" ng-click="btnc.showAttachments()" ng-if = "submitData.proj.proj_status_id == 1">
+          Add Attachments
+      </button>
+      @endif
+  </div>
 		@if(Session::get('role') == config('constants.role_life'))
 		<span ng-if = "submitData.proj.proj_status_id == 2">
-			<button class = "btn btn-primary" ng-click = "btnc.approve()">Approve</button>
-			<button class = "btn btn-danger" ng-click = "btnc.disapprove()">Disapprove</button>
+			<button class = "btn btn-primary btn-sm" ng-click = "btnc.approve()">Approve</button>
+			<button class = "btn btn-danger btn-sm" ng-click = "btnc.disapprove()">Disapprove</button>
 		</span>
 		@endif
 		@if(Session::get('role') == config('constants.role_champion') ||
 		Session::get('role') == config('constants.role_exec'))
-		<button class = "btn btn-info" ng-click = "btnc.completed()" ng-if = "submitData.proj.proj_status_id == 1">Completed</button>
+		<button class = "btn btn-info btn-sm" ng-click = "btnc.completed()" ng-if = "submitData.proj.proj_status_id == 1">Completed</button>
 		@endif
 	</span>
 	@if(Session::get('role') == config('constants.role_champion') ||
 		Session::get('role') == config('constants.role_exec') ||
     Session::get('role') == config('constants.role_life'))
-	<button class = "btn btn-success" ng-if = "submitData.proj.proj_status_id != 3" ng-click="save('proj')">Save</button>
+	<button class = "btn btn-success btn-sm" ng-if = "submitData.proj.proj_status_id != 3" ng-click="save('proj')">Save</button>
 	@endif
+@stop
+
+@section('closeClass')
+    btn-sm
 @stop
