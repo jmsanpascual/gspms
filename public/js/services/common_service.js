@@ -128,9 +128,11 @@ common.service('defaultModal', function($uibModal, $log){
 common.service('formDataAPI', function(){
     this.build = function(data, formData, otherKey)
     {
-
+        // console.log('data');
+        // console.log(data);
         if(!data)
             return;
+
         var fd = (formData) ? formData : new FormData();
         var temp; // identifier
 
@@ -140,14 +142,20 @@ common.service('formDataAPI', function(){
             if(!data.hasOwnProperty(key))
                 continue;
 
+            if(key == 'files' || key == 'name') continue;
 
             if(typeof data[key] == 'object') // array or object
             {
                 //recursion call itself change the data
                 fd = this.build(data[key], fd, key);
             }
+
+            // console.log('fd ', fd);
             // if other key exist means multi array
             var field = (!otherKey) ? key : otherKey + '['+ key +']';
+            // console.log(field);
+            // console.log(key);
+            // console.log(data);
             fd.append(field, data[key]);
         }
 

@@ -51,7 +51,10 @@
 			</div>
 		  </div>
 		</div>
+		@if(Session::get('role') == config('constants.role_champion') ||
+			Session::get('role') == config('constants.role_exec'))
 		<hr>
+
 		<div class = "form-group">
 			<div class = "row">
                 <div class ="col-md-4">
@@ -62,6 +65,7 @@
 				</div>
 			</div>
 		</div>
+		@endif
 	</form>
 @stop
 
