@@ -98,11 +98,11 @@ class ProjectAttachmentController extends Controller
                         $val->move($path, $fileName);
                     }
                     ProjectAttachmentFile::insert($files);
-                // logger($proj_attachment);
+
                     $proj_attachment->files = ProjectAttachmentFile::where('project_attachment_id', $proj_attachment->id)
                         ->get(['id','project_attachment_id', 'name', 'file'])->toArray();
                 }
-
+                // logger($proj_attachment);
                 return $proj_attachment;
             });
 
@@ -138,6 +138,7 @@ class ProjectAttachmentController extends Controller
         $msg = '';
         try {
             $params = $request->all();
+            // logger($params);
             $data['attachment'] = DB::transaction(function() use ($params, $request){
                 $proj_attachment = ProjectAttachment::find($params['id']);
                 $proj_attachment->project_id = $params['project_id'];
