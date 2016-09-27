@@ -162,7 +162,7 @@ class ItemController extends Controller
                             $query->where('category_id', '=', $categoryId)
                             ->whereIn('proj_id', $projectIds);
                         })
-                      ->where('item_name', 'like', '%' . $item['item_name'] . '%')
+                      ->where('item_name', $item['item_name'])
                       ->value('averagePrice');
 
         $recommendedPrice = round($recommendedPrice, 2);
