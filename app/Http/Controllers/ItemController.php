@@ -10,10 +10,12 @@ use App;
 use Response;
 use Log;
 use DB;
+use App\Project;
+use App\ProjectItemCategory;
 
 class ItemController extends Controller
 {
-	public function __construct()
+  public function __construct()
     {
         DB::connection()->enableQueryLog();
     }
@@ -26,10 +28,10 @@ class ItemController extends Controller
 
         try
         {
-        	Log::info($request->all());
-    		$proj_id = $request->get('proj_id');
-    		Log::info('proj_id');
-    		Log::info($proj_id);
+          Log::info($request->all());
+        $proj_id = $request->get('proj_id');
+        Log::info('proj_id');
+        Log::info($proj_id);
             if(EMPTY($proj_id))
                 return;
 
@@ -38,7 +40,7 @@ class ItemController extends Controller
             Log::info('line 24 - - - -');
             $token = csrf_token();
             $data['items'] = App\ProjectItemCategory::JoinCategory()
-                        ->select('item_name', $category . '.name AS category', $item . '.id', 
+                        ->select('item_name', $category . '.name AS category', $item . '.id',
                         $item.'.description','category_id', 'quantity', 'price',
                         DB::Raw('"'. $token . '" AS token'))->where('proj_id', $proj_id)
                         ->get();
@@ -50,7 +52,7 @@ class ItemController extends Controller
         }
         $data['status'] = $status;
         $data['msg'] = $msg;
-       
+
         return array($data);
     }
 
@@ -71,7 +73,7 @@ class ItemController extends Controller
             $id = App\ProjectItemCategory::insertGetId($br);
             // get status name
             $cat_name = App\Category::where('id', $br['category_id'])
-            	->value('name');
+              ->value('name');
             $data['items'] = $br;
             $data['items']['id'] = $id;
             $data['items']['category'] = $cat_name;
@@ -136,6 +138,32 @@ class ItemController extends Controller
         $data['msg'] = $msg;
         $data['status'] = $status;
         return Response::json($data);
+    }
+
+    public function getPriceRecommendation(Request $request) {
+        $item = $request->all();
+        $forApproval = 2;
+        $recommendedPrice = 'Unavailable';
+        $categoryId = $item['category_id'];
+
+        logger('////////////////////////'.json_encode($item));
+
+        if (! isset($item['item_name'])) {
+            return compact('recommendedPrice');
+        }
+
+        $projectIds = Project::where('proj_status_id', '!=', $forApproval)->pluck('id');
+        logger($projectIds);
+
+        $recommendedPrice = ProjectItemCategory::select(DB::raw('avg(price) as averagePrice'))
+                      ->where(function ($query) use ($categoryId, $projectIds) {
+                            $query->where('category_id', '=', $categoryId)
+                            ->whereIn('proj_id', $projectIds);
+                        })
+                      ->where('item_name', 'like', '%' . $item['item_name'] . '%')
+                      ->value('averagePrice');
+
+        return compact('recommendedPrice');
     }
 
 }
