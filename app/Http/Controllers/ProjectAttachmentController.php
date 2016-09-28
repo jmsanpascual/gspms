@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
+use App\Project;
 use App\ProjectAttachment;
 use App\ProjectAttachmentFile;
 
@@ -103,6 +104,17 @@ class ProjectAttachmentController extends Controller
                         ->get(['id','project_attachment_id', 'name', 'file'])->toArray();
                 }
                 // logger($proj_attachment);
+
+                // Make the status to on-going from initiating
+                $ongoingId = 1;
+                $approvedId = 5;
+                $project = Project::findOrFail($params['project_id']);
+
+                if ($project->proj_status_id == $approvedId) {
+                    $project->proj_status_id = $ongoingId;
+                    $project->save();
+                }
+
                 return $proj_attachment;
             });
 

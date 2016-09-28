@@ -177,7 +177,8 @@ angular.module('project.activites.controller',
     PROJ_STAT_ONGOING : 1,
     PROJ_STAT_FOR_APPROVAL : 2,
     PROJ_STAT_COMPLETED : 3,
-    PROJ_STAT_DISAPPROVED : 4
+    PROJ_STAT_DISAPPROVED : 4,
+    PROJ_STAT_APPROVED: 5
 })
 
 .controller('btnCtrl', function($scope, defaultModal, ProjRestApi, projStatus, $window){
@@ -208,7 +209,7 @@ angular.module('project.activites.controller',
 
     _self.approve = function()
     {
-        _self.data.id = projStatus.PROJ_STAT_ONGOING; // approved
+        _self.data.id = projStatus.PROJ_STAT_APPROVED; // approved
         console.log(_self.data);
         changeStatus();
     }

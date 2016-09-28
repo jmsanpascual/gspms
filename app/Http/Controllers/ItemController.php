@@ -78,6 +78,16 @@ class ItemController extends Controller
             $data['items']['id'] = $id;
             $data['items']['category'] = $cat_name;
             $status = TRUE;
+
+            // Make the status to on-going from initiating
+            $ongoingId = 1;
+            $approvedId = 5;
+            $project = Project::findOrFail($br['proj_id']);
+
+            if ($project->proj_status_id == $approvedId) {
+                $project->proj_status_id = $ongoingId;
+                $project->save();
+            }
        } catch (Exception $e) {
             $msg = $e->getMessage();
         }

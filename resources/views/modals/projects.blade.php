@@ -225,7 +225,7 @@
           View Attachments
       </button>
       @else
-      <button class = "btn btn-primary btn-sm" ng-click="btnc.showAttachments()" ng-if = "submitData.proj.proj_status_id == 1">
+      <button class = "btn btn-primary btn-sm" ng-click="btnc.showAttachments()" ng-if = "submitData.proj.proj_status_id == 1 || submitData.proj.proj_status_id == 5">
           Add Attachments
       </button>
       @endif
