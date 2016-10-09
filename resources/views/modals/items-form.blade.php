@@ -7,14 +7,26 @@
 	<form role="form" id = "itemsForm">
 		<input type ="hidden" ng-model = "submitData.items.id">
 		<input type ="hidden" ng-model = "submitData.items.token">
-		<div class = "form-group">
+		<div class = "form-group" ng-controller="AddItemController as ai">
 			<div class = "row">
 				<label class = "form-label col-md-4">Item Name</label>
 				<div class = "col-md-6">
-					<input type = "text" class = "form-control" ng-model = "submitData.items.item_name"
-					placeholder = "Enter Item Name">
+					<select class = "form-control"
+						ng-model="ai.itemName"
+						ng-change="ai.storeItemName(ai.itemName)"
+					ng-options = "item.name for item in ai.itemNames">
+					</select>
+					<br>
+					@if(Session::get('role') == config('constants.role_champion'))
+					<input class="form-control col-md-4" type="text"
+						placeholder="Item Name"
+						ng-model="ai.name"
+						ng-change="ai.storeItemName({name: ai.name})"
+						ng-if="ai.itemName.id == 'NA'">
+					@endif
+					<!-- <input type = "text" class = "form-control" ng-model = "submitData.items.item_name"
+					placeholder = "Enter Item Name"> -->
 				</div>
-
 			</div>
 		</div>
 		<div class = "form-group" ng-controller = "addItemCategory as aic" >
@@ -67,7 +79,7 @@
 	@if(Session::get('role') == config('constants.role_champion'))
 	<span ng-controller="PriceRecommendationController as prc">
 		<span class="pull-left">@{{ prc.priceRecommendation }}</span>
-		<button class = "btn btn-info" ng-click="prc.getPriceRecommendation(submitData.items)">Price Recommendation</button>
+		<button class = "btn btn-info" ng-click="prc.getPriceRecommendation(submitData.items)">Average Price</button>
 	</span>
 	<button class = "btn btn-success" ng-click="save('items')">Save</button>
 	@endif

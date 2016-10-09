@@ -11,6 +11,8 @@ use Log;
 use Lang;
 use Response;
 use DB;
+use App\Project;
+
 class ProjectActivitiesController extends Controller
 {
     public function __construct()
@@ -106,6 +108,17 @@ class ProjectActivitiesController extends Controller
             $data['projAct'] = $req->all();
             $data['projAct']['id'] = $id;
             $data['projAct']['status'] = $stat;
+
+            // Make the status to on-going from initiating
+            $ongoingId = 1;
+            $approvedId = 5;
+            $project = Project::findOrFail($proj_id);
+
+            if ($project->proj_status_id == $approvedId) {
+                $project->proj_status_id = $ongoingId;
+                $project->save();
+            }
+
             DB::commit();
             $status = TRUE;
         }

@@ -12,6 +12,7 @@ use Log;
 use DB;
 use App\Project;
 use App\ProjectItemCategory;
+use App\Item;
 
 class ItemController extends Controller
 {
@@ -78,6 +79,11 @@ class ItemController extends Controller
             $data['items']['id'] = $id;
             $data['items']['category'] = $cat_name;
             $status = TRUE;
+
+            // Adds item name to items table if it does not exist
+            if (! Item::where('name', 'like', $data['items']['item_name'])->exists()) {
+                Item::insert(['name' => $data['items']['item_name']]);
+            }
 
             // Make the status to on-going from initiating
             $ongoingId = 1;
@@ -150,7 +156,8 @@ class ItemController extends Controller
         return Response::json($data);
     }
 
-    public function getPriceRecommendation(Request $request) {
+    public function getPriceRecommendation(Request $request)
+    {
         $item = $request->all();
         $forApproval = 2;
         $recommendedPrice = 'Unavailable';
@@ -177,6 +184,12 @@ class ItemController extends Controller
 
         $recommendedPrice = round($recommendedPrice, 2);
         return compact('recommendedPrice');
+    }
+
+    public function getAllItems()
+    {
+        $items = Item::all();
+        return compact('items');
     }
 
 }

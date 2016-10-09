@@ -105,6 +105,7 @@ Route::post('budget-request/update', 'BudgetRequestController@update');
 Route::resource('budget-request', 'BudgetRequestController');
 Route::resource('budget-request-status', 'BudgetRequestStatusController');
 
+Route::get('items/names', 'ItemController@getAllItems');
 Route::get('items/price-recommendation', 'ItemController@getPriceRecommendation');
 Route::get('items/add', array(function () {
   return view('modals/items-form');

@@ -9,7 +9,7 @@ angular.module('items.controller',
     ])
 
 .controller('ItemCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder,
-    defaultModal, ItemsRestApi, CategoriesRestApi) {
+    defaultModal, ItemsRestApi, CategoriesRestApi, $http) {
     // $scope.proj_id = 1; //declared in modals/projects.blade.php
     var vm = this;
     vm.message = '';
@@ -150,16 +150,48 @@ angular.module('items.controller',
     var vm = this;
 
     vm.getPriceRecommendation = function (item) {
-        console.log('Price recommendation:', item);
+        console.log('Average price:', item);
 
         $http.get('../items/price-recommendation', {
             params: item
         }).then(function (response) {
-            console.log('Price recommendation success:', response);
-            vm.priceRecommendation = 'Recommended Price: ' + response.data.recommendedPrice;
+            console.log('Average price success:', response);
+            vm.priceRecommendation = 'Average Price: ' + response.data.recommendedPrice;
         }, function (error) {
-            console.log('Price recommendation error:', error);
-            vm.priceRecommendation = 'Recommended Price: Unavailable';
+            console.log('Average price error:', error);
+            vm.priceRecommendation = 'Average Price: Unavailable';
         });
     };
+})
+
+.controller('AddItemController', function($http, $scope, defaultModal){
+    var vm = this;
+
+    vm.name = '';
+    vm.storeItemName = storeItemName;
+
+    $http.get('../items/names').then(function (response) {
+        vm.itemNames = response.data.items;
+        vm.itemNames.push({id: 'NA', name: 'Not in the list'});
+
+        var itemsLen = vm.itemNames.length;
+
+        if (itemsLen == 1) {
+            vm.itemName = vm.itemNames[0];
+        } else {
+            for (var i = 0; i < itemsLen; i++) {
+                if ($scope.$parent.submitData.items['item_name'].toLowerCase() == vm.itemNames[i].name.toLowerCase()) {
+                    vm.itemName = vm.itemNames[i];
+                }
+            }
+        }
+    }, function (error) {
+        console.log('Error @AddItemController-http-get-item-names', error);
+    });
+
+    function storeItemName(item) {
+        if (item.id == 'NA') return;
+
+        $scope.$parent.submitData.items['item_name'] = item.name;
+    }
 });
