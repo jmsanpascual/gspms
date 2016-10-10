@@ -130,10 +130,18 @@
     </div>
     </div>
     <!-- Activities -->
-    <div ng-if = "submitData.proj.id">
+    <div ng-if = "submitData.proj.id" ng-controller="projActDTCtrl as padtc">
         <h3>Activities</h3>
+
+        <div class="progress" ng-if="padtc.project_activities.length">
+          <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
+          aria-valuemin="0" aria-valuemax="100" ng-style="{width: padtc.percentage}">
+            @{{ padtc.percentage }}
+          </div>
+        </div>
+
         <hr>
-     <div ng-controller="projActDTCtrl as padtc" ng-init = 'proj_id = submitData.proj.id; padtc.getProjActivities(submitData.proj.id)'>
+     <div ng-init = 'proj_id = submitData.proj.id; padtc.getProjActivities(submitData.proj.id)'>
           @if(Session::get('role') == config('constants.role_champion'))
           <button class = "btn btn-success btn-sm pull-right" ng-click = "padtc.add()"
           ng-if = "submitData.proj.proj_status_id != 3"> Add Activity</button>

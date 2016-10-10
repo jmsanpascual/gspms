@@ -11,21 +11,47 @@ angular.module('project.activites.controller',
 .controller('projActDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder,
     reqDef, defaultModal, ProjectActivitiesRestApi, activityStatusRestApi) {
     // $scope.proj_id = 1; //declared in modals/projects.blade.php
-    var vm = this;
+    var vm = this,
+        completedActivityId = 4,
+        approvedActivityCount = 0;
+
     vm.message = '';
+    vm.percentage = '0%';
+
     vm.edit = edit;
     vm.delete = deleteRow;
     vm.dtInstance = {};
     vm.project_activities = [];
 
+    $scope.$watch('padtc.project_activities.length', function (newVal, oldVal) {
+        if (newVal == oldVal) return;
+
+        vm.percentage = (Math.round((approvedActivityCount / newVal) * 100)) + '%';
+        console.log(vm.percentage);
+    });
+
     this.getProjActivities = function(proj_id)
     {
         ProjectActivitiesRestApi.query({proj_id : $scope.proj_id}).$promise.then(function (result) {
            result = result[0];
+
           if (result.status) {
               console.log('proj');
               console.log(result.proj);
               vm.project_activities =  result.proj_activities;
+              var activitiesLen = result.proj_activities.length;
+
+              for (var i = 0; i < activitiesLen; i++) {
+                  if (result.proj_activities[i].status_id == completedActivityId) {
+                      approvedActivityCount++;
+                  }
+              }
+              console.log(approvedActivityCount);
+              if (approvedActivityCount > 0) {
+                  vm.percentage = (Math.round((approvedActivityCount / activitiesLen) * 100)) + '%';
+              } else {
+                  vm.percentage = '0%';
+              }
           } else {
               alert('Unable to load datatable');
           }
