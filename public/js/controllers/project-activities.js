@@ -23,11 +23,10 @@ angular.module('project.activites.controller',
     vm.dtInstance = {};
     vm.project_activities = [];
 
+    // Watch the length of activities to update the percentage of progress bar
     $scope.$watch('padtc.project_activities.length', function (newVal, oldVal) {
         if (newVal == oldVal) return;
-
         vm.percentage = (Math.round((approvedActivityCount / newVal) * 100)) + '%';
-        console.log(vm.percentage);
     });
 
     this.getProjActivities = function(proj_id)
@@ -38,6 +37,7 @@ angular.module('project.activites.controller',
           if (result.status) {
               console.log('proj');
               console.log(result.proj);
+
               vm.project_activities =  result.proj_activities;
               var activitiesLen = result.proj_activities.length;
 
@@ -46,7 +46,7 @@ angular.module('project.activites.controller',
                       approvedActivityCount++;
                   }
               }
-              console.log(approvedActivityCount);
+
               if (approvedActivityCount > 0) {
                   vm.percentage = (Math.round((approvedActivityCount / activitiesLen) * 100)) + '%';
               } else {
