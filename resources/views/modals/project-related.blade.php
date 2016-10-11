@@ -10,19 +10,33 @@
 
         <p class="text-danger"><strong>@{{ prc.message }}</strong></p>
         <br>
+		<div class = "form-group">
+			<div class = "row">
+				<label class = "col-md-4">Average Total Budget</label>
+				<div class = "col-md-4">
+					<input type = "text" readonly="" ng-model = "prc.ave_budget">
+				</div>
+			</div>
+		</div>
         <table datatable="ng" dt-options="prc.dtOptions" dt-columns="prc.dtColumnDefs"
         dt-instance="prc.dtInstance" class="table table-hover row-border hover">
         <thead>
             <tr>
               <th>Project Title</th>
+              <th>Minimum Budget</th>
+              <th>Maximum Budget</th>
               <th>Total Budget</th>
+              <th>Duration</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr ng-repeat = "data in prc.related">
               <td>@{{data.name }}</td>
+              <td>@{{data.min_budget}}</td>
+              <td>@{{data.max_budget}}</td>
               <td>@{{data.total_budget}}</td>
+              <td>@{{data.duration}}</td>
               <td>
                 <button class="btn btn-warning" title = "Edit" ng-click="prc.edit($index, data)">
                 <i class="fa fa-pencil"></i>

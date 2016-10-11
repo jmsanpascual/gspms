@@ -15,6 +15,7 @@ class CreateProjectAttachmentsTable extends Migration
         Schema::create('project_attachments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('project_id')->unsigned();
+            $table->integer('proj_item_category_id')->unsigned()->nullable();
             $table->string('subject');
             $table->string('description');
             // $table->string('file');

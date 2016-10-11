@@ -8,6 +8,17 @@
 		<input type ="hidden" ng-model = "submitData.attachment.id">
 		<input type ="hidden" ng-model = "submitData.attachment.project_id">
 		<input type ="hidden" ng-model = "submitData.attachment.token">
+		<div class = "form-group" ng-controller="ProjItemController as pic">
+			<div class = "row" ng-init = "pic.getItemList(submitData.attachment.project_id)">
+				<label class = "form-label col-md-4">Item Name</label>
+				<div class = "col-md-6">
+					<select class = "form-control"
+						ng-model="submitData.attachment.proj_item_category_id"
+					ng-options = "data.id as data.item_name for data in pic.items">
+					</select>
+				</div>
+			</div>
+		</div>
 		<div class = "form-group">
 			<div class = "row">
 				<label class = "form-label col-md-4">Subject</label>
@@ -30,12 +41,13 @@
 		<div class = "form-group" ng-if ="submitData.action == 'Edit' ">
 		  <div class = "row">
 			<label class = "form-label col-md-4">Uploaded files</label>
-			<div class = "col-md-6" ng-controller = "ProjectAttachmentFormController as pafc">
-			  <div class = "pic-container" ng-repeat = "data in submitData.attachment.files">
+			<div class = "col-md-6" ng-controller = "ProjectAttachmentFormController as pafc"
+			ng-init = "pafc.showFiles(submitData.attachment.id)">
+			  <div class = "pic-container" ng-repeat = "data in pafc.files">
 				  <a type="button" class="btn btn-default" style = "position:absolute; bottom:0; right:0; margin:2px;z-index:10;"
 				  ng-href ="@{{data.file}}" download="@{{data.name}}" title = "Download"><i class = "fa fa-download"></i></a>
 			  <button type="button" class="close pull-right pic-container-close"
-			  ng-click="pafc.delete(submitData.attachment.files, data, $index)">&times;</button>
+			  ng-click="pafc.delete(pafc.files, data, $index)">&times;</button>
         		<div class = "col-lg-3 col-md-3 col-sm-3 col-xs-3">
 				  <img class = "pic-container-img img-responsive" ng-src = "@{{data.file}}"></img>
 			    </div>

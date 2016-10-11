@@ -4,7 +4,8 @@
     angular
         .module('project.attachment')
         .controller('ProjectAttachmentController', ProjectAttachmentController)
-        .controller('ProjectAttachmentFormController', ProjectAttachmentFormController);
+        .controller('ProjectAttachmentFormController', ProjectAttachmentFormController)
+        .controller('ProjItemController', ProjItemController);
 
     ProjectAttachmentController.$inject = [
         'ProjectAttachment',
@@ -113,13 +114,24 @@
     ProjectAttachmentFormController.$inject = [
         'toast',
         'ProjectAttachment',
-        'defaultModal'
+        'defaultModal',
+        '$http'
     ];
 
-    function ProjectAttachmentFormController(toast, ProjectAttachment, defaultModal) {
+    function ProjectAttachmentFormController(toast, ProjectAttachment, defaultModal, $http) {
         var vm = this;
+        vm.delete = deleteFile;
+        vm.showFiles = showFiles;
+        vm.files = [];
 
-        vm.delete = function(files, file, index) {
+        function showFiles(proj_attachment_id) {
+            $http.get('../project-attachments/showFiles/'+ proj_attachment_id).then(function(result){
+                result = result.data;
+                vm.files = result.files;
+            });
+        }
+
+        function deleteFile(files, file, index) {
             var attr = {
                 deleteName : file.name,
                 deletedKey : file.id
@@ -134,6 +146,23 @@
                     toast.success(result.msg);
                     files.splice(index, 1);
                 });
+            });
+        }
+    }
+
+    ProjItemController.$inject = ['$http'];
+
+    function ProjItemController($http) {
+        var vm = this;
+        vm.items = [];
+        vm.getItemList = getItemList;
+        function getItemList(proj_id) {
+            $http.get('../items/getItemCategoryList/' + proj_id).then(function(result) {
+                result = result.data;
+                console.log(result);
+                console.log(result.items);
+                vm.items = result.items
+                vm.items.unshift({id:'', item_name:'N/A'});
             });
         }
     }

@@ -105,6 +105,7 @@ Route::post('budget-request/update', 'BudgetRequestController@update');
 Route::resource('budget-request', 'BudgetRequestController');
 Route::resource('budget-request-status', 'BudgetRequestStatusController');
 
+Route::get('items/getItemCategoryList/{id}', 'ItemController@itemCategoryList');
 Route::get('items/names', 'ItemController@getAllItems');
 Route::get('items/price-recommendation', 'ItemController@getPriceRecommendation');
 Route::get('items/add', array(function () {
@@ -123,6 +124,7 @@ Route::get('project-attachments/add', array(function () {
   return view('modals/project-attachments-form');
 }));
 Route::post('project-attachments/update', 'ProjectAttachmentController@update');
+Route::get('project-attachments/showFiles/{id}', 'ProjectAttachmentController@showFiles');
 Route::delete('project-attachments/deleteFile/{id}', 'ProjectAttachmentController@destroyAttachment');
 Route::resource('project-attachments', 'ProjectAttachmentController');
 

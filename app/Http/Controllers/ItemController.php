@@ -13,6 +13,7 @@ use DB;
 use App\Project;
 use App\ProjectItemCategory;
 use App\Item;
+use File;
 
 class ItemController extends Controller
 {
@@ -41,10 +42,11 @@ class ItemController extends Controller
             Log::info('line 24 - - - -');
             $token = csrf_token();
             $data['items'] = App\ProjectItemCategory::JoinCategory()
-                        ->select('item_name', $category . '.name AS category', $item . '.id',
-                        $item.'.description','category_id', 'quantity', 'price',
-                        DB::Raw('"'. $token . '" AS token'))->where('proj_id', $proj_id)
-                        ->get();
+                ->leftJoin('project_attachments', 'project_attachments.proj_item_category_id', '=', $item.'.id')
+                ->select('item_name', $category . '.name AS category', $item . '.id',
+                $item.'.description','category_id', 'quantity', 'price',
+                DB::Raw('"'. $token . '" AS token'), 'project_attachments.id AS project_attachment_id')->where('proj_id', $proj_id)
+                ->get();
             $status = TRUE;
         }
         catch(Exception $e)
@@ -57,6 +59,14 @@ class ItemController extends Controller
         return array($data);
     }
 
+    public function itemCategoryList($proj_id) {
+
+        $data['items'] = App\ProjectItemCategory::where('proj_id', $proj_id)
+            ->get(['id', 'item_name']);
+
+        return $data;
+    }
+
     public function show()
     {
         return view('modals/items');
@@ -67,23 +77,32 @@ class ItemController extends Controller
         $status = FALSE;
         $msg = '';
         try {
+
             $br = $request->all();
             Log::info('br');
             Log::info($br);
             unset($br['token']);
-            $id = App\ProjectItemCategory::insertGetId($br);
-            // get status name
-            $cat_name = App\Category::where('id', $br['category_id'])
-              ->value('name');
-            $data['items'] = $br;
-            $data['items']['id'] = $id;
-            $data['items']['category'] = $cat_name;
-            $status = TRUE;
+            // unset($br['upload_files']);
+            unset($br['project_attachment_id']);
+            $data = DB::transaction(function() use($br, $request){
+                $data = array();
+                $id = App\ProjectItemCategory::insertGetId($br);
+                // get status name
+                $cat_name = App\Category::where('id', $br['category_id'])
+                  ->value('name');
+                $data['items'] = $br;
+                $data['items']['id'] = $id;
+                $data['items']['category'] = $cat_name;
 
-            // Adds item name to items table if it does not exist
-            if (! Item::where('name', 'like', $data['items']['item_name'])->exists()) {
-                Item::insert(['name' => $data['items']['item_name']]);
-            }
+                // Adds item name to items table if it does not exist
+                if (! Item::where('name', 'like', $data['items']['item_name'])->exists()) {
+                    Item::insert(['name' => $data['items']['item_name']]);
+                }
+
+                // $data['items']['files'] = $this->_addAttachment($request);
+
+                return $data;
+            });
 
             // Make the status to on-going from initiating
             $ongoingId = 1;
@@ -94,6 +113,7 @@ class ItemController extends Controller
                 $project->proj_status_id = $ongoingId;
                 $project->save();
             }
+            $status = TRUE;
        } catch (Exception $e) {
             $msg = $e->getMessage();
         }
@@ -101,6 +121,44 @@ class ItemController extends Controller
         $data['status'] = $status;
 
         return Response::json($data);
+    }
+
+    private function _getAttachmentPath() {
+        $path = $this->_getPath();
+        if(!File::isDirectory($path)) {
+            File::makeDirectory($path, 0777, TRUE);
+        }
+        return $path;
+    }
+
+    private function _getPath() {
+        return public_path() . DIRECTORY_SEPARATOR . 'attachments' . DIRECTORY_SEPARATOR;
+    }
+
+    private function _addAttachment($request) {
+        // save the files
+        if($request->has('upload_files')) {
+            // check or create first the directory
+            $path = $this->_getAttachmentPath();
+            $files = [];
+            foreach($request->file('upload_files') AS $key => $val) {
+                $fileName = sha1($val->getClientOriginalName() . time());
+                $fileName = $fileName . '.' . $val->getClientOriginalExtension();
+                $files[] = [
+                    'project_attachment_id' => $proj_attachment->id,
+                    'file' => $fileName,
+                    'name' => $val->getClientOriginalName()
+                ];
+
+                $val->move($path, $fileName);
+            }
+            ProjectAttachmentFile::insert($files);
+
+            $data->files = ProjectAttachmentFile::where('project_attachment_id', $proj_attachment->id)
+                ->get(['id','project_attachment_id', 'name', 'file'])->toArray();
+
+            return $data;
+        }
     }
 
     public function update(Request $request)
@@ -117,9 +175,13 @@ class ItemController extends Controller
             unset($upd_arr['id']);
             unset($upd_arr['category']);
             unset($upd_arr['token']);
+            // unset($br['upload_files']);
+            unset($upd_arr['project_attachment_id']);
+
             App\ProjectItemCategory::where('id', $id)->update($upd_arr);
 
             $data['items'] = $request;
+            logger();
             $status = TRUE;
         }
         catch(Exception $e)
