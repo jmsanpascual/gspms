@@ -34,10 +34,10 @@ class ProjectAttachmentController extends Controller
             DB::Raw('"'. $token . '" AS token'))
             ->get();
 
-            foreach($attachment AS $key => &$val) {
-                $val['files'] = ProjectAttachmentFile::where('project_attachment_id', $val->id)
-                  ->get(['id', 'project_attachment_id','file', 'name'])->toArray();
-            }
+            // foreach($attachment AS $key => &$val) {
+            //     $val['files'] = ProjectAttachmentFile::where('project_attachment_id', $val->id)
+            //       ->get(['id', 'project_attachment_id','file', 'name'])->toArray();
+            // }
 
             // logger(' lINE 25 - - - - -');
             // logger(json_encode(DB::getQueryLog()));
@@ -57,6 +57,12 @@ class ProjectAttachmentController extends Controller
         return array($data);
     }
 
+    public function showFiles($proj_attachment_id) {
+        $val['files'] = ProjectAttachmentFile::where('project_attachment_id', $proj_attachment_id)
+          ->get(['id', 'project_attachment_id','file', 'name'])->toArray();
+
+        return $val;
+    }
     public function show()
     {
         return view('modals/project-attachment');
@@ -74,6 +80,10 @@ class ProjectAttachmentController extends Controller
             $data['attachment'] = DB::transaction(function() use ($params, $request){
                 $proj_attachment = new ProjectAttachment();
                 $proj_attachment->project_id = $params['project_id'];
+
+                if(!EMPTY($params['proj_item_category_id']))
+                    $proj_attachment->proj_item_category_id = $params['proj_item_category_id'];
+
                 $proj_attachment->subject = $params['subject'];
                 $proj_attachment->description = $params['description'];
                 $proj_attachment->created_by = auth()->id();
@@ -117,7 +127,8 @@ class ProjectAttachmentController extends Controller
 
                 return $proj_attachment;
             });
-
+            logger('proj attachment --------------------');
+            logger($data['attachment']);
             // $data['attachment'] = $br;
             // $data['attachment']['id'] = $id;
             // $data['attachment']['name'] = $creator;
@@ -125,6 +136,7 @@ class ProjectAttachmentController extends Controller
             $status = TRUE;
        } catch (Exception $e) {
             $msg = $e->getMessage();
+            logger($e);
         }
         $data['msg'] = $msg;
         $data['status'] = $status;
@@ -154,6 +166,10 @@ class ProjectAttachmentController extends Controller
             $data['attachment'] = DB::transaction(function() use ($params, $request){
                 $proj_attachment = ProjectAttachment::find($params['id']);
                 $proj_attachment->project_id = $params['project_id'];
+
+                if(!EMPTY($params['proj_item_category_id']))
+                    $proj_attachment->proj_item_category_id = $params['proj_item_category_id'];
+
                 $proj_attachment->subject = $params['subject'];
                 $proj_attachment->description = $params['description'];
                 $proj_attachment->created_by = auth()->id();

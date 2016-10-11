@@ -27,11 +27,20 @@
         vm.edit = edit;
         vm.dtInstance = {};
         vm.attachments = [];
+        vm.ave_budget = 0;
 
         function refresh() {
             ProjRestApi.related({proj_id : vm.proj_id}).$promise.then(function(result){
                 if (result.status) {
                     vm.related = result.related;
+                    //compute avg
+                    for(var key in result.related) {
+                        vm.ave_budget += result.related[key].total_budget;
+                    }
+                    console.log(result.related);
+                    console.log(vm.ave_budget);
+                    console.log(result.related.length);
+                    vm.ave_budget = vm.ave_budget/ result.related.length;
                 } else {
                     alert('Unable to load datatable');
                 }
@@ -80,7 +89,10 @@
         vm.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0),
             DTColumnDefBuilder.newColumnDef(1),
-            DTColumnDefBuilder.newColumnDef(2).notSortable()
+            DTColumnDefBuilder.newColumnDef(2),
+            DTColumnDefBuilder.newColumnDef(3),
+            DTColumnDefBuilder.newColumnDef(4),
+            DTColumnDefBuilder.newColumnDef(5).notSortable()
         ];
 
 

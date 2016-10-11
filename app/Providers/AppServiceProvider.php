@@ -23,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        \DB::listen(function($sql) {
+            logger(json_encode($sql));
+        });
     }
 }

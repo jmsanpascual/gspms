@@ -36,26 +36,67 @@ class ProjectController extends Controller
             $token = csrf_token();
             $data['proj'] = App\Projects::JoinStatus();
 
+
+            $select = [
+                $proj . '.name',
+                $stat . '.name AS status',
+                $proj . '.id',
+                'start_date',
+                'end_date',
+                'objective',
+                'total_budget',
+                'champion_id',
+                'program_id',
+                'proj_status_id',
+                'resource_person_id',
+                'partner_organization',
+                'partner_community',
+                DB::Raw('"'. $token . '" AS token')
+            ];
+
             // search related projects
             if(!EMPTY($related)) {
                 // find related projects within 5 years
                 $getMinYear = date('Y-m-d H:i:s', strtotime('-5 years'));
+                // make this check approved
+                // $select[] = DB::Raw('MAX(proj_budget_request.amount) as max_budget');
+                // $select[] = DB::Raw('MIN(proj_budget_request.amount) as min_budget');
 
-                $data['proj']->where('program_id', $related->program_id)
-                  ->where($proj.'.created_at', '>', $getMinYear)
-                  ->whereIn('proj_status_id', [1,3])
+                $data['proj']
+                // ->leftJoin('proj_budget_request', 'proj_budget_request.proj_id', '=', 'projects.id')
+                ->where('program_id', $related->program_id)
+                //   ->where($proj.'.created_at', '>', $getMinYear)
+                  ->Where($proj.'.end_date', '>', $getMinYear)
+                  ->whereIn('proj_status_id', [1,3,5])
                   ->where($proj.'.id', '!=', $related->id);
             }
 
-            $data['proj'] = $data['proj']->select($proj . '.name', $stat . '.name AS status', $proj . '.id',
-                'start_date','end_date', 'objective', 'total_budget', 'champion_id',
-                'program_id', 'proj_status_id', 'resource_person_id', 'partner_organization',
-                'partner_community', DB::Raw('"'. $token . '" AS token'))
-                ->get();
+            $data['proj'] = $data['proj']->get($select);
 
             foreach($data['proj'] as $key => $value) {
                 $temp = explode('(#$;)', $value->objective);
                 $data['proj'][$key]->objective = $temp;
+
+                if(!EMPTY($related)) {
+                    // start date
+                    $start_year = date('Y', strtotime($data['proj'][$key]->start_date));
+                    // $start_month = date('n', strtotime($data['proj'][$key]->start_date));
+                    // $start_day = date('j', strtotime($data['proj'][$key]->start_date));
+
+                    // end date
+                    $end_year = date('Y', strtotime($data['proj'][$key]->end_date));
+                    // $end_month = date('n', strtotime($data['proj'][$key]->end_date));
+                    // $end_day = date('j', strtotime($data['proj'][$key]->end_date));
+
+                    $duration_year = ($end_year - $start_year) . 'year(s) ';
+                    // $duration_month = ($end_month - $start_month) . 'month(s) ';
+                    // $duration_day = ($end_month - $start_month) . 'month(s) ';
+                    $data['proj'][$key]->duration = $duration_year;
+                    $budget = App\ProjectBudgetRequest::where('proj_id', $data['proj'][$key]->id)
+                      ->first([DB::Raw('MAX(proj_budget_request.amount) as max_budget'), DB::Raw('MIN(proj_budget_request.amount) as min_budget')]);
+                    $data['proj'][$key]->max_budget = $budget->max_budget;
+                    $data['proj'][$key]->min_budget = $budget->min_budget;
+                }
             }
 
             $status = TRUE;
@@ -233,7 +274,7 @@ class ProjectController extends Controller
         }
         catch(Exception $e)
         {
-            Log::info(json_encode(DB::getQueryLog()));
+            logger($e);
             $msg = $e->getMessage();
         }
         $data['msg'] = $msg;

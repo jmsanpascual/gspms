@@ -72,6 +72,47 @@
 				</div>
 			</div>
 		</div>
+		<div class = "form-group" ng-if ="submitData.action == 'Edit' ">
+		  <div class = "row">
+			<label class = "form-label col-md-4">Uploaded files</label>
+			<div class = "col-md-6" ng-controller = "ProjectAttachmentFormController as pafc"
+			ng-init = "pafc.showFiles(submitData.items.project_attachment_id)">
+			  <div class = "pic-container" ng-repeat = "data in pafc.files">
+				  <a type="button" class="btn btn-default" style = "position:absolute; bottom:0; right:0; margin:2px;z-index:10;"
+				  ng-href ="@{{data.file}}" download="@{{data.name}}" title = "Download"><i class = "fa fa-download"></i></a>
+			  <button type="button" class="close pull-right pic-container-close"
+			  ng-click="pafc.delete(pafc.files, data, $index)">&times;</button>
+        		<div class = "col-lg-3 col-md-3 col-sm-3 col-xs-3">
+				  <img class = "pic-container-img img-responsive" ng-src = "@{{data.file}}"></img>
+			    </div>
+				<div class = "col-lg-9 col-md-9 col-sm-9 col-xs-9 pic-container-right">
+			      <span style = "text-align: center;"> @{{data.name}} </span>
+				  <div class="progress">
+				    <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+					style="width:100%;">100 %
+				    </div>
+				  </div>
+			    </div>
+			  </div>
+			</div>
+		  </div>
+		</div>
+
+		@if(Session::get('role') == config('constants.role_champion') ||
+			Session::get('role') == config('constants.role_exec'))
+		<!-- <hr>
+
+		<div class = "form-group">
+			<div class = "row">
+                <div class ="col-md-4">
+                    <tmjupload class = "btn btn-primary" file-model = "submitData.items.upload_files"
+                    target = "#attachment-container" multiple = "true">Upload File</tmjupload>
+                </div>
+				<div class = "col-md-10 col-md-offset-1" id = "attachment-container">
+				</div>
+			</div>
+		</div> -->
+		@endif
 	</form>
 @stop
 
