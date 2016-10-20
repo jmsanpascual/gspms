@@ -92,10 +92,6 @@ class ProjectController extends Controller
                     // $duration_month = ($end_month - $start_month) . 'month(s) ';
                     // $duration_day = ($end_month - $start_month) . 'month(s) ';
                     $data['proj'][$key]->duration = $duration_year;
-                    $budget = App\ProjectBudgetRequest::where('proj_id', $data['proj'][$key]->id)
-                      ->first([DB::Raw('MAX(proj_budget_request.amount) as max_budget'), DB::Raw('MIN(proj_budget_request.amount) as min_budget')]);
-                    $data['proj'][$key]->max_budget = $budget->max_budget;
-                    $data['proj'][$key]->min_budget = $budget->min_budget;
                 }
             }
 

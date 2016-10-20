@@ -28,14 +28,21 @@
         vm.dtInstance = {};
         vm.attachments = [];
         vm.ave_budget = 0;
+        vm.min_budget = 0;
+        vm.max_budget = 0;
 
         function refresh() {
             ProjRestApi.related({proj_id : vm.proj_id}).$promise.then(function(result){
                 if (result.status) {
                     vm.related = result.related;
                     //compute avg
+                    var total_budget = 0;
                     for(var key in result.related) {
-                        vm.ave_budget += result.related[key].total_budget;
+                        total_budget = result.related[key].total_budget;
+                        vm.ave_budget += total_budget;
+                        // if total budget is lower than the current min budget or no value yet
+                        vm.min_budget = (!vm.min_budget || vm.min_budget > total_budget) ? total_budget : vm.min_budget;
+                        vm.max_budget = (!vm.max_budget || vm.max_budget < total_budget) ? total_budget : vm.max_budget;
                     }
                     console.log(result.related);
                     console.log(vm.ave_budget);
@@ -90,9 +97,7 @@
             DTColumnDefBuilder.newColumnDef(0),
             DTColumnDefBuilder.newColumnDef(1),
             DTColumnDefBuilder.newColumnDef(2),
-            DTColumnDefBuilder.newColumnDef(3),
-            DTColumnDefBuilder.newColumnDef(4),
-            DTColumnDefBuilder.newColumnDef(5).notSortable()
+            DTColumnDefBuilder.newColumnDef(3).notSortable()
         ];
 
 
