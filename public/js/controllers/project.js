@@ -15,7 +15,8 @@ angular.module('project.controller', [
     'project.attachment',
     'upload',
     'toast',
-    'project-related'
+    'project-related',
+    'notification'
 ])
 
 .controller('projDTCtrl', function($scope, DTOptionsBuilder, DTColumnDefBuilder,
