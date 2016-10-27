@@ -44,9 +44,9 @@
                         vm.min_budget = (!vm.min_budget || vm.min_budget > total_budget) ? total_budget : vm.min_budget;
                         vm.max_budget = (!vm.max_budget || vm.max_budget < total_budget) ? total_budget : vm.max_budget;
                     }
-                    console.log(result.related);
-                    console.log(vm.ave_budget);
-                    console.log(result.related.length);
+                    // console.log(result.related);
+                    // console.log(vm.ave_budget);
+                    // console.log(result.related.length);
                     vm.ave_budget = vm.ave_budget/ result.related.length;
                 } else {
                     alert('Unable to load datatable');

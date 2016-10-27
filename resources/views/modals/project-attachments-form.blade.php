@@ -9,6 +9,7 @@
 		<input type ="hidden" ng-model = "submitData.attachment.project_id">
 		<input type ="hidden" ng-model = "submitData.attachment.token">
 		<div class = "form-group" ng-controller="ProjItemController as pic">
+			@{{ submitData.attachment.proj_item_category_id }}
 			<div class = "row" ng-init = "pic.getItemList(submitData.attachment.project_id)">
 				<label class = "form-label col-md-4">Item Name</label>
 				<div class = "col-md-6">
