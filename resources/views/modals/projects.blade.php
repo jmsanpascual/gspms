@@ -190,7 +190,7 @@
 @section('btn')
 
 	<span ng-controller = "btnCtrl as btnc" ng-if = "submitData.proj.id"
-	ng-init = 'btnc.data.proj_id = submitData.proj.id;'>
+	ng-init = 'btnc.data.proj_id = submitData.proj.id; btnc.proj = submitData.proj'>
 		<div class = "pull-left">
 
         @if(Session::get('role') == config('constants.role_life')
@@ -222,10 +222,7 @@
       <a class = "btn btn-default btn-sm" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">Progress Report</a>
       @endif
 
-      @if(Session::get('role') == config('constants.role_life')
-        || Session::get('role') == config('constants.role_head'))
       <button class = "btn btn-success btn-sm" ng-click = "btnc.showRelated()">View Related Projects</button>
-      @endif
 
       @if(Session::get('role') == config('constants.role_life')
         || Session::get('role') == config('constants.role_head'))

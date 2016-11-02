@@ -5,24 +5,30 @@
 @stop
 @section('modal-content')
 	<!-- DTable -->
-	 <div ng-controller="ProjectRelatedController as prc" ng-init = 'prc.proj_id = submitData.proj_id; prc.refresh()'>
+	 <div ng-controller="ProjectRelatedController as prc" ng-init = 'prc.orig_proj = submitData.proj; prc.refresh()'>
 
  		<div class = "form-group">
  			<div class = "row">
- 				<label class = "col-md-4">Average Total Budget</label>
- 				<label class = "col-md-4" ng-bind="prc.ave_budget"></label>
+ 				<label class = "col-md-3">Average Total Budget</label>
+ 				<label class = "col-md-3" ng-bind="prc.ave_budget"></label>
+ 				<label class = "col-md-3">Average Duration</label>
+ 				<label class = "col-md-3" ng-bind="prc.ave_duration"></label>
  			</div>
  		</div>
  		<div class = "form-group">
  			<div class = "row">
- 				<label class = "col-md-4">Minimum Total Budget</label>
- 				<label class = "col-md-4" ng-bind="prc.min_budget"></label>
+ 				<label class = "col-md-3">Minimum Total Budget</label>
+ 				<label class = "col-md-3" ng-bind="prc.min_budget"></label>
+ 				<label class = "col-md-3">Minimum Duration</label>
+ 				<label class = "col-md-3" ng-bind="prc.min_duration"></label>
  			</div>
  		</div>
  		<div class = "form-group">
  			<div class = "row">
- 				<label class = "col-md-4">Maximum Total Budget</label>
- 				<label class = "col-md-4" ng-bind="prc.max_budget"></label>
+ 				<label class = "col-md-3">Maximum Total Budget</label>
+ 				<label class = "col-md-3" ng-bind="prc.max_budget"></label>
+ 				<label class = "col-md-3">Max Duration</label>
+ 				<label class = "col-md-3" ng-bind="prc.max_duration"></label>
  			</div>
  		</div>
 
@@ -46,9 +52,11 @@
               <td>@{{data.total_budget}}</td>
               <td>@{{data.duration}}</td>
               <td>
-                <button class="btn btn-warning" title = "Edit" ng-click="prc.edit($index, data)">
-                <i class="fa fa-pencil"></i>
+				@if(session()->get('role') == config('constants.role_life') || session()->get('role') == config('constants.role_head'))
+                <button class="btn btn-primary" title = "Edit" ng-click="prc.edit($index, data)">
+                <i class="fa fa-exchange"></i>
                 </button>
+				@endif
               </td>
             </tr>
           </tbody>

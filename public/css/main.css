@@ -2802,3 +2802,7 @@ select {
 .objectives input {
   margin-right: 5px;
 }
+
+.modal-eighty {
+  width: 80% !important;
+}

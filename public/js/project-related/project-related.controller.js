@@ -30,24 +30,39 @@
         vm.ave_budget = 0;
         vm.min_budget = 0;
         vm.max_budget = 0;
+        vm.min_duration = 0;
+        vm.max_duration = 0;
+        vm.ave_duration = 0;
+        vm.orig_proj = {};
 
         function refresh() {
-            ProjRestApi.related({proj_id : vm.proj_id}).$promise.then(function(result){
+            ProjRestApi.related({proj_id : vm.orig_proj.id}).$promise.then(function(result){
                 if (result.status) {
                     vm.related = result.related;
                     //compute avg
                     var total_budget = 0;
+                    var total_duration = 0;
                     for(var key in result.related) {
-                        total_budget = result.related[key].total_budget;
-                        vm.ave_budget += total_budget;
+                        var budget = result.related[key].total_budget,
+                        duration = parseInt(result.related[key].duration);
+                        total_budget += budget;
+                        total_duration += duration;
+                        // vm.ave_budget += total_budget;
                         // if total budget is lower than the current min budget or no value yet
-                        vm.min_budget = (!vm.min_budget || vm.min_budget > total_budget) ? total_budget : vm.min_budget;
-                        vm.max_budget = (!vm.max_budget || vm.max_budget < total_budget) ? total_budget : vm.max_budget;
+                        vm.min_budget = (!vm.min_budget || vm.min_budget > budget) ? budget : vm.min_budget;
+                        vm.max_budget = (!vm.max_budget || vm.max_budget < budget) ? budget : vm.max_budget;
+                        // duration
+                        vm.min_duration = parseInt(vm.min_duration);
+                        vm.max_duration = parseInt(vm.max_duration);
+
+                        vm.min_duration = ((!vm.min_duration || vm.min_duration > duration) ? duration : vm.min_duration) + ' year(s)';
+                        vm.max_duration = ((!vm.max_duration || vm.max_duration < duration) ? duration : vm.max_duration) + ' year(s)';
                     }
-                    // console.log(result.related);
-                    // console.log(vm.ave_budget);
+                    // console.log(total_budget);
+                    // console.log(total_duration);
                     // console.log(result.related.length);
-                    vm.ave_budget = vm.ave_budget/ result.related.length;
+                    vm.ave_budget = ((result.related.length) ? total_budget/ result.related.length : 0).toFixed(2);
+                    vm.ave_duration = ((result.related.length) ? total_duration/ result.related.length : 0).toFixed(2) + ' year(s)';
                 } else {
                     alert('Unable to load datatable');
                 }
@@ -103,10 +118,9 @@
 
         function edit(index, proj) {
             var attr = {
-                size: 'lg',
-                templateUrl : 'projects',
-                saveUrl: '../projects/update',
-                action: 'Edit',
+                size: 'eighty',
+                templateUrl : '../projects/compare',
+                action: 'Compare',
                 // keepOpen : true, // keep open even after save
                 programs : $scope.program,
                 program: {id: proj.program_id},
@@ -115,7 +129,8 @@
                 champion: {id: proj.champion_id},
                 resource_person : $scope.resourcePersons,
                 resource: {id: proj.resource_person_id},
-                proj : angular.copy(proj)
+                proj : angular.copy(proj),
+                old_proj: angular.copy(vm.orig_proj)
             };
 
             var modal = defaultModal.showModal(attr);
