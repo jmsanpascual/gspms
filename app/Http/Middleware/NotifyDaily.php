@@ -85,13 +85,13 @@ class NotifyDaily
 
     private function _almostDue($proj_query) {
         // project is not done and less than 80% finished with 20% time left notify LIFE AND CHAMPION responsible
-        $date = date('Y-m-d');
+        // $date = date('Y-m-d');
         // filter end dates must not yet due
         // $proj = $proj_query->where('end_date', '>', $date)
         //     ->get();
         // then compute if already 20%
         // foreach() {
-        //
+
         // }
     }
 }
