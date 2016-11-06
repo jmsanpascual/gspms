@@ -17,7 +17,7 @@ class SessionCheck
      */
     public function handle($request, Closure $next)
     {
-        Log::info('sessionCheck');
+        // Log::info('sessionCheck');
         if(!Auth::check())
             return redirect('/');
 

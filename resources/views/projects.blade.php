@@ -84,6 +84,7 @@ ng-app='project.controller'
 @endsection
 
 @section('scripts')
+@parent
 {!! HTML::script('js/resource-person/services/resource-person.js') !!}
 {!! HTML::script('js/services/project-status.js') !!}
 {!! HTML::script('js/services/program.js') !!}

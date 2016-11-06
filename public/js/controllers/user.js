@@ -1,6 +1,12 @@
 'use strict'
 
-angular.module('users', ['datatables','common.service', 'ui.bootstrap', 'roles.service'])
+angular.module('users', [
+    'datatables',
+    'common.service',
+    'ui.bootstrap',
+    'roles.service',
+    'notification',
+])
 
 .controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder, reqDef, defaultModal, rolesRestApi) {
     var vm = this;

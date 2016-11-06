@@ -39,8 +39,8 @@ class ProjectActivitiesController extends Controller
                                     "$activity.end_date", "$activity.remarks", "$act_status.name AS status",
                                     "$activity.status_id", "$activity.description", DB::Raw('"'. $token . '" AS token'))
     								->where('proj_id', $proj_id)->get();
-            Log::info(' lINE 33 - - - - -');
-            Log::info(json_encode(DB::getQueryLog()));
+            // Log::info(' lINE 33 - - - - -');
+            // Log::info(json_encode(DB::getQueryLog()));
     		$status = TRUE;
     	}
     	catch(Exception $e)

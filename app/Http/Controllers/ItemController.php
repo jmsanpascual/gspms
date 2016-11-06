@@ -181,7 +181,7 @@ class ItemController extends Controller
             App\ProjectItemCategory::where('id', $id)->update($upd_arr);
 
             $data['items'] = $request;
-            logger();
+            // logger();
             $status = TRUE;
         }
         catch(Exception $e)
@@ -226,7 +226,7 @@ class ItemController extends Controller
         $categoryId = $item['category_id'];
         $yearAgo = date('Y-m-d', strtotime('-1 years'));
 
-        logger('////////////////////////'.json_encode($item));
+        // logger('////////////////////////'.json_encode($item));
 
         if (! isset($item['item_name'])) {
             return compact('recommendedPrice');
@@ -234,7 +234,7 @@ class ItemController extends Controller
 
         $projectIds = Project::where('proj_status_id', '!=', $forApproval)
                     ->where('start_date', '>', $yearAgo)->pluck('id');
-        logger($projectIds);
+        // logger($projectIds);
 
         $recommendedPrice = ProjectItemCategory::select(DB::raw('avg(price) as averagePrice'))
                       ->where(function ($query) use ($categoryId, $projectIds) {

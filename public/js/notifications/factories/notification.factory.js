@@ -9,6 +9,6 @@
 
     /* @ngInject */
     function Notification($resource) {
-        return $resource('../notifications/:id', {id : '@id'});
+        return $resource('/gspms/public/notifications/:id', {id : '@id'});
     }
 })();

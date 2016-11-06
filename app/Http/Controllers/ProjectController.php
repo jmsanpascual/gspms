@@ -16,6 +16,7 @@ use App\Notification;
 use App\UserNotification;
 use App\UserRoles;
 use App\Traits\Notify;
+use Carbon\Carbon;
 
 class ProjectController extends Controller
 {
@@ -75,33 +76,43 @@ class ProjectController extends Controller
             }
 
             $data['proj'] = $data['proj']->get($select);
+            $min_duration = 0;
+            $max_duration = 0;
+            $ave_duration = 0;
 
             foreach($data['proj'] as $key => $value) {
                 $temp = explode('(#$;)', $value->objective);
                 $data['proj'][$key]->objective = $temp;
 
                 if(!EMPTY($related)) {
-                    // start date
-                    $start_year = date('Y', strtotime($data['proj'][$key]->start_date));
-                    // $start_month = date('n', strtotime($data['proj'][$key]->start_date));
-                    // $start_day = date('j', strtotime($data['proj'][$key]->start_date));
+                    $start_date =  Carbon::createFromFormat('Y-m-d h:i:s', $data['proj'][$key]->start_date);
+                    $end_date =  Carbon::createFromFormat('Y-m-d h:i:s', $data['proj'][$key]->end_date);
+                    $days = $end_date->diffInDays($start_date);
+                    $duration = $this->_convertToYearMonthDays($days);
 
-                    // end date
-                    $end_year = date('Y', strtotime($data['proj'][$key]->end_date));
-                    // $end_month = date('n', strtotime($data['proj'][$key]->end_date));
-                    // $end_day = date('j', strtotime($data['proj'][$key]->end_date));
+                    $ave_duration += $days;
+                    $max_duration = ($days > $max_duration) ? $days : $max_duration;
+                    $min_duration = ($days < $min_duration || $min_duration === 0) ? $days : $min_duration;
 
-                    $duration_year = ($end_year - $start_year) . 'year(s) ';
-                    // $duration_month = ($end_month - $start_month) . 'month(s) ';
-                    // $duration_day = ($end_month - $start_month) . 'month(s) ';
-                    $data['proj'][$key]->duration = $duration_year;
+                    $data['proj'][$key]->duration = $duration;
                 }
+            }
+
+            if(!EMPTY($related)) {
+                // logger('computing');
+                $ave_duration = $ave_duration/$data['proj']->count();
+                $data['others'] = [
+                    'ave_duration' => $this->_convertToYearMonthDays($ave_duration),
+                    'min_duration' => $this->_convertToYearMonthDays($min_duration),
+                    'max_duration' => $this->_convertToYearMonthDays($max_duration)
+                ];
             }
 
             $status = TRUE;
         }
         catch(Exception $e)
         {
+            logger($e->getError());
             $msg = $e->getMessage();
         }
         $data['status'] = $status;
@@ -110,6 +121,32 @@ class ProjectController extends Controller
         return array($data);
     }
 
+    public function _convertToYearMonthDays($days)
+    {
+        $yearMonths = 12;
+        $monthDays = 365.25/$yearMonths;
+        $months = 0;
+        $years = 0;
+
+        // convert to month
+        if($days > $monthDays) {
+            $months = floor($days/$monthDays);
+            // get the remainder
+            $days = $days % $monthDays;
+        }
+
+        // convert to years
+        if($months > $yearMonths) {
+            $years = floor($months/$yearMonths);
+            //get the remainder for months
+            $months = $months%$yearMonths;
+
+        }
+
+        $format = $years . ' yr(s). '. $months . ' mo(s). ';
+
+        return $format;
+    }
     public function create()
     {
         return view('create-project');
@@ -152,8 +189,8 @@ class ProjectController extends Controller
 
         try {
             $project = $request->all();
-            logger('projects');
-            logger($project);
+            // logger('projects');
+            // logger($project);
             $objectives = $project['objective']; // Store the array objectives
             unset($project['token']);
 
@@ -391,7 +428,9 @@ class ProjectController extends Controller
         $msg = '';
         try {
             $proj = App\Project::find($id);
-            $data['related'] = $this->index($proj)[0]['proj'];
+            $index = $this->index($proj)[0];
+            $data['related'] = $index['proj'];
+            $data['others'] = $index['others'];
             $status = TRUE;
         } catch(Exception $e) {
             $msg = $e->getMessage();
