@@ -9,6 +9,11 @@ class ProjectActivities extends Model
     //
     protected $table = 'proj_activities';
 
+    public function tasks()
+    {
+        return $this->hasMany('App\ActivityTask', 'activity_id', 'activity_id');
+    }
+
     public function scopejoinActivities($query)
     {
     	$activity = (new Activities)->getTable();

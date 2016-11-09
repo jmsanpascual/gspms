@@ -33,7 +33,7 @@ angular.module('project.activites.controller',
     {
         ProjectActivitiesRestApi.query({proj_id : $scope.proj_id}).$promise.then(function (result) {
            result = result[0];
-
+           console.log('Tasks:', result);
           if (result.status) {
               console.log('proj');
               console.log(result.proj);
@@ -147,6 +147,59 @@ angular.module('project.activites.controller',
     }
 
 
+})
+
+.controller('ActivityTaskController', function ($scope, $rootScope) {
+    var tasks =  $scope.submitData.projAct.tasks,
+        taskLen = !tasks ? 0 : tasks.length,
+        approvedTaskCount = 0;
+
+    $scope.percentage = '0%';
+
+    for (var i = 0; i < taskLen; i++) {
+        if (tasks[i].done) {
+            approvedTaskCount++;
+        }
+    }
+
+    if (approvedTaskCount > 0) {
+        $scope.percentage = (Math.round((approvedTaskCount / taskLen) * 100)) + '%';
+    }
+
+    // Watch the length of activity tasks to update the percentage of progress bar
+    $scope.$watch('submitData.projAct.tasks.length', function (newVal, oldVal) {
+        if (newVal == oldVal) return;
+
+        approvedTaskCount = 0;
+        tasks = $scope.submitData.projAct.tasks;
+        taskLen = newVal;
+        $scope.percentage = '0%';
+
+        for (var i = 0; i < taskLen; i++) {
+            if (tasks[i].done) {
+                approvedTaskCount++;
+            }
+        }
+
+        if (approvedTaskCount > 0) {
+            $scope.percentage = (Math.round((approvedTaskCount / taskLen) * 100)) + '%';
+        }
+    });
+
+    $rootScope.$on('task-updated', function () {
+        approvedTaskCount = 0;
+        $scope.percentage = '0%';
+
+        for (var i = 0; i < taskLen; i++) {
+            if (tasks[i].done) {
+                approvedTaskCount++;
+            }
+        }
+
+        if (approvedTaskCount > 0) {
+            $scope.percentage = (Math.round((approvedTaskCount / taskLen) * 100)) + '%';
+        }
+    });
 })
 
 .constant('actStatus', {
