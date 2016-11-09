@@ -12,9 +12,14 @@ use Log;
 use DB;
 use Session;
 use Exception;
+use App\Notification;
+use App\UserNotification;
+use App\UserRoles;
+use App\Traits\Notify;
 
 class ProjectController extends Controller
 {
+    use Notify;
 
     public function __construct()
     {
@@ -31,8 +36,6 @@ class ProjectController extends Controller
         {
             $proj = (new App\Projects)->getTable();
             $stat = (new App\ProjectStatus)->getTable();
-            Log::info('line 24 - - - -');
-            Log::info($proj);
             $token = csrf_token();
             $data['proj'] = App\Projects::JoinStatus();
 
@@ -257,9 +260,11 @@ class ProjectController extends Controller
         $status = FALSE;
         try
         {
+            DB::beginTransaction();
+            $proj = App\Project::where('id', $req->get('proj_id'));
+            $this->_addNotif($req, $proj->first());
             // missing check if for approval
-            $stat = App\Project::where('id', $req->get('proj_id'))
-            ->update([
+            $stat = $proj->update([
                 'proj_status_id' => $req->get('id'),
                 'remarks' => $req->get('remarks')
             ]);
@@ -267,9 +272,12 @@ class ProjectController extends Controller
             $data['stat'] = App\ProjectStatus::where('id', $req->get('id'))->first(['id','name']);
             Log::info('stat' . json_encode($data['stat']));
             $status = TRUE;
+
+            DB::commit();
         }
         catch(Exception $e)
         {
+            DB::rollback();
             logger($e);
             $msg = $e->getMessage();
         }
@@ -279,6 +287,25 @@ class ProjectController extends Controller
         return Response::json($data);
     }
 
+    public function _addNotif($req, $proj)
+    {
+        $status = config('constants.proj_status_completed');
+        if($req->id != $status) return;
+
+        try {
+            $data = [
+                'title' => 'Project Completed',
+                'text' => trans('notifications.proj_completed', ['name' => $proj->name]),
+                'proj_id' => $proj->id,
+                'role' => config('constants.role_champion'),
+
+            ];
+
+            $this->saveNotif($data);
+        } catch(Exception $e) {
+            throw $e;
+        }
+    }
 
     public function destroy($id)
     {

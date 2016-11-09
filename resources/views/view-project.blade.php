@@ -1,5 +1,6 @@
 @extends('layouts.index')
 
+
 @section('content')
 
 <div class="row">
@@ -16,7 +17,7 @@
     </div>
 </div>
 
-<div class="row" ng-app='project.controller' ng-controller='ProjectCtrl'>
+<div class="row" ng-controller='ProjectCtrl'>
   <div class="col-md-12">
          <div class="panel panel-default">
         <div class="panel-heading">

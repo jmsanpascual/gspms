@@ -16,5 +16,7 @@ return [
     'data_saved' => 'The data you entered was successfully saved.',
     'data_updated' => ':str was successfully updated.',
     'data_deleted' => ':str was successfully deleted.',
-
+    'proj_completed' => 'project :name was completed',
+    'proj_due' => 'project :name was past due',
+    'proj_almost_due' => 'project :name almost due ',
 ];

@@ -3,7 +3,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="no-js">
+<html class="no-js" @yield('app')>
 <!--<![endif]-->
 
 <head>
@@ -54,7 +54,33 @@
                 </button>
             </div>
             <div class="user-nav">
-                <ul>
+                <ul ng-controller = "NotificationController as nc">
+                    <li class="dropdown messages open">
+                        <span class="badge badge-danager animated bounceIn" id="new-messages" ng-if = "nc.notifications.length > 0"
+                            ng-bind="nc.notifications.length"></span>
+                        <button type="button" class="btn btn-default dropdown-toggle options" id="toggle-mail" data-toggle="dropdown" aria-expanded="true">
+                            <i class="fa fa-envelope"></i>
+                        </button>
+                        <ul class="dropdown-menu alert animated fadeInDown">
+                            <li>
+                                <h1>You have <strong ng-bind="nc.notifications.length"></strong> new messages</h1>
+                            </li>
+                            <li ng-repeat = "notif in nc.notifications">
+                                <a href="#">
+                                    <div class="message-info">
+                                        <span class="sender" style = "font-weight:bold;" ng-bind="::notif.title"></span>
+                                        <span class="time" ng-bind="::notif.created_at"></span>
+                                        <div class="message-content" ng-bind="::notif.text"></div>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#">Check all messages <i class="fa fa-angle-right"></i></a>
+                            </li>
+                        </ul>
+
+                    </li>
                     <li class="profile-photo">
                         <img src="{{ asset('img/avatar.png') }}" alt="" class="img-circle">
                     </li>
@@ -79,7 +105,7 @@
             <h5 class="sidebar-header">Navigation</h5>
             <ul class="nav nav-pills nav-stacked">
               @if(Session::get('role') == config('constants.role_life'))
-              <li ng-class = "{'active' : {{json_encode(($page == 'accounts'))}}; }">
+              <li ng-class = "{'active' : {{json_encode(($page == 'accounts'))}} }">
                   <a href="{{ URL::to('users') }}" title="Forms">
                     <i class="fa fa-list-alt"></i> Accounts
                   </a>
@@ -106,7 +132,7 @@
               @endif
 
               @if(Session::get('role') != config('constants.role_finance'))
-                <li ng-class = "{active : {{json_encode(($page == 'projects'))}}; }">
+                <li ng-class = "{'active' : {{json_encode(($page == 'projects'))}} }">
                   <a href="{{ route('view.project2') }}" title="Forms">
                       <i class="icon-doc"></i> Projects
                   </a>
@@ -147,7 +173,11 @@
     {!! HTML::script('js/vendor/node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.js') !!}
     {!! HTML::script('js/others/angular-datatable.min.js') !!}
     {!! HTML::script('js/services/common_service.js') !!}
-    
+    {!! HTML::script('js/notifications/notification.module.js') !!}
+    {!! HTML::script('js/notifications/controllers/notification.controller.js') !!}
+    {!! HTML::script('js/notifications/factories/notification.factory.js') !!}
+    {!! HTML::script('js/notifications/factories/notification-manager.factory.js') !!}
+
     {!! HTML::script('plugins/chartjs/Chart.min.js') !!}
     {!! HTML::script('plugins/chartjs/chartjs-demo.js') !!}
     @yield('scripts')

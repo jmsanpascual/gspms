@@ -322,7 +322,7 @@ class UserController extends Controller
 
     public function login()
     {
-    $credentials = Request::all();
+        $credentials = Request::all();
         Log::info('credentials  - - - -  ' . json_encode($credentials));
         if (Auth::attempt($credentials)) {
 

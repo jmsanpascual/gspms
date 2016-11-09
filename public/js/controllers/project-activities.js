@@ -262,6 +262,8 @@ angular.module('project.activites.controller',
 
 .controller('btnCtrl', function($scope, defaultModal, ProjRestApi, projStatus, $window){
     var _self = this;
+    _self.proj = {};
+
     _self.data = {};
     _self.data.remarks = $scope.submitData.proj.remarks
     var changeStatus = function()
@@ -343,7 +345,7 @@ angular.module('project.activites.controller',
         var attr = {
             size: 'md',
             templateUrl : '../projects/view-related',
-            proj_id : _self.data.proj_id
+            proj : _self.proj
         };
 
         defaultModal.showModal(attr);

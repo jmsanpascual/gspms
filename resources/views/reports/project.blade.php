@@ -43,7 +43,7 @@
 	<tr>
 		<td colspan=  "4" class = "sub-title">
 			<h3>Project Information<h3></td>
-	</tr><!-- 
+	</tr><!--
 	foreach($upd_arr['objective'] as $key => $value) {
                if (empty($temp)) $temp .= $value;
                else $temp .= $delimiter . $value;
@@ -88,8 +88,8 @@
 		<td colspan= "4" class = "sub-title"><h4>Objectives<h4></td>
 	</tr>
 	<tr>
-		<td colspan = "4"> 
-			<?php 
+		<td colspan = "4">
+			<?php
 			$delimiter = '(#$;)';
 			$proj->objective = explode($delimiter, $proj->objective);
 			?>

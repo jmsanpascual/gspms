@@ -4,6 +4,10 @@
 {!! HTML::style('js/upload/upload.css'); !!}
 @endsection
 
+@section('app')
+ng-app='project.controller'
+@endsection
+
 @section('content')
   <div class="row">
       <div class="col-md-12">
@@ -18,7 +22,7 @@
           <h1 class="h1">View Projects</h1>
       </div>
   </div>
-  <div class="row" ng-app = "project.controller">
+  <div class="row">
       <div class="col-md-12">
           <div class="panel panel-default">
               <div class="panel-heading">

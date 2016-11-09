@@ -45,4 +45,8 @@ class User extends Authenticatable
         $user_role = (new UserRoles)->getTable();
         return $query->leftJoin($user_role, $this->getTable() . '.id', '=', $user_role . '.user_id');
     }
+
+    public function notifications() {
+        return $this->belongsToMany('App\Notification', 'user_notifications');
+    }
 }

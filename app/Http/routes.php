@@ -68,6 +68,10 @@ Route::get('projects/view-related', function() {
     return view('modals/project-related');
 });
 
+Route::get('projects/compare', function() {
+    return view('modals/project-comparison');
+});
+
 Route::get('projects/get-on-going-projects', 'ProjectController@getOnGoingProjects');
 Route::post('projects/update-total-budget', 'ProjectController@updateTotalBudget');
 Route::get('projects/chart/{id}', 'ProjectController@createChart')->name('proj_chart');
@@ -133,6 +137,9 @@ Route::resource('programs', 'ProgramController');
 
 // RESTful resource route for Project Status
 Route::resource('project-status', 'ProjectStatusController');
+
+// RESTful resource route for notifications
+Route::resource('notifications', 'NotificationController');
 
 // RESTful resource route for Activity Status
 Route::resource('activity-status', 'ActivityStatusController');
