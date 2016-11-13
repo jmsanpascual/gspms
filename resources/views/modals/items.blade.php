@@ -28,17 +28,20 @@
             <tr ng-repeat = "data in ic.items">
               <td>@{{data.item_name}}</td>
               <td>@{{data.category}}</td>
-              <td>@{{data.quantity}}</td>
+              <td>@{{data.quantity}} (@{{data.quantity_label}})</td>
               <td>@{{data.price}}</td>
               <td>@{{ ((data.price) * (data.quantity)) }}</td>
               <td>
+
+              @if(Session::get('role') == config('constants.role_finance'))
                 <button class="btn btn-warning btn-sm" ng-click="ic.edit($index, data)">
                 <i class="fa fa-edit"></i>
                 </button>
+			  @endif
                 @if(Session::get('role') == config('constants.role_champion'))
-                <button class="btn btn-danger btn-sm" ng-click="ic.delete($index ,data)">
+                <!-- <button class="btn btn-danger btn-sm" ng-click="ic.delete($index ,data)">
                    <i class="fa fa-trash-o"></i>
-                </button>
+                </button> -->
                 @endif
               </td>
             </tr>

@@ -125,7 +125,7 @@ angular.module('project.controller', [
     }
 
     function edit(index, proj) {
-        console.log(proj);
+        // console.log(proj);
         var attr = {
             size: 'lg',
             templateUrl : 'projects',

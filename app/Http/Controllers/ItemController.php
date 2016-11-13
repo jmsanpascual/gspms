@@ -28,12 +28,8 @@ class ItemController extends Controller
         $msg = '';
         $data = array();
 
-        try
-        {
-          Log::info($request->all());
-        $proj_id = $request->get('proj_id');
-        Log::info('proj_id');
-        Log::info($proj_id);
+        try {
+            $proj_id = $request->get('proj_id');
             if(EMPTY($proj_id))
                 return;
 
@@ -44,10 +40,11 @@ class ItemController extends Controller
             $data['items'] = App\ProjectItemCategory::JoinCategory()
                 ->leftJoin('project_attachments', 'project_attachments.proj_item_category_id', '=', $item.'.id')
                 ->select('item_name', $category . '.name AS category', $item . '.id',
-                $item.'.description','category_id', 'quantity', 'price',
+                $item.'.description','category_id', 'quantity', 'price', 'quantity_label',
                 DB::Raw('"'. $token . '" AS token'), 'project_attachments.id AS project_attachment_id')->where('proj_id', $proj_id)
                 ->get();
             $status = TRUE;
+            logger(json_encode($data));
         }
         catch(Exception $e)
         {
