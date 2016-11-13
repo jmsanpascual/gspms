@@ -7,5 +7,9 @@ return [
     'role_head' => 1,
     'role_finance' => 5,
     'act_status_for_approval' => 1,
+    'proj_status_ongoing' => 1,
+    'proj_status_for_approval' => 2,
     'proj_status_completed' => 3,
+    'proj_status_disapproved' => 4,
+    'proj_status_approved' => 5
 ];

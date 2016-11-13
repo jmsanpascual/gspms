@@ -65,14 +65,44 @@ class ProjectController extends Controller
                 // make this check approved
                 // $select[] = DB::Raw('MAX(proj_budget_request.amount) as max_budget');
                 // $select[] = DB::Raw('MIN(proj_budget_request.amount) as min_budget');
+                $projStatusAllowed = [
+                    config('constants.proj_status_ongoing'),
+                    config('constants.proj_status_completed'),
+                    config('constants.proj_status_approved'),
+                ];
 
                 $data['proj']
                 // ->leftJoin('proj_budget_request', 'proj_budget_request.proj_id', '=', 'projects.id')
                 ->where('program_id', $related->program_id)
                 //   ->where($proj.'.created_at', '>', $getMinYear)
                   ->Where($proj.'.end_date', '>', $getMinYear)
-                  ->whereIn('proj_status_id', [1,3,5])
+                  ->whereIn('proj_status_id',$projStatusAllowed)
                   ->where($proj.'.id', '!=', $related->id);
+            } else if(EMPTY($related)) {
+                // if exec or champion show only projects that are ongoing, disapprove and approve
+                // showed disapprove for them to edit it and ask for approval again
+                if(Session::get('role') == config('constants.role_champion')
+                    || Session::get('role') == config('constants.role_exec')) {
+
+                    $projStatusAllowed = [
+                        config('constants.proj_status_ongoing'),
+                        config('constants.proj_status_disapproved'),
+                        config('constants.proj_status_approved'),
+                    ];
+                    $data['proj']->whereIn('proj_status_id', $projStatusAllowed);
+
+                    // if champion only show assigned projects
+                    if(Session::get('role') == config('constants.role_champion')) {
+                        $data['proj']->where('champion_id', Session::get('id'));
+                    }
+
+                // if life, head or finance dont show ongoing projects
+                } else if(Session::get('role') == config('constants.role_head')
+                    || Session::get('role') == config('constants.role_life')
+                    || Session::get('role') == config('constants.role_finance')) {
+
+                    $data['proj']->where('proj_status_id', '!=', config('constants.proj_status_ongoing'));
+                }
             }
 
             $data['proj'] = $data['proj']->get($select);
@@ -209,6 +239,10 @@ class ProjectController extends Controller
             Log::info(' start date '. $project['start_date']);
             $project['end_date'] = date('Y-m-d H:i:s', strtotime($project['end_date']));
             $project['id'] = App\Project::insertGetId($project);
+            // if the one adding is not the champion notify the champion about the added project
+            if(Session::get('role') != config('constants.role_champion'))
+                $this->_notifyAssignedChampion($project);
+
             // Get status name
             $stat_name = App\ProjectStatus::where('id', $project['proj_status_id'])->value('name');
 
@@ -225,6 +259,34 @@ class ProjectController extends Controller
         $data['status'] = $status;
 
         return Response::json($data);
+    }
+
+    private function _notifyAssignedChampion($proj, $previous_champion = NULL)
+    {
+        try {
+            if(!EMPTY($previous_champion))
+            {
+                $data = [
+                    'title' => 'Project Assignment Removed',
+                    'text' => trans('project_assigned_remove', ['name' => $proj['name']]),
+                    'proj_id' => $proj['id'],
+                    'user_ids' => [$previous_champion]
+                ];
+
+                $this->saveNotif($data);
+            }
+
+            $data = [
+                'title' => 'Project Assignment',
+                'text' => trans('project_assigned', ['name' => $proj['name']]),
+                'proj_id' => $proj['id'],
+                'user_ids' => [$proj['champion_id']]
+            ];
+
+            $this->saveNotif($data);
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     public function update(Request $request)
@@ -247,20 +309,28 @@ class ProjectController extends Controller
                if (empty($temp)) $temp .= $value;
                else $temp .= $delimiter . $value;
             }
-
+            $previous_champion = App\Projects::find($id)->champion_id;
             $upd_arr['objective'] = $temp; // Assign the concatenated objectives
             unset($upd_arr['status_id']);
             $upd_arr['proj_status_id'] = 2;
             if(EMPTY($upd_arr['champion_id'])  && Session::get('role') == config('constants.role_champion'))
                 $upd_arr['champion_id'] = Session::get('id');
+
             $upd_arr['start_date'] = date('Y-m-d H:i:s', strtotime($upd_arr['start_date']));
-            Log::info(' start date '. $upd_arr['start_date']);
             $upd_arr['end_date'] = date('Y-m-d H:i:s', strtotime($upd_arr['end_date']));
             App\Projects::where('id', $id)->update($upd_arr);
+
             $stat = App\ProjectStatus::where('id', $upd_arr['proj_status_id'])->value('name');
             $data['proj'] = $request;
             $data['proj']['proj_status_id'] = $upd_arr['proj_status_id'];
             $data['proj']['status'] = $stat;
+
+            // if the one updating is not the champion and selected champion has been changed
+            // notify the champion about the new project assigned
+            if(Session::get('role') != config('constants.role_champion')
+                && $previous_champion != $data['proj']['champion_id'])
+                $this->_notifyAssignedChampion($data['proj'], $previous_champion);
+
             $status = TRUE;
         } catch(Exception $e) {
             $msg = $e->getMessage();
@@ -328,14 +398,13 @@ class ProjectController extends Controller
     {
         $status = config('constants.proj_status_completed');
         if($req->id != $status) return;
-
+        // if project  completed notify except champion
         try {
             $data = [
                 'title' => 'Project Completed',
                 'text' => trans('notifications.proj_completed', ['name' => $proj->name]),
                 'proj_id' => $proj->id,
                 'role' => config('constants.role_champion'),
-
             ];
 
             $this->saveNotif($data);
