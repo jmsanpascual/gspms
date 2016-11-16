@@ -59,31 +59,33 @@
               @endif
 
               @if(Session::get('role') == config('constants.role_head')
-                || Session::get('role') == config('constants.role_life'))
+                || Session::get('role') == config('constants.role_life')
+                || Session::get('role') == config('constants.role_finance'))
               <li class="nav-dropdown">
                 <a href="" title="Forms">
                     <i class="fa fa-money"></i> Funds
                 </a>
                 <ul class="nav-sub">
+                  @if(Session::get('role') == config('constants.role_head'))
                   <li>
                     <a href="{{ URL::to('/funds/view') }}">Add Fund</a>
                   </li>
-                  @if(Session::get('role') == config('constants.role_life'))
-                  <li>
+                  @endif
+                  @if(Session::get('role') == config('constants.role_life')
+                    || Session::get('role') == config('constants.role_finance'))
+                  <!-- <li>
                     <a href="{{ URL::to('/funds-allocation/view') }}">Funds Allocation</a>
-                  </li>
+                  </li> -->
                   @endif
                 </ul>
               </li>
               @endif
 
-              @if(Session::get('role') != config('constants.role_finance'))
-                <li ng-class = "{'active' : {{json_encode(($page == 'projects'))}} }">
-                  <a href="{{ route('view.project2') }}" title="Forms">
-                      <i class="icon-doc"></i> Projects
-                  </a>
+              <li ng-class = "{'active' : {{json_encode(($page == 'projects'))}} }">
+                <a href="{{ route('view.project2') }}" title="Forms">
+                  <i class="icon-doc"></i> Projects
+                </a>
               </li>
-              @endif
 
               @if(Session::get('role') == config('constants.role_champion')
                 || Session::get('role') == config('constants.role_exec'))

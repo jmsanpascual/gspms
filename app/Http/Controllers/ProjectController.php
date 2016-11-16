@@ -510,4 +510,10 @@ class ProjectController extends Controller
 
         return $data;
     }
+
+    public function getOnGoingProjects()
+    {
+        $projects = App\Projects::where('proj_status_id', '1')->get();
+        return Response::json($projects);
+    }
 }
