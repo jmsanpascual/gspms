@@ -9,6 +9,7 @@ use DB;
 use App;
 use Response;
 use Log;
+use App\Fund;
 class BudgetRequestController extends Controller
 {
 	public function __construct()
@@ -128,8 +129,11 @@ class BudgetRequestController extends Controller
         try
         {
             // missing check if for approval
-            $stat = App\ProjectBudgetRequest::where('id', $req->get('br_id'))
-            ->update([
+            $stat = App\ProjectBudgetRequest::where('id', $req->get('br_id'));
+			$br = $stat->first();
+			$this->_deductFund($req, $br);
+
+            $stat->update([
                 'status_id' => $req->get('id'),
                 'remarks' => $req->get('remarks')
             ]);
@@ -148,6 +152,29 @@ class BudgetRequestController extends Controller
 
         return Response::json($data);
     }
+
+	private function _deductFund($req, $br)
+	{
+		$status = config('constants.budget_request_approved');
+		// if not approved
+		if($req->get('id') != $status) return;
+		// if approve deduct fund
+		try {
+			if(EMPTY($br->amount)) throw new Exception('Amount is missing on approve.');
+
+            // get year today
+            $year = date('Y');
+            $fund = Fund::where('year', $year)->first();
+
+            if(EMPTY($fund)) throw new Exception('No Funds yet on this year');
+            if($fund->remaining_funds < $br->amount) throw new Exception('Insufficient funds on requested budget.');
+
+            $fund->remaining_funds -= $br->amount;
+            $fund->save();
+		} catch(Exception $e) {
+			throw $e;
+		}
+	}
 
     public function destroy($id)
     {

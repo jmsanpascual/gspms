@@ -236,11 +236,19 @@
       @endif
   </div>
 		@if(Session::get('role') == config('constants.role_life'))
-		<span ng-if = "submitData.proj.proj_status_id == 2">
+		<span ng-if = "submitData.proj.proj_status_id == 6">
 			<button class = "btn btn-primary btn-sm" ng-click = "btnc.approve()">Approve</button>
 			<button class = "btn btn-danger btn-sm" ng-click = "btnc.disapprove()">Disapprove</button>
 		</span>
 		@endif
+
+        @if(Session::get('role') == config('constants.role_finance'))
+		<span ng-if = "submitData.proj.proj_status_id == 2">
+			<button class = "btn btn-primary btn-sm" ng-click = "btnc.approveByFinance()">Approve</button>
+			<button class = "btn btn-danger btn-sm" ng-click = "btnc.disapproveByFinance()">Disapprove</button>
+		</span>
+		@endif
+
 		@if(Session::get('role') == config('constants.role_champion') ||
 		Session::get('role') == config('constants.role_exec'))
 		<button class = "btn btn-info btn-sm" ng-click = "btnc.completed()" ng-if = "submitData.proj.proj_status_id == 1">Completed</button>

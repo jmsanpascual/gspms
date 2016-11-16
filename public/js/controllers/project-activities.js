@@ -204,7 +204,8 @@ angular.module('project.activites.controller',
     PROJ_STAT_FOR_APPROVAL : 2,
     PROJ_STAT_COMPLETED : 3,
     PROJ_STAT_DISAPPROVED : 4,
-    PROJ_STAT_APPROVED: 5
+    PROJ_STAT_APPROVED: 5,
+    PROJ_STAT_FOR_APPROVAL_LIFE : 6,
 })
 
 .controller('btnCtrl', function($scope, defaultModal, ProjRestApi, projStatus, $window){
@@ -212,7 +213,8 @@ angular.module('project.activites.controller',
     _self.proj = {};
 
     _self.data = {};
-    _self.data.remarks = $scope.submitData.proj.remarks
+    _self.data.remarks = $scope.submitData.proj.remarks;
+    _self.data.proj_id = $scope.submitData.proj.id;
     var changeStatus = function()
     {
         // if(!confirm('Are you sure you want to '))
@@ -242,9 +244,26 @@ angular.module('project.activites.controller',
         changeStatus();
     }
 
-    _self.disapprove = function()
+    _self.approveByFinance = function()
+    {
+        _self.data.id = projStatus.PROJ_STAT_FOR_APPROVAL_LIFE; // approved
+
+        console.log(_self.data);
+        changeStatus();
+    }
+
+    _self.disapproveByFinance = function()
     {
         _self.data.id = projStatus.PROJ_STAT_DISAPPROVED; // approved
+        changeStatus();
+    }
+
+    _self.disapprove = function()
+    {
+        _self.data.id = projStatus.PROJ_STAT_FOR_APPROVAL; // approved
+        // if approve by finance get the total budget
+        // _self.data.total_budget = $scope.submitData.proj.total_budget;
+
         changeStatus();
     }
 
