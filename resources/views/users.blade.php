@@ -1,5 +1,11 @@
 @extends('layouts.index')
 
+
+@section('app')
+ng-app='users'
+@endsection
+
+
 @section('content')
 
   <div class="row">
@@ -15,7 +21,7 @@
           <h1 class="h1">View List</h1>
       </div>
   </div>
-  <div class="row" ng-app = "users">
+  <div class="row">
       <div class="col-md-12">
           <div class="panel panel-default">
               <div class="panel-heading">
@@ -72,6 +78,7 @@
 @endsection
 
 @section('scripts')
+@parent
 {!! HTML::script('js/controllers/user.js') !!}
 {!! HTML::script('js/services/roles.js') !!}
 @endsection

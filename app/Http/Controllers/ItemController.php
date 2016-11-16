@@ -28,12 +28,8 @@ class ItemController extends Controller
         $msg = '';
         $data = array();
 
-        try
-        {
-          Log::info($request->all());
-        $proj_id = $request->get('proj_id');
-        Log::info('proj_id');
-        Log::info($proj_id);
+        try {
+            $proj_id = $request->get('proj_id');
             if(EMPTY($proj_id))
                 return;
 
@@ -44,10 +40,11 @@ class ItemController extends Controller
             $data['items'] = App\ProjectItemCategory::JoinCategory()
                 ->leftJoin('project_attachments', 'project_attachments.proj_item_category_id', '=', $item.'.id')
                 ->select('item_name', $category . '.name AS category', $item . '.id',
-                $item.'.description','category_id', 'quantity', 'price',
+                $item.'.description','category_id', 'quantity', 'price', 'quantity_label',
                 DB::Raw('"'. $token . '" AS token'), 'project_attachments.id AS project_attachment_id')->where('proj_id', $proj_id)
                 ->get();
             $status = TRUE;
+            logger(json_encode($data));
         }
         catch(Exception $e)
         {
@@ -181,7 +178,7 @@ class ItemController extends Controller
             App\ProjectItemCategory::where('id', $id)->update($upd_arr);
 
             $data['items'] = $request;
-            logger();
+            // logger();
             $status = TRUE;
         }
         catch(Exception $e)
@@ -226,7 +223,7 @@ class ItemController extends Controller
         $categoryId = $item['category_id'];
         $yearAgo = date('Y-m-d', strtotime('-1 years'));
 
-        logger('////////////////////////'.json_encode($item));
+        // logger('////////////////////////'.json_encode($item));
 
         if (! isset($item['item_name'])) {
             return compact('recommendedPrice');
@@ -234,7 +231,7 @@ class ItemController extends Controller
 
         $projectIds = Project::where('proj_status_id', '!=', $forApproval)
                     ->where('start_date', '>', $yearAgo)->pluck('id');
-        logger($projectIds);
+        // logger($projectIds);
 
         $recommendedPrice = ProjectItemCategory::select(DB::raw('avg(price) as averagePrice'))
                       ->where(function ($query) use ($categoryId, $projectIds) {

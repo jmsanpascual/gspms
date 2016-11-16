@@ -8,10 +8,13 @@ use Exception;
 trait Notify {
     public function saveNotif($params) {
         try {
+            $date = date('Y-m-d H:i:s');
+
             $id = Notification::insertGetId([
                 'title' => $params['title'],
                 'text' => $params['text'],
-                'project_id' => $params['proj_id']
+                'project_id' => $params['proj_id'],
+                'created_at' => $date
             ]);
 
             // if project is done notify all except champion
@@ -19,7 +22,6 @@ trait Notify {
 
             $user_ids = $params['user_ids'] ?: UserRoles::where('role_id', '!=', $params['role'])->lists('user_id');
 
-            $date = date('Y-m-d H:i:s');
             // format data to be inserted
             $data = [];
             foreach($user_ids as $key => $val) {

@@ -26,7 +26,6 @@ class NotifyDaily
         // Cache::forget('notify');
         if(Cache::get('notify') != date('Y-m-d')) {
             try {
-                logger('notify');
                 DB::beginTransaction();
                 $this->_notifyProjects();
                 Cache::forever('notify', date('Y-m-d'));
@@ -41,7 +40,6 @@ class NotifyDaily
     }
 
     private function _notifyProjects() {
-        logger('notify projects');
         // not yet completed projects
         $proj_query = Project::where('proj_status_id', config('constants.proj_status_completed'));
 
@@ -71,7 +69,7 @@ class NotifyDaily
                 'title' => 'Project past due.',
                 'text' =>  trans('notifications.proj_due', ['name'=> $val['name']]),
                 'proj_id' => $val['id'],
-                'user_ids' => $ids,
+                'user_ids' => $ids
             ];
 
             $this->saveNotif($data);

@@ -3,6 +3,6 @@
 
     angular
         .module('notification', [
-            
+            'ngResource'
         ]);
 })();

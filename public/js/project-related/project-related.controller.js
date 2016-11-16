@@ -38,31 +38,35 @@
         function refresh() {
             ProjRestApi.related({proj_id : vm.orig_proj.id}).$promise.then(function(result){
                 if (result.status) {
+                    console.log(result);
                     vm.related = result.related;
+                    vm.ave_duration = result.others.ave_duration;
+                    vm.min_duration = result.others.min_duration;
+                    vm.max_duration = result.others.max_duration;
                     //compute avg
                     var total_budget = 0;
-                    var total_duration = 0;
+                    // var total_duration = 0;
                     for(var key in result.related) {
                         var budget = result.related[key].total_budget,
                         duration = parseInt(result.related[key].duration);
                         total_budget += budget;
-                        total_duration += duration;
+                        // total_duration += duration;
                         // vm.ave_budget += total_budget;
                         // if total budget is lower than the current min budget or no value yet
                         vm.min_budget = (!vm.min_budget || vm.min_budget > budget) ? budget : vm.min_budget;
                         vm.max_budget = (!vm.max_budget || vm.max_budget < budget) ? budget : vm.max_budget;
                         // duration
-                        vm.min_duration = parseInt(vm.min_duration);
-                        vm.max_duration = parseInt(vm.max_duration);
+                        // vm.min_duration = parseInt(vm.min_duration);
+                        // vm.max_duration = parseInt(vm.max_duration);
 
-                        vm.min_duration = ((!vm.min_duration || vm.min_duration > duration) ? duration : vm.min_duration) + ' year(s)';
-                        vm.max_duration = ((!vm.max_duration || vm.max_duration < duration) ? duration : vm.max_duration) + ' year(s)';
+                        // vm.min_duration = ((!vm.min_duration || vm.min_duration > duration) ? duration : vm.min_duration) + ' year(s)';
+                        // vm.max_duration = ((!vm.max_duration || vm.max_duration < duration) ? duration : vm.max_duration) + ' year(s)';
                     }
                     // console.log(total_budget);
                     // console.log(total_duration);
                     // console.log(result.related.length);
                     vm.ave_budget = ((result.related.length) ? total_budget/ result.related.length : 0).toFixed(2);
-                    vm.ave_duration = ((result.related.length) ? total_duration/ result.related.length : 0).toFixed(2) + ' year(s)';
+                    // vm.ave_duration = ((result.related.length) ? total_duration/ result.related.length : 0).toFixed(2) + ' year(s)';
                 } else {
                     alert('Unable to load datatable');
                 }
