@@ -1,21 +1,31 @@
 'use strict'
 
-angular.module('funds', ['ngResource'])
+angular.module('funds', ['ngResource', 'school', 'toast'])
 
-.controller('FundCtrl', function (fund) {
-    var fundCtrl = this;
+.controller('FundCtrl', function (fund, School, toast) {
+    var vm = this;
 
-    fundCtrl.add = function (fundParam) {
-        fundParam.year = new Date().getFullYear();
+    vm.fund = {};
+
+    activate();
+
+    function activate() {
+        School.query().$promise.then(function (schools) {
+            vm.schools = schools;
+            vm.fund.school = schools[0];
+            vm.fund.year = new Date().getFullYear();
+        });
+    }
+
+    vm.add = function (fundParam) {
         fund.add(fundParam).then(function (addedFund) {
-            console.log('Added fund:', addedFund);
-            alert(fundParam.amount + ' was successfully added!');
+            toast.success(fundParam.amount + ' was successfully added');
             reset();
         });
     };
 
     function reset() {
-        fundCtrl.capital.amount = '';
+        vm.fund.amount = '';
     }
 })
 

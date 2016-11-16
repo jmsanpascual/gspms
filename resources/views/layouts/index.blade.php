@@ -66,9 +66,18 @@
                     <i class="fa fa-money"></i> Funds
                 </a>
                 <ul class="nav-sub">
-                  @if(Session::get('role') == config('constants.role_head'))
+                  @if(Session::get('role') == config('constants.role_head')
+                    || Session::get('role') == config('constants.role_finance'))
                   <li>
-                    <a href="{{ URL::to('/funds/view') }}">Add Fund</a>
+                    <a href="{{ URL::to('/funds/view') }}">
+                      @if(Session::get('role') == config('constants.role_head'))
+                        View/Add
+                      @else
+                        View
+                      @endif
+
+                      Fund
+                    </a>
                   </li>
                   @endif
                   @if(Session::get('role') == config('constants.role_life')
