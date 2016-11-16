@@ -17,6 +17,7 @@ use App\UserNotification;
 use App\UserRoles;
 use App\Traits\Notify;
 use Carbon\Carbon;
+use App\Fund;
 
 class ProjectController extends Controller
 {
@@ -75,7 +76,7 @@ class ProjectController extends Controller
                 // ->leftJoin('proj_budget_request', 'proj_budget_request.proj_id', '=', 'projects.id')
                 ->where('program_id', $related->program_id)
                 //   ->where($proj.'.created_at', '>', $getMinYear)
-                  ->Where($proj.'.end_date', '>', $getMinYear)
+                  ->where($proj.'.end_date', '>', $getMinYear)
                   ->whereIn('proj_status_id',$projStatusAllowed)
                   ->where($proj.'.id', '!=', $related->id);
             } else if(EMPTY($related)) {
@@ -101,7 +102,7 @@ class ProjectController extends Controller
                     || Session::get('role') == config('constants.role_life')
                     || Session::get('role') == config('constants.role_finance')) {
 
-                    $data['proj']->where('proj_status_id', '!=', config('constants.proj_status_ongoing'));
+                    // $data['proj']->where('proj_status_id', '!=', config('constants.proj_status_ongoing'));
                 }
             }
 
@@ -236,13 +237,13 @@ class ProjectController extends Controller
                 $project['champion_id'] = Session::get('id');
 
             $project['start_date'] = date('Y-m-d H:i:s', strtotime($project['start_date']));
-            Log::info(' start date '. $project['start_date']);
             $project['end_date'] = date('Y-m-d H:i:s', strtotime($project['end_date']));
             $project['id'] = App\Project::insertGetId($project);
             // if the one adding is not the champion notify the champion about the added project
             if(Session::get('role') != config('constants.role_champion'))
                 $this->_notifyAssignedChampion($project);
 
+            $this->_notifyFinance($project);
             // Get status name
             $stat_name = App\ProjectStatus::where('id', $project['proj_status_id'])->value('name');
 
@@ -261,24 +262,62 @@ class ProjectController extends Controller
         return Response::json($data);
     }
 
-    private function _notifyAssignedChampion($proj, $previous_champion = NULL)
+    private function _notifyFinance($proj, $edit = FALSE)
     {
         try {
-            if(!EMPTY($previous_champion))
-            {
+            logger($proj);
+            if($proj['proj_status_id'] != 2) return;
+
+            if($edit) {
+                // notify finance of edited project
+                $finance = config('constants.role_finance');
+                $finance_emp = UserRoles::where('role_id', $finance)->lists('user_id');
+
                 $data = [
-                    'title' => 'Project Assignment Removed',
-                    'text' => trans('project_assigned_remove', ['name' => $proj['name']]),
+                    'title' => 'Project Edited',
+                    'text' => trans('notifications.project_edited', ['name' => $proj['name']]),
                     'proj_id' => $proj['id'],
-                    'user_ids' => [$previous_champion]
+                    'user_ids' => $finance_emp
                 ];
 
                 $this->saveNotif($data);
             }
 
+            $finance = config('constants.role_finance');
+            $finance_emp = UserRoles::where('role_id', $finance)->lists('user_id');
+            logger($finance_emp);
+            $data = [
+                'title' => 'Project Newly Added',
+                'text' => trans('notifications.project_added', ['name' => $proj['name']]),
+                'proj_id' => $proj['id'],
+                'user_ids' => $finance_emp
+            ];
+
+            $this->saveNotif($data);
+        } catch(Exception $e) {
+            throw $e;
+        }
+
+    }
+
+    private function _notifyAssignedChampion($proj, $previous_champion = NULL)
+    {
+        try {
+            if(!EMPTY($previous_champion)) {
+                $data = [
+                    'title' => 'Project Assignment Removed',
+                    'text' => trans('notifications.project_assigned_remove', ['name' => $proj['name']]),
+                    'proj_id' => $proj['id'],
+                    'user_ids' => [$previous_champion]
+                ];
+
+                $this->saveNotif($data);
+
+            }
+
             $data = [
                 'title' => 'Project Assignment',
-                'text' => trans('project_assigned', ['name' => $proj['name']]),
+                'text' => trans('notifications.project_assigned', ['name' => $proj['name']]),
                 'proj_id' => $proj['id'],
                 'user_ids' => [$proj['champion_id']]
             ];
@@ -331,6 +370,7 @@ class ProjectController extends Controller
                 && $previous_champion != $data['proj']['champion_id'])
                 $this->_notifyAssignedChampion($data['proj'], $previous_champion);
 
+            $this->_notifyFinance($data['proj'], true);
             $status = TRUE;
         } catch(Exception $e) {
             $msg = $e->getMessage();
@@ -368,8 +408,11 @@ class ProjectController extends Controller
         try
         {
             DB::beginTransaction();
-            $proj = App\Project::where('id', $req->get('proj_id'));
-            $this->_addNotif($req, $proj->first());
+            $proj = App\Project::where('id',$req->get('proj_id'));
+            $findProj = $proj->first();
+            $this->_addNotif($req, $findProj);
+            $this->_deductFund($req, $findProj);
+            $this->_addNotifFinance($req, $findProj);
             // missing check if for approval
             $stat = $proj->update([
                 'proj_status_id' => $req->get('id'),
@@ -377,7 +420,7 @@ class ProjectController extends Controller
             ]);
 
             $data['stat'] = App\ProjectStatus::where('id', $req->get('id'))->first(['id','name']);
-            Log::info('stat' . json_encode($data['stat']));
+            // Log::info('stat' . json_encode($data['stat']));
             $status = TRUE;
 
             DB::commit();
@@ -392,6 +435,35 @@ class ProjectController extends Controller
         $data['status'] = $status;
 
         return Response::json($data);
+    }
+
+    // public function _addNotifFinance($req, $proj)
+    // {
+    //
+    // }
+
+    public function _deductFund($req, $proj)
+    {
+        // it means that it was approved by finance
+        $status = config('constants.proj_status_approved');
+        if($req->id != $status) return;
+        // if approved by finance deduct funds
+        try {
+            if(EMPTY($proj->total_budget)) throw new Exception('Total Budget is missing on approve.');
+
+            // get year today
+            $year = date('Y');
+            $fund = Fund::where('year', $year)->first();
+
+            if(EMPTY($fund)) throw new Exception('No Funds yet on this year');
+            if($fund->remaining_funds < $proj->total_budget) throw new Exception('Insufficient funds on requested budget.');
+
+            $fund->remaining_funds -= $proj->total_budget;
+            $fund->save();
+
+        } catch(Exception $e) {
+            throw $e;
+        }
     }
 
     public function _addNotif($req, $proj)

@@ -30,10 +30,10 @@
 			<div class = "row">
 				<label class = "form-label col-md-4">Status</label>
 				<div class = "col-md-6">
-					<select class = "form-control" ng-model = "submitData.brequest.status_id" 
+					<select class = "form-control" ng-model = "submitData.brequest.status_id"
 					ng-options = "c.id as c.name for c in submitData.status">
 					</select>
-				</div>	
+				</div>
 			</div>
 		</div> -->
 		<div class = "form-group" ng-if = "submitData.brequest.status_id">
@@ -49,7 +49,7 @@
 @stop
 
 @section('btn')
-	@if(Session::get('role') == config('constants.role_life'))
+	@if(Session::get('role') == config('constants.role_finance'))
 	<span ng-controller = "BudgetRequestStatusCtrl as brsc" ng-init = "brsc.data.proj_id = submitData.brequest.proj_id;
 	brsc.data.br_id = submitData.brequest.id" style ="margin-right: 5px;" ng-if = "submitData.brequest.id">
 		<span ng-if = "submitData.brequest.status_id == 1">

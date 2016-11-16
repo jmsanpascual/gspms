@@ -20,5 +20,7 @@ return [
     'proj_due' => 'project :name was past due',
     'proj_almost_due' => 'project :name almost due ',
     'project_assigned' => 'project :name was assigned to you.',
-    'project_assigned_remove' => 'project :name was removed from your assignment.'
+    'project_assigned_remove' => 'project :name was removed from your assignment.',
+    'project_edited' => 'project :name was edited and needs your approval.',
+    'project_added' => 'project :name was newly added and needs your approval.',
 ];

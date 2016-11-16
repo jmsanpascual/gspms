@@ -13,7 +13,7 @@ class Notification extends Model
 
     public function getCreatedAtAttribute($val)
     {
-        return Carbon::createFromFormat('Y-m-d h:i:s', $val)
+        return Carbon::createFromFormat('Y-m-d H:i:s', $val)
             ->setTimezone('Asia/Singapore')
             ->format('Y-m-d h:i A');
     }
