@@ -10,4 +10,9 @@ class SchoolFund extends Model
         'school_id',
         'amount',
     ];
+
+    public function school()
+    {
+        return $this->belongsTo('App\School');
+    }
 }

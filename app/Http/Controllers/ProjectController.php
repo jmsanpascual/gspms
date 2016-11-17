@@ -437,10 +437,10 @@ class ProjectController extends Controller
         return Response::json($data);
     }
 
-    // public function _addNotifFinance($req, $proj)
-    // {
-    //
-    // }
+    public function _addNotifFinance($req, $proj)
+    {
+
+    }
 
     public function _deductFund($req, $proj)
     {

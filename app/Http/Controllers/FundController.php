@@ -57,4 +57,9 @@ class FundController extends Controller
             return Response::json([['error' => $e->getMessage()]]);
         }
     }
+
+    function getSchoolFunds()
+    {
+        return SchoolFund::with('school')->get();
+    }
 }

@@ -59,7 +59,6 @@
               @endif
 
               @if(Session::get('role') == config('constants.role_head')
-                || Session::get('role') == config('constants.role_life')
                 || Session::get('role') == config('constants.role_finance'))
               <li class="nav-dropdown">
                 <a href="" title="Forms">
@@ -85,6 +84,13 @@
                   <!-- <li>
                     <a href="{{ URL::to('/funds-allocation/view') }}">Funds Allocation</a>
                   </li> -->
+                  @endif
+                  @if(Session::get('role') == config('constants.role_head'))
+                  <li>
+                    <a href="{{ URL::to('/funds/logs') }}">
+                      Logs
+                    </a>
+                  </li>
                   @endif
                 </ul>
               </li>
