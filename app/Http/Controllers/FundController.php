@@ -34,6 +34,7 @@ class FundController extends Controller
                 'school_id' => $school['id'],
                 'amount' => $newFund['amount'],
                 'year' => $newFund['year'],
+                'received_date' => $newFund['received_date'],
             ];
 
             // Check if there's an existing fund first

@@ -45,6 +45,12 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-3 control-label">Received Date</label>
+                        <div class="col-sm-8">
+                          <input class="form-control" type="date" placeholder="Received Date" ng-model="fc.fund.received_date" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-3 control-label">Year</label>
                         <div class="col-sm-8">
                           <input class="form-control" type="number" placeholder="Year" ng-model="fc.fund.year" readonly>

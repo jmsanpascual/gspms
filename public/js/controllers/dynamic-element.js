@@ -28,7 +28,7 @@ angular.module('dynamicElement', [])
     }
 })
 
-.controller('DynamicElementTaskController', function ($scope, $rootScope) {
+.controller('DynamicElementTaskController', function ($scope, $rootScope, defaultModal) {
     var arrayCount = getLen();
     $scope.fields = arrayCount.length <= 0 ? [{id: 0}] : arrayCount;
     $scope.$parent.submitData.projAct.tasks = !$scope.$parent.submitData.projAct.tasks ? [] : $scope.$parent.submitData.projAct.tasks;
@@ -48,6 +48,25 @@ angular.module('dynamicElement', [])
         else task.done = !task.done;
 
         $rootScope.$emit('task-updated');
+    };
+
+    $scope.addRemarks = function (task) {
+        if (!task) return;
+
+        var attrs = {
+            size: 'md',
+            templateUrl: '../add-task-remarks-view',
+            action: 'Add',
+            task: task
+        };
+
+        if (task.id) {
+            attrs.saveUrl = '../add-task-remarks';
+        }
+
+        defaultModal.showModal(attrs).result.then(function(data){
+            console.log('Remarks added successfully', data);
+        });
     };
 
     function getLen() {

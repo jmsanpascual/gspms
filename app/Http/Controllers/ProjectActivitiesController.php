@@ -164,7 +164,8 @@ class ProjectActivitiesController extends Controller
             unset($activity['status']);
             unset($activity['token']);
             DB::beginTransaction();
-            $activity['status_id'] = 1;
+            // This line of code will revert back the status to for approval
+            // $activity['status_id'] = 1;
 
             // Get and remove tasks before inserting the activity
             $tasks = $activity['tasks'];
@@ -173,7 +174,7 @@ class ProjectActivitiesController extends Controller
 
             Log::info($activity);
             $id = App\Activities::where('id', $act_id)->update($activity);
-            $stat = App\ActivityStatus::where('id', $activity['status_id'])->value('name');
+            // $stat = App\ActivityStatus::where('id', $activity['status_id'])->value('name');
 
             if (! empty($tasks)) {
                 // Update the tasks
@@ -190,7 +191,7 @@ class ProjectActivitiesController extends Controller
 
             $data['projAct'] = $req->all();
             $data['projAct']['status_id'] = $activity['status_id'];
-            $data['projAct']['status'] = $stat;
+            // $data['projAct']['status'] = $stat;
             DB::commit();
             $status = TRUE;
         }
@@ -253,5 +254,15 @@ class ProjectActivitiesController extends Controller
         $data['msg'] = $msg;
         $data['status'] = $status;
         return Response::json($data);
+    }
+
+    public function addTaskRemarks(Request $request)
+    {
+        $task = $request->all();
+
+        App\ActivityTask::where('id', $task['id'])->update($task);
+
+        $data['status'] = TRUE;
+        return $data;
     }
 }

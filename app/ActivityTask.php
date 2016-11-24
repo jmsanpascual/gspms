@@ -10,6 +10,7 @@ class ActivityTask extends Model
         'name',
         'activity_id',
         'done',
+        'remarks',
     ];
 
     protected $hidden = [

@@ -70,6 +70,10 @@
 							 >
               <i ng-class="{'fa fa-times': submitData.projAct.tasks[$index].done, 'fa fa-check': !submitData.projAct.tasks[$index].done}"></i>
             </button> &nbsp;
+						<button class="btn btn-primary btn-sm" type="button"
+							ng-click="addRemarks(submitData.projAct.tasks[$index])">
+              <i class="fa fa-file-text" aria-hidden="true"></i>
+            </button> &nbsp;
             <button class="btn btn-primary btn-sm" type="button" ng-click="removeField($index)">
               <i class="fa fa-trash-o"></i>
             </button>

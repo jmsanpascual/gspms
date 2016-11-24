@@ -9,6 +9,8 @@ class SchoolFund extends Model
     protected $fillable = [
         'school_id',
         'amount',
+        'year',
+        'received_date',
     ];
 
     public function school()

@@ -26,6 +26,7 @@ angular.module('funds', ['ngResource', 'school', 'toast'])
 
     function reset() {
         vm.fund.amount = '';
+        vm.fund.received_date = '';
     }
 })
 
