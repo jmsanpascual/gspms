@@ -65,6 +65,15 @@
 		</div>
 		<div class = "form-group">
 			<div class = "row">
+				<label class = "form-label col-md-4">Quantity Label</label>
+				<div class = "col-md-6">
+					<input type = "text" class = "form-control" ng-model = "submitData.items.quantity_label"
+					placeholder = "Enter Quantity Label e.g(kg, liter)">
+				</div>
+			</div>
+		</div>
+		<div class = "form-group">
+			<div class = "row">
 				<label class = "form-label col-md-4">Price</label>
 				<div class = "col-md-6">
 					<input type = "text" class = "form-control" ng-model = "submitData.items.price"
@@ -117,11 +126,12 @@
 @stop
 
 @section('btn')
-	@if(Session::get('role') == config('constants.role_champion'))
+
 	<span ng-controller="PriceRecommendationController as prc">
 		<span class="pull-left">@{{ prc.priceRecommendation }}</span>
 		<button class = "btn btn-info" ng-click="prc.getPriceRecommendation(submitData.items)">Average Price</button>
 	</span>
-	<button class = "btn btn-success" ng-click="save('items')">Save</button>
-	@endif
+	{{(Session::get('role') == config('constants.role_champion'))}}
+	<button class = "btn btn-success" ng-click="save('items')" ng-if = "(!submitData.items.id && {{(int)(Session::get('role') == config('constants.role_champion'))}})
+	|| (submitData.items.id && {{(int)(Session::get('role') == config('constants.role_finance'))}})">Save</button>
 @stop

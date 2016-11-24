@@ -251,6 +251,7 @@ class ProjectController extends Controller
             $data['proj'] = $project;
             $data['proj']['proj_status_id'] = $project['proj_status_id'];
             $data['proj']['status'] = $stat_name;
+            $data['saveUrl'] = 'update';
             $status = TRUE;
         } catch (Exception $e) {
             $msg = $e->getMessage();
