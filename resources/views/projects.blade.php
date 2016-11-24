@@ -106,6 +106,7 @@ ng-app='project.controller'
 <!-- Attachment -->
 {!! HTML::script('js/project-attachments/project-attachment.module.js') !!}
 {!! HTML::script('js/project-attachments/project-attachment.controller.js') !!}
+{!! HTML::script('js/project-attachments/project-attachment.factory.js') !!}
 {!! HTML::script('js/project-attachments/project-attachment.service.js') !!}
 <!-- End Attachment  -->
 <!-- Related Project  -->

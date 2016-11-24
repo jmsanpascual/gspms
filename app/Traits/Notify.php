@@ -20,7 +20,7 @@ trait Notify {
             // if project is done notify all except champion
             //so we need to look for users with role not champion
 
-            $user_ids = $params['user_ids'] ?: UserRoles::where('role_id', '!=', $params['role'])->lists('user_id');
+            $user_ids = !EMPTY($params['user_ids']) ? $params['user_ids'] : UserRoles::where('role_id', '!=', $params['role'])->lists('user_id');
 
             // format data to be inserted
             $data = [];
