@@ -127,6 +127,7 @@ Route::resource('categories', 'CategoryController');
 Route::get('project-attachments/add', array(function () {
   return view('modals/project-attachments-form');
 }));
+Route::post('project-attachments/find/{id}', 'ProjectAttachmentController@find');
 Route::post('project-attachments/update', 'ProjectAttachmentController@update');
 Route::get('project-attachments/showFiles/{id}', 'ProjectAttachmentController@showFiles');
 Route::delete('project-attachments/deleteFile/{id}', 'ProjectAttachmentController@destroyAttachment');
@@ -139,6 +140,9 @@ Route::resource('programs', 'ProgramController');
 Route::resource('project-status', 'ProjectStatusController');
 
 // RESTful resource route for notifications
+Route::get('notifications/projects/{id}/{userNotifId}', 'NotificationController@projects');
+Route::get('notifications/lists', 'NotificationController@lists');
+Route::get('notifications/getAllNotif', 'NotificationController@getAllNotif');
 Route::resource('notifications', 'NotificationController');
 
 // RESTful resource route for Activity Status
