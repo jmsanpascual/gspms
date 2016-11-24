@@ -34,10 +34,12 @@ class ProjectActivitiesController extends Controller
             $activity = (new App\Activities)->getTable();
             $act_status = (new App\ActivityStatus)->getTable();
             $token = csrf_token();
-    		$data['proj_activities'] = App\ProjectActivities::joinActivityStatus()
+    		$data['proj_activities'] = App\ProjectActivities::with('tasks')
+                                    ->joinActivityStatus()
                                     ->select("$activity.id","$activity.name", "$activity.start_date",
                                     "$activity.end_date", "$activity.remarks", "$act_status.name AS status",
-                                    "$activity.status_id", "$activity.description", DB::Raw('"'. $token . '" AS token'))
+                                    "$activity.status_id", "$activity.description", "proj_activities.activity_id",
+                                    DB::Raw('"'. $token . '" AS token'))
     								->where('proj_id', $proj_id)->get();
             // Log::info(' lINE 33 - - - - -');
             // Log::info(json_encode(DB::getQueryLog()));
@@ -102,9 +104,22 @@ class ProjectActivitiesController extends Controller
             Log::info(' start date '. $activity['start_date']);
             $activity['end_date'] = date('Y-m-d H:i:s', strtotime($activity['end_date']));
 
+            // Get and remove tasks before inserting the activity
+            $tasks = $activity['tasks'];
+            unset($activity['tasks']);
+
             $id = App\Activities::insertGetId($activity);
             App\ProjectActivities::insert(['proj_id' => $proj_id, 'activity_id' => $id]);
             $stat = App\ActivityStatus::where('id', $activity['status_id'])->value('name');
+
+            // Add the activity id to tasks
+            foreach ($tasks as $key => $value) {
+                $tasks[$key]['activity_id'] = $id;
+                $tasks[$key]['done'] = 0;
+            }
+
+            App\ActivityTask::insert($tasks); // Insert tasks
+
             $data['projAct'] = $req->all();
             $data['projAct']['id'] = $id;
             $data['projAct']['status'] = $stat;
@@ -151,9 +166,28 @@ class ProjectActivitiesController extends Controller
             DB::beginTransaction();
             $activity['status_id'] = 1;
 
+            // Get and remove tasks before inserting the activity
+            $tasks = $activity['tasks'];
+            unset($activity['activity_id']);
+            unset($activity['tasks']);
+
             Log::info($activity);
             $id = App\Activities::where('id', $act_id)->update($activity);
             $stat = App\ActivityStatus::where('id', $activity['status_id'])->value('name');
+
+            if (! empty($tasks)) {
+                // Update the tasks
+                foreach ($tasks as $key => $value) {
+                    // Update the activity tasks
+                    if (!isset($tasks[$key]['id'])) {
+                        $tasks[$key]['activity_id'] = $act_id;
+                        App\ActivityTask::insert($tasks[$key]);
+                    } else {
+                        App\ActivityTask::where('id', $tasks[$key]['id'])->update($tasks[$key]);
+                    }
+                }
+            }
+
             $data['projAct'] = $req->all();
             $data['projAct']['status_id'] = $activity['status_id'];
             $data['projAct']['status'] = $stat;

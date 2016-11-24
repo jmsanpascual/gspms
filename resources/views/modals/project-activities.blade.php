@@ -2,6 +2,12 @@
 
 @section('title')
 	@{{ submitData.action}} Activity
+	<div class="progress" ng-controller="ActivityTaskController" ng-show="submitData.projAct.tasks && submitData.projAct.tasks.length">
+		<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
+		aria-valuemin="0" aria-valuemax="100" ng-style="{width: percentage}">
+			@{{ percentage }}
+		</div>
+	</div>
 @stop
 @section('modal-content')
 	<form role="form" id = "projForm">
@@ -43,10 +49,37 @@
 		<div class = "form-group">
 			<div class = "row">
 				<div class = "col-md-12">
-				<label class = "form-label col-md-4">Description</label>
-				<div class = "col-md-6">
-					<textarea class = "form-control" style ="resize:none" ng-model = "submitData.projAct.description" placeholder="Description"></textarea>
+					<label class = "form-label col-md-4">Description</label>
+					<div class = "col-md-6">
+						<textarea class = "form-control" style ="resize:none" ng-model = "submitData.projAct.description" placeholder="Description"></textarea>
+					</div>
 				</div>
+			</div>
+		</div>
+		<div class = "form-group" ng-controller='DynamicElementTaskController'>
+			<div class = "row">
+				<div class = "col-md-12">
+				<label class = "form-label col-md-4">Tasks</label>
+				<div class = "col-md-6">
+					<div class="objectives" ng-repeat='field in fields'>
+            <input class="form-control" ng-model="submitData.projAct.tasks[$index].name"
+							type="text" ng-class="{'col-sm-12': $last}"
+            	placeholder="Task @{{$index + 1}}" >
+						<button class="btn btn-primary btn-sm" type="button"
+							ng-click="doneAndUndoneTasks(submitData.projAct.tasks[$index])"
+							 >
+              <i ng-class="{'fa fa-times': submitData.projAct.tasks[$index].done, 'fa fa-check': !submitData.projAct.tasks[$index].done}"></i>
+            </button> &nbsp;
+            <button class="btn btn-primary btn-sm" type="button" ng-click="removeField($index)">
+              <i class="fa fa-trash-o"></i>
+            </button>
+          </div>
+				</div>
+				<div class="col-sm-6" ng-class="{'col-sm-offset-4': fields.length}">
+          <button class="btn btn-primary btn-sm" type="button" ng-click="addField()">
+            Add Task
+          </button>
+        </div>
 			</div>
 			</div>
 		</div>
@@ -78,22 +111,22 @@
 @stop
 
 @section('btn')
-	
+
 	<span ng-controller = "ActivityStatusCtrl as asc" ng-init = "asc.data.proj_id = submitData.projAct.proj_id;
 	asc.data.act_id = submitData.projAct.id" style ="margin-right: 5px;" ng-if = "submitData.projAct.id">
 		@if(Session::get('role') == config('constants.role_life'))
 		<span ng-if = "submitData.projAct.status_id == 1">
 			<button class = "btn btn-primary" ng-click = "asc.approve()">Approve</button>
 			<button class = "btn btn-danger" ng-click = "asc.disapprove()">Disapprove</button>
-			
+
 		</span>
 		@endif
 		@if(Session::get('role') == config('constants.role_champion'))
 		<button class = "btn btn-info" ng-click = "asc.completed()" ng-if = "submitData.projAct.status_id == 2">Completed</button>
 		@endif
 	</span>
-	
-	
+
+
 	@if(Session::get('role') == config('constants.role_champion'))
 	<button class = "btn btn-success" ng-if = "submitData.projAct.status_id != 4" ng-click="save('projAct')">Save</button>
 	@endif

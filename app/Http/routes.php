@@ -47,6 +47,10 @@ Route::resource('roles', 'RoleController');
 Route::get('funds/view', function () {
     return view('funds');
 });
+Route::get('funds/logs', function () {
+    return view('fund-logs');
+});
+Route::get('funds/school-funds', 'FundController@getSchoolFunds');
 Route::resource('funds', 'FundController');
 
 // RESTful resource route for Fund Allocation

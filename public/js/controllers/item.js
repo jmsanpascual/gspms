@@ -180,8 +180,11 @@ angular.module('items.controller',
             vm.itemName = vm.itemNames[0];
         } else {
             for (var i = 0; i < itemsLen; i++) {
-                if ($scope.$parent.submitData.items['item_name'].toLowerCase() == vm.itemNames[i].name.toLowerCase()) {
+
+                if (($scope.$parent.submitData.items['item_name'] || '').toLowerCase() == vm.itemNames[i].name.toLowerCase()) {
                     vm.itemName = vm.itemNames[i];
+                } else {
+                    vm.itemName = vm.itemNames[itemsLen - 1];
                 }
             }
         }
