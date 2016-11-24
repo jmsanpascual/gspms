@@ -131,7 +131,7 @@ Route::resource('categories', 'CategoryController');
 Route::get('project-attachments/add', array(function () {
   return view('modals/project-attachments-form');
 }));
-Route::post('project-attachments/find/{id}', 'ProjectAttachmentController@find');
+Route::get('project-attachments/find/{id}', 'ProjectAttachmentController@find');
 Route::post('project-attachments/update', 'ProjectAttachmentController@update');
 Route::get('project-attachments/showFiles/{id}', 'ProjectAttachmentController@showFiles');
 Route::delete('project-attachments/deleteFile/{id}', 'ProjectAttachmentController@destroyAttachment');
