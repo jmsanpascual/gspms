@@ -11,17 +11,17 @@
 <div class="user-nav">
     <ul ng-controller = "NotificationController as nc">
         <li class="dropdown messages open">
-            <span class="badge badge-danager animated bounceIn" id="new-messages" ng-if = "nc.notifications.length > 0"
-                ng-bind="nc.notifications.length"></span>
+            <span class="badge badge-danager animated bounceIn" id="new-messages" ng-if = "nc.count > 0"
+                ng-bind="nc.count"></span>
             <button type="button" class="btn btn-default dropdown-toggle options" id="toggle-mail" data-toggle="dropdown" aria-expanded="true">
                 <i class="fa fa-envelope"></i>
             </button>
             <ul class="dropdown-menu alert animated fadeInDown">
                 <li>
-                    <h1>You have <strong ng-bind="nc.notifications.length"></strong> new messages</h1>
+                    <h1>You have <strong ng-bind="nc.count"></strong> new messages</h1>
                 </li>
                 <li ng-repeat = "notif in nc.notifications">
-                    <a href="#">
+                    <a href="javascript:;" ng-click ="nc.showNotif(notif, $index)">
                         <div class="message-info">
                             <span class="sender" style = "font-weight:bold;" ng-bind="::notif.title"></span>
                             <span class="time" ng-bind="::notif.created_at"></span>
@@ -31,7 +31,7 @@
                 </li>
 
                 <li>
-                    <a href="#">Check all messages <i class="fa fa-angle-right"></i></a>
+                    <a href="../notifications/lists">Check all messages <i class="fa fa-angle-right"></i></a>
                 </li>
             </ul>
 
