@@ -27,14 +27,16 @@ class FundController extends Controller
     public function store(Request $request)
     {
         try {
-            $newFund = $request->except('school');
+            $newFund = $request->except(['school', 'received_date']);
             $school = $request->input('school');
+            $receivedDate = $request->input('received_date');
+
             // Add neccessary columns to school funds
             $schoolFundInfo = [
                 'school_id' => $school['id'],
                 'amount' => $newFund['amount'],
                 'year' => $newFund['year'],
-                'received_date' => $newFund['received_date'],
+                'received_date' => $receivedDate,
             ];
 
             // Check if there's an existing fund first
