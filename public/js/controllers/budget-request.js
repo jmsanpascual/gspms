@@ -1,14 +1,14 @@
 'use strict'
-angular.module('budget.request.controller', 
+angular.module('budget.request.controller',
     [
-    'budgetRequest.service', 
-    'datatables', 
-    'common.service', 
+    'budgetRequest.service',
+    'datatables',
+    'common.service',
     'ui.bootstrap',
     'budgetRequestStatus.service'
     ])
-  
-.controller('BudgetReqCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder, 
+
+.controller('BudgetReqCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder,
     defaultModal, BudgetRequestRestApi, BudgetRequestStatusRestApi) {
     // $scope.proj_id = 1; //declared in modals/projects.blade.php
     var vm = this;
@@ -76,7 +76,7 @@ angular.module('budget.request.controller',
         defaultModal.showModal(attr).result.then(function(data){
             console.log(data);
             vm.budget_requests.push(data.brequest);
-        });      
+        });
 
     }
 
@@ -90,11 +90,11 @@ angular.module('budget.request.controller',
             brequest : angular.copy(act)
         };
         attr.brequest.proj_id = $scope.proj_id;
-        
+
         defaultModal.showModal(attr).result.then(function(data){
             console.log(data);
             vm.budget_requests.splice(index, 1, angular.copy(data.brequest));
-        });   
+        });
     }
 
     function deleteRow(index, act) {
@@ -133,9 +133,11 @@ angular.module('budget.request.controller',
 .controller('BudgetRequestStatusCtrl', function($scope, brStatus, BudgetRequestRestApi){
     var _self = this;
     _self.data = {};
-    _self.data.remarks = $scope.submitData.brequest.remarks
     var changeStatus = function()
     {
+        _self.data.remarks = $scope.submitData.brequest.remarks;
+        // if(!confirm('Are you sure you want to '))
+            // return;
         BudgetRequestRestApi.request(_self.data).$promise.then(function(result){
             if(!result.status)
             {
@@ -167,6 +169,3 @@ angular.module('budget.request.controller',
     }
 
 });
-
-
-

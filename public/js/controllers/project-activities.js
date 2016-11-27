@@ -266,10 +266,13 @@ angular.module('project.activites.controller',
     _self.proj = {};
 
     _self.data = {};
-    _self.data.remarks = $scope.submitData.proj.remarks;
     _self.data.proj_id = $scope.submitData.proj.id;
     var changeStatus = function()
     {
+        _self.data.remarks = $scope.submitData.proj.remarks;
+        // console.log($scope.submitData.proj)
+        // console.log(_self.data);
+        // console.log('heere ---------------');
         // if(!confirm('Are you sure you want to '))
         //     return;
 
@@ -301,7 +304,7 @@ angular.module('project.activites.controller',
     {
         _self.data.id = projStatus.PROJ_STAT_FOR_APPROVAL_LIFE; // approved
 
-        console.log(_self.data);
+        // console.log(_self.data);
         changeStatus();
     }
 

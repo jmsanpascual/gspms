@@ -117,6 +117,7 @@
         </div>
       </div>
     </div>
+    </div>
     <div class = "form-group" ng-if = "submitData.proj.proj_status_id">
       <div class = "row">
         <div class = "col-md-12">
@@ -127,7 +128,6 @@
         </div>
       </div>
       </div>
-    </div>
     </div>
     <!-- Activities -->
     <div ng-if = "submitData.proj.id" ng-controller="projActDTCtrl as padtc">
@@ -224,14 +224,14 @@
 
       <button class = "btn btn-success btn-sm" ng-click = "btnc.showRelated()">View Related Projects</button>
 
-      @if(Session::get('role') == config('constants.role_life')
-        || Session::get('role') == config('constants.role_head'))
+      @if(Session::get('role') == config('constants.role_champion')
+        || Session::get('role') == config('constants.role_exec'))
+        <button class = "btn btn-primary btn-sm" ng-click="btnc.showAttachments()" ng-if = "submitData.proj.proj_status_id == 1 || submitData.proj.proj_status_id == 5">
+            Add Attachments
+        </button>
+      @elseif(Session::get('role') == config('constants.role_finance'))
       <button class = "btn btn-primary btn-sm" ng-click="btnc.showAttachments()">
           View Attachments
-      </button>
-      @else
-      <button class = "btn btn-primary btn-sm" ng-click="btnc.showAttachments()" ng-if = "submitData.proj.proj_status_id == 1 || submitData.proj.proj_status_id == 5">
-          Add Attachments
       </button>
       @endif
   </div>

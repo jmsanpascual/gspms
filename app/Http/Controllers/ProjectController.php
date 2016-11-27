@@ -56,6 +56,7 @@ class ProjectController extends Controller
                 'resource_person_id',
                 'partner_organization',
                 'partner_community',
+                'remarks',
                 DB::Raw('"'. $token . '" AS token')
             ];
 
@@ -414,6 +415,8 @@ class ProjectController extends Controller
             $this->_addNotif($req, $findProj);
             $this->_deductFund($req, $findProj);
             $this->_addNotifFinance($req, $findProj);
+
+            logger($req);
             // missing check if for approval
             $stat = $proj->update([
                 'proj_status_id' => $req->get('id'),
