@@ -44,12 +44,12 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-2">Start Date</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.start_date" placeholder="Start Date"
+          <input type = "date" class = "form-control" ng-model = "submitData.proj.start_date" placeholder="Start Date"
           disabled>
         </div>
         <label class = "form-label col-md-2">Start Date</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.old_proj.start_date" placeholder="Start Date"
+          <input type = "date" class = "form-control" ng-model = "submitData.old_proj.start_date" placeholder="Start Date"
           disabled>
         </div>
       </div>
@@ -60,12 +60,12 @@
         <div class = "col-md-12">
         <label class = "form-label col-md-2">End Date</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.end_date" placeholder="End Date"
+          <input type = "date" class = "form-control" ng-model = "submitData.proj.end_date" placeholder="End Date"
           disabled>
         </div>
         <label class = "form-label col-md-2">End Date</label>
         <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.old_proj.end_date" placeholder="End Date"
+          <input type = "date" class = "form-control" ng-model = "submitData.old_proj.end_date" placeholder="End Date"
           disabled>
         </div>
       </div>
