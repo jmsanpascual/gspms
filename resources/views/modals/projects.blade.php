@@ -69,11 +69,11 @@
                 ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
             </div>
             <div ng-controller = "ProjBudgetCtrl as pbc" ng-init = "pbc.getTotalExpense(submitData.proj.id)">
-                <span ng-if = "pbc.total_expense && submitData.proj.id" >
+                <span ng-if = "pbc.expense.total && submitData.proj.id" >
                     <label class = "form-label col-md-2">Remaining Budget</label>
                     <div class = "col-md-4">
                         <input type = "text" class = "form-control" placeholder="Total Remaining Budget"
-                        disabled value = "@{{ submitData.proj.total_budget - pbc.total_expense}}">
+                        disabled value = "@{{ submitData.proj.total_budget - pbc.expense.total }}">
                     </div>
                 </span>
             </div>

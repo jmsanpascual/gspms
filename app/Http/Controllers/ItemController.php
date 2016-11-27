@@ -98,6 +98,8 @@ class ItemController extends Controller
 
                 // $data['items']['files'] = $this->_addAttachment($request);
 
+                $data['total_expense'] = $this->_getTotalExpense($br['proj_id']);
+
                 return $data;
             });
 
@@ -178,6 +180,7 @@ class ItemController extends Controller
             App\ProjectItemCategory::where('id', $id)->update($upd_arr);
 
             $data['items'] = $request;
+            $data['total_expense'] = $this->_getTotalExpense($upd_arr['proj_id']);
             // logger();
             $status = TRUE;
         }
@@ -251,14 +254,20 @@ class ItemController extends Controller
         return compact('items');
     }
 
+    public function _getTotalExpense($id)
+    {
+        return App\ProjectItemCategory::where('proj_id', $id)
+        ->sum(DB::raw('quantity * price'));
+    }
+
     public function getTotalExpense($id)
     {
         $msg = '';
         $status = FALSE;
         try {
-            $data['total_expense'] = App\ProjectItemCategory::where('proj_id', $id)
-            ->sum(DB::raw('quantity * price'));
+            $data['total_expense'] = $this->_getTotalExpense($id);
 
+            $status = TRUE;
         } catch(Exception $e) {
             logger($e);
             $msg = $e->getMessage();
