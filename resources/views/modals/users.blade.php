@@ -116,7 +116,8 @@
 				<label class = "form-label col-md-3">Birthdate</label>
 				<div class = "col-md-6">
 					<input type = "date" class = "form-control" ng-model = "submitData.users.bdate"
-					placeholder = "Enter Birthdate (mm/dd/yyyy)">
+					placeholder = "Enter Birthdate (mm/dd/yyyy)"
+					format-date>
 				</div>
 			</div>
 			</div>

@@ -32,12 +32,14 @@
         <label class = "form-label col-md-2">Start Date</label>
         <div class = "col-md-4">
           <input type = "date" class = "form-control" ng-model = "submitData.proj.start_date" placeholder="Start Date"
-          ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+          ng-disabled="{{Session::get('role') == config('constants.role_life')}}"
+          format-date>
         </div>
         <label class = "form-label col-md-2">End Date</label>
         <div class = "col-md-4">
           <input type = "date" class = "form-control" ng-model = "submitData.proj.end_date" placeholder="End Date"
-          ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+          ng-disabled="{{Session::get('role') == config('constants.role_life')}}"
+          format-date>
         </div>
       </div>
       </div>
@@ -61,17 +63,20 @@
     <div class = "form-group">
       <div class = "row">
         <div class = "col-md-12">
-        <!-- <label class = "form-label col-md-2">Status</label>
-        <div class = "col-md-4">
-          <select class = "form-control" ng-model = "submitData.proj.proj_status_id"
-          ng-options = "c.id as c.name for c in submitData.status">
-          </select>
-        </div> -->
-        <label class = "form-label col-md-2">Total Budget</label>
-        <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.total_budget" placeholder="Total Budget"
-          ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
-        </div>
+            <label class = "form-label col-md-2">Total Budget</label>
+            <div class = "col-md-4">
+                <input type = "text" class = "form-control" ng-model = "submitData.proj.total_budget" placeholder="Total Budget"
+                ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+            </div>
+            <div ng-controller = "ProjBudgetCtrl as pbc" ng-init = "pbc.getTotalExpense(submitData.proj.id)">
+                <span ng-if = "pbc.total_expense && submitData.proj.id" >
+                    <label class = "form-label col-md-2">Remaining Budget</label>
+                    <div class = "col-md-4">
+                        <input type = "text" class = "form-control" placeholder="Total Remaining Budget"
+                        disabled value = "@{{ submitData.proj.total_budget - pbc.total_expense}}">
+                    </div>
+                </span>
+            </div>
       </div>
       </div>
     </div>

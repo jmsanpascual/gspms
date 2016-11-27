@@ -251,4 +251,21 @@ class ItemController extends Controller
         return compact('items');
     }
 
+    public function getTotalExpense($id)
+    {
+        $msg = '';
+        $status = FALSE;
+        try {
+            $data['total_expense'] = App\ProjectItemCategory::where('proj_id', $id)
+            ->sum(DB::raw('quantity * price'));
+
+        } catch(Exception $e) {
+            logger($e);
+            $msg = $e->getMessage();
+        }
+        $data['status'] = $status;
+        $data['msg'] = $msg;
+
+        return $data;
+    }
 }

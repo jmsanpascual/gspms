@@ -31,12 +31,14 @@
         <label class = "form-label col-md-2">Start Date</label>
         <div class = "col-md-4">
           <input type = "date" class = "form-control" ng-model = "submitData.proj.start_date" placeholder="Start Date"
-          ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+          ng-disabled="{{Session::get('role') == config('constants.role_life')}}"
+          format-date>
         </div>
         <label class = "form-label col-md-2">End Date</label>
         <div class = "col-md-4">
           <input type = "date" class = "form-control" ng-model = "submitData.proj.end_date" placeholder="End Date"
-          ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+          ng-disabled="{{Session::get('role') == config('constants.role_life')}}"
+          format-date>
         </div>
       </div>
       </div>

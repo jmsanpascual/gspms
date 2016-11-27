@@ -120,6 +120,7 @@ Route::resource('budget-request', 'BudgetRequestController');
 Route::resource('budget-request-status', 'BudgetRequestStatusController');
 
 Route::get('items/getItemCategoryList/{id}', 'ItemController@itemCategoryList');
+Route::get('items/getTotalExpense/{proj_id}', 'ItemController@getTotalExpense');
 Route::get('items/names', 'ItemController@getAllItems');
 Route::get('items/price-recommendation', 'ItemController@getPriceRecommendation');
 Route::get('items/add', array(function () {

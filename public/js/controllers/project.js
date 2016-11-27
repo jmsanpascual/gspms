@@ -173,4 +173,21 @@ angular.module('project.controller', [
             });
         });
     }
+})
+
+.controller('ProjBudgetCtrl', function($http){
+    var vm = this;
+    vm.total_expense;
+    // vm.proj_id;
+    vm.getTotalExpense = getTotalExpense;
+    // activate();
+
+    function getTotalExpense(proj_id) {
+        if(!proj_id) return;
+        
+        $http.get('../items/getTotalExpense/'+proj_id).then(function(result) {
+            result = result.data;
+            vm.total_expense = result.total_expense;
+        });
+    }
 });

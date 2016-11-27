@@ -99,8 +99,8 @@ common.service('defaultModal', function($uibModal, $log){
                 resolveAttr[key] = config[key];
             }
         }
-        console.log('attr');
-        console.log(resolveAttr);
+        // console.log('attr');
+        // console.log(resolveAttr);
         // overwrite resolve
         config.resolve = {
              attr : function(){
@@ -165,13 +165,13 @@ common.service('formDataAPI', function(){
 
 // used by service
 common.controller('defaultModalInstanceCtrl', function ($scope, $uibModalInstance, attr, $http, formDataAPI) {
-    console.log('attr');
-    console.log(attr);
+    // console.log('attr');
+    // console.log(attr);
     $scope.submitData = (attr != undefined) ? attr : {};
     var changeClose = false;
     var postData;
     $scope.save = function (formData, withFile) {
-        console.log('formdata',formData);
+        // console.log('formdata',formData);
         var data = (formData == undefined) ? $scope.submitData : $scope.submitData[formData];
 
         if (data.resource) {
@@ -317,3 +317,15 @@ common.service('tmjLoading', function($timeout){
         angular.element(element).attr('disabled', false);
     }
 });
+common.directive("formatDate", function(){
+  return {
+   restrict: 'A',
+   require: 'ngModel',
+   scope: {
+       ngModel : '='
+   },
+    link: function(scope, elem, attr, modelCtrl) {
+        scope.ngModel = new Date(scope.ngModel);
+    }
+  }
+})
