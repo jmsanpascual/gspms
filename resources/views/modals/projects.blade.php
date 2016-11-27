@@ -172,9 +172,9 @@
                     <i class="fa fa-edit"></i>
                     </button>
                     @if(Session::get('role') == config('constants.role_champion'))
-                    <button class="btn btn-danger btn-sm" ng-if = "data.status_id != 4" ng-click="padtc.delete($index ,data)">
+                    <!-- <button class="btn btn-danger btn-sm" ng-if = "data.status_id != 4" ng-click="padtc.delete($index ,data)">
                        <i class="fa fa-trash-o"></i>
-                    </button>
+                    </button> -->
                     @endif
                 </span>
                 </td>

@@ -33,6 +33,7 @@
                       <tr>
                         <th>School Name</th>
                         <th>Amount</th>
+                        <th>Received Date</th>
                         <th>Year</th>
                       </tr>
                     </thead>
@@ -40,6 +41,7 @@
                       <tr ng-repeat = "fund in flc.schoolFunds">
                         <td ng-bind="fund.school.name"></td>
                         <td ng-bind="fund.amount"></td>
+                        <td ng-bind="fund.received_date"></td>
                         <td ng-bind="fund.year"></td>
                       </tr>
                     </tbody>

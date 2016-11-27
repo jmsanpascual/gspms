@@ -8,11 +8,11 @@ angular.module('project.activites.controller',
     'activityStatus.service'
     ])
 
-.controller('projActDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder,
+.controller('projActDTCtrl', function($rootScope, $scope, $compile, $timeout, DTOptionsBuilder, DTColumnDefBuilder,
     reqDef, defaultModal, ProjectActivitiesRestApi, activityStatusRestApi) {
     // $scope.proj_id = 1; //declared in modals/projects.blade.php
     var vm = this,
-        completedActivityId = 4,
+        approvedActivityId = 2,
         approvedActivityCount = 0;
 
     vm.message = '';
@@ -24,33 +24,79 @@ angular.module('project.activites.controller',
     vm.project_activities = [];
 
     // Watch the length of activities to update the percentage of progress bar
-    $scope.$watch('padtc.project_activities.length', function (newVal, oldVal) {
-        if (newVal == oldVal) return;
-        vm.percentage = (Math.round((approvedActivityCount / newVal) * 100)) + '%';
+    // $scope.$watch('padtc.project_activities.length', function (newVal, oldVal) {
+    //     if (newVal == oldVal) return;
+    //     vm.percentage = (Math.round((approvedActivityCount / newVal) * 100)) + '%';
+    // });
+
+    $rootScope.$on('update-percentage', function (event, percentage) {
+        // vm.percentage = Math.round((percentage / vm.project_activities.length)) + '%';
+        var activitiesLen = vm.project_activities.length,
+            subTaskPercentage = 0,
+            approvedTaskCount = 0;
+
+        for (var i = 0; i < activitiesLen; i++) {
+
+            if (vm.project_activities[i].status_id == approvedActivityId) {
+                  var tasks = vm.project_activities[i].tasks,
+                      tasksLen = tasks.length;
+
+                  approvedTaskCount = 0;
+
+                  for (var x = 0;  x < tasksLen; x++) {
+                      if (tasks[x].done) {
+                          approvedTaskCount++;
+                      }
+                  }
+
+                  subTaskPercentage += (Math.round((approvedTaskCount / tasksLen) * 100));
+            }
+        }
+
+        if (activitiesLen > 0) {
+            vm.percentage = Math.round((subTaskPercentage / activitiesLen)) + '%';
+        } else {
+            vm.percentage = '0%';
+        }
     });
 
     this.getProjActivities = function(proj_id)
     {
         ProjectActivitiesRestApi.query({proj_id : $scope.proj_id}).$promise.then(function (result) {
            result = result[0];
-           console.log('Tasks:', result);
-          if (result.status) {
-              console.log('proj');
-              console.log(result.proj);
 
+          if (result.status) {
               vm.project_activities =  result.proj_activities;
-              var activitiesLen = result.proj_activities.length;
+              var activitiesLen = result.proj_activities.length,
+                  subTaskPercentage = 0,
+                  approvedTaskCount = 0;
 
               for (var i = 0; i < activitiesLen; i++) {
-                  if (result.proj_activities[i].status_id == completedActivityId) {
-                      approvedActivityCount++;
+
+                  if (result.proj_activities[i].status_id == approvedActivityId) {
+                        var tasks = result.proj_activities[i].tasks,
+                            tasksLen = tasks.length;
+
+                        approvedTaskCount = 0;
+
+                        for (var x = 0;  x < tasksLen; x++) {
+                            if (tasks[x].done) {
+                                approvedTaskCount++;
+                            }
+                        }
+
+                        subTaskPercentage += (Math.round((approvedTaskCount / tasksLen) * 100));
                   }
               }
 
-              if (approvedActivityCount > 0) {
-                  vm.percentage = (Math.round((approvedActivityCount / activitiesLen) * 100)) + '%';
+              if (activitiesLen > 0) {
+                  $timeout(function () {
+                      vm.percentage = Math.round((subTaskPercentage / activitiesLen)) + '%';
+                  }, 500);
               } else {
-                  vm.percentage = '0%';
+                  $timeout(function () {
+                      vm.percentage = '0%';
+                  }, 500);
               }
           } else {
               alert('Unable to load datatable');
@@ -117,6 +163,25 @@ angular.module('project.activites.controller',
         defaultModal.showModal(attr).result.then(function(data){
             console.log(data);
             vm.project_activities.splice(index, 1, angular.copy(data.projAct));
+
+            if (data.taskIds) {
+                var taskIds = data.taskIds,
+                    taskIdsLen = taskIds.length,
+                    tempLen = vm.project_activities[index].tasks.length;
+
+                for (var i = 0; i < taskIdsLen; i++) {
+                    var taskId = taskIds[i];
+
+                    for (var x = 0; x < tempLen; x++) {
+                        var origTask = vm.project_activities[index].tasks[x];
+
+                        if (origTask.name == taskId.name) {
+                            origTask.id = taskId.id;
+                            console.log('Name Match', origTask, taskId);
+                        }
+                    }
+                }
+            }
         });
     }
 
@@ -152,7 +217,8 @@ angular.module('project.activites.controller',
 .controller('ActivityTaskController', function ($scope, $rootScope) {
     var tasks =  $scope.submitData.projAct.tasks,
         taskLen = !tasks ? 0 : tasks.length,
-        approvedTaskCount = 0;
+        approvedTaskCount = 0,
+        percentage = undefined;
 
     $scope.percentage = '0%';
 
@@ -182,7 +248,11 @@ angular.module('project.activites.controller',
         }
 
         if (approvedTaskCount > 0) {
-            $scope.percentage = (Math.round((approvedTaskCount / taskLen) * 100)) + '%';
+            percentage = (Math.round((approvedTaskCount / taskLen) * 100));
+            $scope.percentage = percentage + '%';
+            // $scope.submitData.projAct
+        } else {
+            percentage = 0;
         }
     });
 
@@ -197,7 +267,16 @@ angular.module('project.activites.controller',
         }
 
         if (approvedTaskCount > 0) {
-            $scope.percentage = (Math.round((approvedTaskCount / taskLen) * 100)) + '%';
+            percentage = (Math.round((approvedTaskCount / taskLen) * 100));
+            $scope.percentage = percentage + '%';
+        } else {
+            percentage = 0;
+        }
+    });
+
+    $scope.$on('$destroy', function () {
+        if (percentage != undefined && $scope.submitData.projAct.status_id == 2) {
+            $rootScope.$emit('update-percentage', percentage);
         }
     });
 })

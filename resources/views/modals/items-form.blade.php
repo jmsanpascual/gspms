@@ -131,7 +131,7 @@
 		<span class="pull-left">@{{ prc.priceRecommendation }}</span>
 		<button class = "btn btn-info" ng-click="prc.getPriceRecommendation(submitData.items)">Average Price</button>
 	</span>
-	{{(Session::get('role') == config('constants.role_champion'))}}
+
 	<button class = "btn btn-success" ng-click="save('items')" ng-if = "(!submitData.items.id && {{(int)(Session::get('role') == config('constants.role_champion'))}})
 	|| (submitData.items.id && {{(int)(Session::get('role') == config('constants.role_finance'))}})">Save</button>
 @stop
