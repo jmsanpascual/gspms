@@ -23,4 +23,5 @@ return [
     'project_assigned_remove' => 'project :name was removed from your assignment.',
     'project_edited' => 'project :name was edited and needs your approval.',
     'project_added' => 'project :name was newly added and needs your approval.',
+    'project_approval' => 'project :name needs your approval.',
 ];

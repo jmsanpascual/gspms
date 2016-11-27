@@ -269,7 +269,7 @@ class ProjectController extends Controller
     {
         try {
             logger($proj);
-            if($proj['proj_status_id'] != 2) return;
+            if($proj['proj_status_id'] != config('constants.proj_status_for_approval_finance')) return;
 
             if($edit) {
                 // notify finance of edited project
@@ -419,6 +419,7 @@ class ProjectController extends Controller
             $this->_addNotif($req, $findProj);
             $this->_deductFund($req, $findProj);
             $this->_addNotifFinance($req, $findProj);
+            $this->_addNotifLife($req, $findProj);
 
             logger($req);
             // missing check if for approval
@@ -447,7 +448,46 @@ class ProjectController extends Controller
 
     public function _addNotifFinance($req, $proj)
     {
+        if($proj['proj_status_id'] != config('constants.proj_status_for_approval_finance')) return;
+        // if project  completed notify except champion
+        try {
+            // notify finance of edited project
+            $finance = config('constants.role_finance');
+            $finance_emp = UserRoles::where('role_id', $finance)->lists('user_id');
 
+            $data = [
+                'title' => 'Project Needs an Approval',
+                'text' => trans('notifications.project_approval', ['name' => $proj->name]),
+                'proj_id' => $proj->id,
+                'user_ids' => $finance_emp
+            ];
+
+            $this->saveNotif($data);
+        } catch(Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function _addNotifLife($req, $proj)
+    {
+        if($proj['proj_status_id'] != config('constants.proj_status_for_approval_life')) return;
+        // if project  completed notify except champion
+        try {
+            // notify finance of edited project
+            $role = config('constants.role_life');
+            $user_ids = UserRoles::where('role_id', $role)->lists('user_id');
+
+            $data = [
+                'title' => 'Project Needs an Approval',
+                'text' => trans('notifications.project_approval', ['name' => $proj->name]),
+                'proj_id' => $proj->id,
+                'user_ids' => $user_ids
+            ];
+
+            $this->saveNotif($data);
+        } catch(Exception $e) {
+            throw $e;
+        }
     }
 
     public function _deductFund($req, $proj)
