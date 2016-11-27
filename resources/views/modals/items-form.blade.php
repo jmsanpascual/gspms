@@ -74,7 +74,7 @@
 		</div>
 		<div class = "form-group">
 			<div class = "row">
-				<label class = "form-label col-md-4">Price</label>
+				<label class = "form-label col-md-4">Price per (@{{submitData.items.quantity_label}}) </label>
 				<div class = "col-md-6">
 					<input type = "text" class = "form-control" ng-model = "submitData.items.price"
 					placeholder = "Enter Price">
