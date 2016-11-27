@@ -176,15 +176,16 @@ class ProjectActivitiesController extends Controller
             $id = App\Activities::where('id', $act_id)->update($activity);
             // $stat = App\ActivityStatus::where('id', $activity['status_id'])->value('name');
 
+            $taskIds = [];
+
             if (! empty($tasks)) {
                 // Update the tasks
                 foreach ($tasks as $key => $value) {
                     // Update the activity tasks
                     if (!isset($tasks[$key]['id'])) {
                         $tasks[$key]['activity_id'] = $act_id;
-                        App\ActivityTask::insert($tasks[$key]);
-                    } else {
-                        App\ActivityTask::where('id', $tasks[$key]['id'])->update($tasks[$key]);
+                        $taskId = App\ActivityTask::insertGetId($tasks[$key]);
+                        $taskIds[] = ['id' => $taskId, 'name' => $tasks[$key]['name']];
                     }
                 }
             }
@@ -202,6 +203,7 @@ class ProjectActivitiesController extends Controller
         }
         $data['status'] = $status;
         $data['msg'] = $msg;
+        $data['taskIds'] = $taskIds;
 
         return Response::json($data);
     }
@@ -264,5 +266,10 @@ class ProjectActivitiesController extends Controller
 
         $data['status'] = TRUE;
         return $data;
+    }
+
+    public function deleteTask($id) {
+        App\ActivityTask::where('id', $id)->delete();
+        return;
     }
 }

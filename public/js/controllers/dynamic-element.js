@@ -28,7 +28,7 @@ angular.module('dynamicElement', [])
     }
 })
 
-.controller('DynamicElementTaskController', function ($scope, $rootScope, defaultModal) {
+.controller('DynamicElementTaskController', function ($scope, $rootScope, $http, defaultModal) {
     var arrayCount = getLen();
     $scope.fields = arrayCount.length <= 0 ? [{id: 0}] : arrayCount;
     $scope.$parent.submitData.projAct.tasks = !$scope.$parent.submitData.projAct.tasks ? [] : $scope.$parent.submitData.projAct.tasks;
@@ -39,8 +39,19 @@ angular.module('dynamicElement', [])
     };
 
     $scope.removeField = function (index) {
+        var task = $scope.$parent.submitData.projAct.tasks[index];
         $scope.fields.splice(index, 1);
-        $scope.$parent.submitData.projAct.tasks.splice(index, 1);
+
+        if (task.id) {
+            $http.delete('../delete-task/' + task.id).then(function () {
+                $scope.$parent.submitData.projAct.tasks.splice(index, 1);
+                $rootScope.$on('update-percentage');
+            }, function (error) {
+
+            });
+        } else {
+            $scope.$parent.submitData.projAct.tasks.splice(index, 1);
+        }
     };
 
     $scope.doneAndUndoneTasks = function (task) {

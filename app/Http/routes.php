@@ -96,6 +96,7 @@ Route::get('add-task-remarks-view', function () {
     return view('modals/task-remarks');
 });
 Route::post('add-task-remarks', 'ProjectActivitiesController@addTaskRemarks');
+Route::delete('delete-task/{id}', 'ProjectActivitiesController@deleteTask');
 
 Route::resource('budget', 'BudgetController');
 
