@@ -20,15 +20,9 @@ angular.module('budget.request.controller',
 
     this.getProjBudgetReq = function()
     {
-        console.log('proj_id');
-        console.log($scope.proj_id);
         BudgetRequestRestApi.query({proj_id : $scope.proj_id}).$promise.then(function (result) {
-           console.log(result);
            result = result[0];
-           console.log(result);
           if (result.status) {
-              console.log('request');
-              console.log(result.budget_requests);
               vm.budget_requests =  result.budget_requests;
           } else {
               alert('Unable to load datatable');
@@ -92,7 +86,6 @@ angular.module('budget.request.controller',
         attr.brequest.proj_id = $scope.proj_id;
 
         defaultModal.showModal(attr).result.then(function(data){
-            console.log(data);
             vm.budget_requests.splice(index, 1, angular.copy(data.brequest));
         });
     }

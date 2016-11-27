@@ -9,7 +9,7 @@ angular.module('items.controller',
     ])
 
 .controller('ItemCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder,
-    defaultModal, ItemsRestApi, CategoriesRestApi, $http) {
+    defaultModal, ItemsRestApi, CategoriesRestApi, $http, ExpenseManager) {
     // $scope.proj_id = 1; //declared in modals/projects.blade.php
     var vm = this;
     vm.message = '';
@@ -17,6 +17,7 @@ angular.module('items.controller',
     vm.delete = deleteRow;
     vm.dtInstance = {};
     vm.items = [];
+    vm.expense = ExpenseManager.get();
 
     this.getProjItems = function()
     {
@@ -77,6 +78,7 @@ angular.module('items.controller',
 
         defaultModal.showModal(attr).result.then(function(data){
             console.log(data);
+            vm.expense.total = data.total_expense;
             vm.items.push(data.items);
         });
 
@@ -96,6 +98,7 @@ angular.module('items.controller',
 
         defaultModal.showModal(attr).result.then(function(data){
             console.log(data);
+            vm.expense.total = data.total_expense;
             vm.items.splice(index, 1, angular.copy(data.items));
         });
     }
@@ -180,7 +183,6 @@ angular.module('items.controller',
             vm.itemName = vm.itemNames[0];
         } else {
             for (var i = 0; i < itemsLen; i++) {
-
                 if (($scope.$parent.submitData.items['item_name'] || '').toLowerCase() == vm.itemNames[i].name.toLowerCase()) {
                     vm.itemName = vm.itemNames[i];
                 } else {

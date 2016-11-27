@@ -9,13 +9,12 @@
 		<input type ="hidden" ng-model = "submitData.attachment.project_id">
 		<input type ="hidden" ng-model = "submitData.attachment.token">
 		<div class = "form-group" ng-controller="ProjItemController as pic">
-			@{{ submitData.attachment.proj_item_category_id }}
-			<div class = "row" ng-init = "pic.getItemList(submitData.attachment.project_id)">
+			<div class = "row">
 				<label class = "form-label col-md-4">Item Name</label>
-				<div class = "col-md-6">
+				<div class = "col-md-6" ng-init = "submitData.attachment.proj_item_category_id = submitData.attachment.proj_item_category_id || ''">
 					<select class = "form-control"
 						ng-model="submitData.attachment.proj_item_category_id"
-					ng-options = "data.id as data.item_name for data in pic.items">
+					ng-options = "data.id as data.item_name for data in pic.items" ng-change = "pic.getAttachment(submitData)">
 					</select>
 				</div>
 			</div>

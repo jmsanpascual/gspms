@@ -62,7 +62,8 @@
             // Add to datatable
             modal.result.then(function(data){
                 toast.success(data.msg);
-                vm.attachments.push(data.attachment);
+                if(data.action == 'insert')
+                    vm.attachments.push(data.attachment);
             });
         }
 
@@ -115,10 +116,11 @@
         'toast',
         'ProjectAttachment',
         'defaultModal',
-        '$http'
+        '$http',
+        'ProjectAttachmentManager'
     ];
 
-    function ProjectAttachmentFormController(toast, ProjectAttachment, defaultModal, $http) {
+    function ProjectAttachmentFormController(toast, ProjectAttachment, defaultModal, $http, ProjectAttachmentManager) {
         var vm = this;
         vm.delete = deleteFile;
         vm.showFiles = showFiles;
@@ -127,7 +129,8 @@
         function showFiles(proj_attachment_id) {
             $http.get('../project-attachments/showFiles/'+ proj_attachment_id).then(function(result){
                 result = result.data;
-                vm.files = result.files;
+                ProjectAttachmentManager.set(result.files);
+                vm.files = ProjectAttachmentManager.get();
             });
         }
 
@@ -150,19 +153,69 @@
         }
     }
 
-    ProjItemController.$inject = ['$http'];
+    ProjItemController.$inject = ['$http', 'ProjectAttachmentManager', '$scope'];
 
-    function ProjItemController($http) {
+    function ProjItemController($http, ProjectAttachmentManager, $scope) {
         var vm = this;
         vm.items = [];
+        vm.files = [];
         vm.getItemList = getItemList;
-        function getItemList(proj_id) {
+        vm.getAttachment = getAttachment;
+
+        getItemList();
+
+        function getItemList() {
+            var proj_id = $scope.submitData.attachment.project_id;
             $http.get('../items/getItemCategoryList/' + proj_id).then(function(result) {
                 result = result.data;
-                console.log(result);
-                console.log(result.items);
                 vm.items = result.items
                 vm.items.unshift({id:'', item_name:'N/A'});
+            });
+        }
+
+        // function getItemList(proj_id) {
+        //    // vm.project_id = $scope.submitData.attachment.project_id;
+        //     $http.get('../items/getItemCategoryList/' + proj_id).then(function(result) {
+        //         result = result.data;
+        //         console.log(result);
+        //         console.log(result.items);
+        //         vm.items = result.items
+        //         vm.items.unshift({id:'', item_name:'N/A'});
+        //     });
+        // }
+
+        function getAttachment(submitData) {
+            var attachment = submitData.attachment;
+            if(!attachment.proj_item_category_id) {
+                submitData.saveUrl = '../project-attachments/save';
+                submitData.action = 'Add';
+
+                attachment.id = '';
+                attachment.subject = '';
+                attachment.description = '';
+                return;
+            }
+
+            $http.get('../project-attachments/find/'+ attachment.proj_item_category_id).then(function(result) {
+                result= result.data;
+
+                result = result.attachment || {};
+                attachment.id = result.id || '';
+                attachment.subject = result.subject || '';
+                attachment.description = result.description || '';
+
+                submitData.saveUrl = (attachment.id) ? '../project-attachments/update' : '../project-attachments/save';
+                submitData.action = (attachment.id) ? 'Edit' : 'Add';
+
+                // if(!attachment.id) return;
+                // //get files
+                // $http.get('../project-attachments/showFiles/'+ attachment.id).then(function(result){
+                //     result = result.data;// result.files
+                //     vm.files = ProjectAttachmentManager.get();
+                //     for(var key in result.files) {
+                //         vm.files.push(result.files[key]);
+                //     }
+                // });
             });
         }
     }

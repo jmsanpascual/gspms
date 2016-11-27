@@ -127,8 +127,8 @@ class ProjectAttachmentController extends Controller
 
                 return $proj_attachment;
             });
-            logger('proj attachment --------------------');
-            logger($data['attachment']);
+            // logger('proj attachment --------------------');
+            // logger($data['attachment']);
             // $data['attachment'] = $br;
             // $data['attachment']['id'] = $id;
             // $data['attachment']['name'] = $creator;
@@ -140,7 +140,7 @@ class ProjectAttachmentController extends Controller
         }
         $data['msg'] = $msg;
         $data['status'] = $status;
-
+        $data['action'] = 'insert';
         return response()->json($data);
     }
 
@@ -215,6 +215,7 @@ class ProjectAttachmentController extends Controller
         $data['msg'] = $msg;
         $data['status'] = $status;
 
+        $data['action'] = 'update';
         return response()->json($data);
     }
 
@@ -273,5 +274,30 @@ class ProjectAttachmentController extends Controller
         $data['msg'] = $msg;
         $data['status'] = $status;
         return response()->json($data);
+    }
+
+    public function find($id)
+    {
+        $status = FALSE;
+        $msg = '';
+        try {
+            $itemCategory = ProjectAttachment::where('proj_item_category_id', $id)->first();
+
+            if(!EMPTY($itemCategory)) {
+                $data['attachment'] = $itemCategory;
+                $data['saveUrl'] = '../project-attachments/update';
+                $data['action'] = 'Edit';
+            }
+
+            $status = true;
+        } catch (Exception $e) {
+            $msg =  $e->getMessage();
+            logger($e);
+        }
+
+        $data['msg'] = $msg;
+        $data['status'] = $status;
+
+        return $data;
     }
 }

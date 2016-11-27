@@ -140,6 +140,7 @@ Route::get('project-attachments/add', array(function () {
 }));
 Route::get('project-attachments/find/{id}', 'ProjectAttachmentController@find');
 Route::post('project-attachments/update', 'ProjectAttachmentController@update');
+Route::post('project-attachments/save', 'ProjectAttachmentController@store');
 Route::get('project-attachments/showFiles/{id}', 'ProjectAttachmentController@showFiles');
 Route::delete('project-attachments/deleteFile/{id}', 'ProjectAttachmentController@destroyAttachment');
 Route::resource('project-attachments', 'ProjectAttachmentController');
