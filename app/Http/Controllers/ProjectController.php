@@ -225,7 +225,8 @@ class ProjectController extends Controller
             // logger($project);
             $objectives = $project['objective']; // Store the array objectives
             unset($project['token']);
-
+            if($project['resource_person_id'] == 'NA')
+                $project['resource_person_id'] = NULL;
             // Convert array obkectives to concatenated string using the delimiter
             foreach($project['objective'] as $key => $value) {
                if (empty($temp)) $temp .= $value;
@@ -344,6 +345,9 @@ class ProjectController extends Controller
             unset($upd_arr['id']);
             unset($upd_arr['status']);
             unset($upd_arr['token']);
+
+            if($upd_arr['resource_person_id'] == 'NA')
+                $upd_arr['resource_person_id'] = NULL;
 
             // Convert array objectives to concatenated string using the delimiter
             foreach($upd_arr['objective'] as $key => $value) {

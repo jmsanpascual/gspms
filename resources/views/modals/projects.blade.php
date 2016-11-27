@@ -93,8 +93,8 @@
         </div>
         @endif
         <label class = "form-label col-md-2">Resource Person</label>
-        <div class = "col-md-4">
-          <select class = "form-control" ng-init="submitData.proj.resource_person_id = submitData.resource.id" ng-model = "submitData.proj.resource_person_id"
+        <div class = "col-md-4" ng-init = "submitData.proj.resource_person_id = submitData.resource.id || 'NA'">
+          <select class = "form-control" ng-model = "submitData.proj.resource_person_id"
           ng-options = "rp.id as rp.name for rp in submitData.resource_person" ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
           </select>
         </div>
