@@ -260,8 +260,7 @@
 		@endif
 	</span>
 	@if(Session::get('role') == config('constants.role_champion') ||
-		Session::get('role') == config('constants.role_exec') ||
-    Session::get('role') == config('constants.role_life'))
+		Session::get('role') == config('constants.role_exec'))
 	<button class = "btn btn-success btn-sm" ng-if = "submitData.proj.proj_status_id != 3" ng-click="save('proj')">Save</button>
 	@endif
 @stop

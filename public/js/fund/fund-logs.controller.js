@@ -12,21 +12,22 @@
         var vm = this;
 
         vm.dtInstance = {};
-        vm.schoolFunds = [];
+        vm.funds = [];
 
         vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
         vm.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0),
             DTColumnDefBuilder.newColumnDef(1),
             DTColumnDefBuilder.newColumnDef(2),
-            DTColumnDefBuilder.newColumnDef(3)
+            DTColumnDefBuilder.newColumnDef(3),
+            DTColumnDefBuilder.newColumnDef(4)
         ];
 
         activate();
 
         function activate() {
             $http.get('../funds/school-funds').then(function (result) {
-                vm.schoolFunds = result.data;
+                vm.funds = result.data;
             });
         }
     }

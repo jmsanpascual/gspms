@@ -8,10 +8,10 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Fund;
 use App\SchoolFund;
+use App\ProjectFund;
 use Response;
 use Log;
 use DB;
-
 class FundController extends Controller
 {
     public function index()
@@ -63,6 +63,9 @@ class FundController extends Controller
 
     function getSchoolFunds()
     {
-        return SchoolFund::with('school')->get();
+        $school_fund = SchoolFund::with('referer')->get()->toArray();
+        $proj_fund = ProjectFund::with('referer')->get()->toArray();
+        $fund = array_merge($school_fund, $proj_fund);
+        return $fund;
     }
 }

@@ -13,8 +13,17 @@ class SchoolFund extends Model
         'received_date',
     ];
 
-    public function school()
+    protected $appends = [
+        'type'
+    ];
+
+    public function getTypeAttribute()
     {
-        return $this->belongsTo('App\School');
+        return 'School';
+    }
+
+    public function referer()
+    {
+        return $this->hasOne('App\School', 'id');
     }
 }

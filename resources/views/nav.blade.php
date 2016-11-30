@@ -31,7 +31,7 @@
                 </li>
 
                 <li>
-                    <a href="../notifications/lists">Check all messages <i class="fa fa-angle-right"></i></a>
+                    <a href="/gspms/public/notifications/lists">Check all messages <i class="fa fa-angle-right"></i></a>
                 </li>
             </ul>
 

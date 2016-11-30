@@ -420,8 +420,8 @@ class ProjectController extends Controller
             $this->_deductFund($req, $findProj);
             $this->_addNotifFinance($req, $findProj);
             $this->_addNotifLife($req, $findProj);
-
-            logger($req);
+            $this->_completedProj($req, $findProj);
+            // logger($req);
             // missing check if for approval
             $stat = $proj->update([
                 'proj_status_id' => $req->get('id'),
@@ -449,7 +449,6 @@ class ProjectController extends Controller
     public function _addNotifFinance($req, $proj)
     {
         if($proj['proj_status_id'] != config('constants.proj_status_for_approval_finance')) return;
-        // if project  completed notify except champion
         try {
             // notify finance of edited project
             $finance = config('constants.role_finance');
@@ -463,6 +462,34 @@ class ProjectController extends Controller
             ];
 
             $this->saveNotif($data);
+        } catch(Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function _completedProj($req, $proj)
+    {
+        if($req->id != config('constants.proj_status_completed')) return;
+        // if project  completed check for remaining budget and add it in the current year funds
+        try {
+            $total_expense = App\ProjectItemCategory::where('proj_id', $proj['id'])
+            ->sum(DB::raw('quantity * price'));
+            $remaining_funds = $proj['total_budget'] - $total_expense;
+
+            $year = date('Y');
+
+            $ins = [
+                'project_id' => $proj['id'],
+                'amount' => $remaining_funds,
+                'year' => $year,
+                'received_date' => date('Y-m-d H:i:s'),
+                'created_at' => date('Y-m-d H:i:s'),
+            ];
+
+            App\ProjectFund::insert($ins);
+            // update remaining funds
+            App\Fund::where('year', $year)->increment('remaining_funds', $remaining_funds);
+
         } catch(Exception $e) {
             throw $e;
         }
