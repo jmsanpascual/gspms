@@ -230,6 +230,7 @@ class ItemController extends Controller
     {
         $item = $request->all();
         $forApproval = 2;
+        $forApproval2 = 6;
         $recommendedPrice = 'Unavailable';
         $categoryId = $item['category_id'];
         $yearAgo = date('Y-m-d', strtotime('-1 years'));
@@ -240,7 +241,7 @@ class ItemController extends Controller
             return compact('recommendedPrice');
         }
 
-        $projectIds = Project::where('proj_status_id', '!=', $forApproval)
+        $projectIds = Project::whereNotIn('proj_status_id', [2, 4, 6])
                     ->where('start_date', '>', $yearAgo)->pluck('id');
         // logger($projectIds);
 
