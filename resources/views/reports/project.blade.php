@@ -68,17 +68,25 @@
 		<td>Organization</td>
 		<td>{{$proj->partner_organization}}</td>
 		<td>Community</td>
-		<td>{{$proj->community}}</td>
+		<td>{{$proj->partner_community}}</td>
 	</tr>
 	<tr>
 		<td>Champion</td>
 		<td>{{$proj->champ_name}}</td>
 		<td>Resource Person</td>
-		<td>{{$proj->rp_name}}</td>
+		<td>{{$proj->first_name . ' ' . $proj->middle_name . ' ' . $proj->last_name}}</td>
+	</tr>
+	<tr>
+		<td colspan = "2">Initial Budget</td>
+		<td colspan = "2">P {{number_format($proj->total_budget,2)}}</td>
+	</tr>
+	<tr>
+		<td colspan = "2">Total Budget Request</td>
+		<td colspan = "2">P {{number_format($total_budget_request,2)}}</td>
 	</tr>
 	<tr>
 		<td colspan = "2">Total Budget</td>
-		<td colspan = "2">P {{number_format($proj->total_budget,2)}}</td>
+		<td colspan = "2">P {{number_format($total_budget,2)}}</td>
 	</tr>
 	<tr>
 		<td colspan = "2">Total Expense</td>
