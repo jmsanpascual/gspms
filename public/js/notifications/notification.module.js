@@ -20,5 +20,6 @@
             'upload',
             'toast',
             'project-related',
+            'project.controller'
         ]);
 })();

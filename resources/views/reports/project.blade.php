@@ -102,21 +102,21 @@
 	</tr>
 	<tr>
 		<td colspan = "2">Total Work Done (TWD)</td>
-		<td colspan = "2"></td>
+		<td colspan = "2">{{$duration}}</td>
 	</tr>
 	<tr>
 		<td colspan = "2">Budget at Completion (BAC) </td>
 		<td colspan = "2">{{number_format($proj->total_budget - $total_expense,2)}}</td>
 	</tr>
-	<tr>
+	<!-- <tr>
 		<td colspan = "2">Earned Value (EV)</td>
 		<td colspan = "2"></td>
-	</tr>
-	<tr>
+	</tr> -->
+	<!-- <tr>
 		<td colspan = "2">Actual Cost (AC)</td>
-		<td colspan = "2"></td>
-	</tr>
-	<tr>
+		<td colspan = "2">{{number_format($total_expense,2)}}</td>
+	</tr> -->
+	<!-- <tr>
 		<td colspan = "2">Cost Performance Index (CPI)</td>
 		<td colspan = "2"></td>
 	</tr>
@@ -132,7 +132,7 @@
 		<td colspan = "4">
 			<img src = "{{route('proj_chart', ['id' => 1 ])}}">
 		</td>
-	</tr>
+	</tr> -->
 </tbody>
 </table>
     {!! HTML::script('js/others/jquery-1.12.0.min.js') !!}

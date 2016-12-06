@@ -117,8 +117,8 @@ class ProjectController extends Controller
                 $data['proj'][$key]->objective = $temp;
 
                 if(!EMPTY($related)) {
-                    $start_date =  Carbon::createFromFormat('Y-m-d h:i:s', $data['proj'][$key]->start_date);
-                    $end_date =  Carbon::createFromFormat('Y-m-d h:i:s', $data['proj'][$key]->end_date);
+                    $start_date =  Carbon::createFromFormat('Y-m-d H:i:s', $data['proj'][$key]->start_date);
+                    $end_date =  Carbon::createFromFormat('Y-m-d H:i:s', $data['proj'][$key]->end_date);
                     $days = $end_date->diffInDays($start_date);
                     $duration = $this->_convertToYearMonthDays($days);
 
@@ -172,13 +172,13 @@ class ProjectController extends Controller
             $years = floor($months/$yearMonths);
             //get the remainder for months
             $months = $months%$yearMonths;
-
         }
 
         $format = $years . ' yr(s). '. $months . ' mo(s). ';
 
         return $format;
     }
+
     public function create()
     {
         return view('create-project');
@@ -268,7 +268,7 @@ class ProjectController extends Controller
     private function _notifyFinance($proj, $edit = FALSE)
     {
         try {
-            logger($proj);
+            // logger($proj);
             if($proj['proj_status_id'] != config('constants.proj_status_for_approval_finance')) return;
 
             if($edit) {
@@ -283,7 +283,7 @@ class ProjectController extends Controller
                     'user_ids' => $finance_emp
                 ];
 
-                $this->saveNotif($data);
+                return $this->saveNotif($data);
             }
 
             $finance = config('constants.role_finance');
@@ -455,7 +455,7 @@ class ProjectController extends Controller
             $finance_emp = UserRoles::where('role_id', $finance)->lists('user_id');
 
             $data = [
-                'title' => 'Project Needs an Approval',
+                'title' => 'Project Approval',
                 'text' => trans('notifications.project_approval', ['name' => $proj->name]),
                 'proj_id' => $proj->id,
                 'user_ids' => $finance_emp
@@ -505,7 +505,7 @@ class ProjectController extends Controller
             $user_ids = UserRoles::where('role_id', $role)->lists('user_id');
 
             $data = [
-                'title' => 'Project Needs an Approval',
+                'title' => 'Project Approval',
                 'text' => trans('notifications.project_approval', ['name' => $proj->name]),
                 'proj_id' => $proj->id,
                 'user_ids' => $user_ids
@@ -603,6 +603,12 @@ class ProjectController extends Controller
             ->sum(DB::raw('quantity * price'));
 
             $data['proj_id'] = $id;
+
+            $start_date =  Carbon::createFromFormat('Y-m-d H:i:s',$data['proj']->start_date);
+            $end_date =  Carbon::createFromFormat('Y-m-d H:i:s', $data['proj']->end_date);
+            $days = $end_date->diffInDays($start_date);
+            $data['duration'] = $this->_convertToYearMonthDays($days);
+
             // $data['chart'] = $this->createChart($id);
             $html = view('reports/project', $data);
             $html = utf8_encode($html);
@@ -614,6 +620,7 @@ class ProjectController extends Controller
         }
         catch(\Exception $e)
         {
+
             $msg = $e->getMessage();
         }
         $data['status'] = $status;

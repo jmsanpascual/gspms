@@ -63,20 +63,29 @@
     <div class = "form-group">
       <div class = "row">
         <div class = "col-md-12">
-            <label class = "form-label col-md-2">Total Budget</label>
+            <label class = "form-label col-md-2">Initial Budget</label>
             <div class = "col-md-4">
                 <input type = "text" class = "form-control" ng-model = "submitData.proj.total_budget" placeholder="Total Budget"
                 ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
             </div>
-            <div ng-controller = "ProjBudgetCtrl as pbc" ng-init = "pbc.getTotalExpense(submitData.proj.id)">
-                <span ng-if = "pbc.expense.total && submitData.proj.id" >
-                    <label class = "form-label col-md-2">Remaining Budget</label>
-                    <div class = "col-md-4">
-                        <input type = "text" class = "form-control" placeholder="Total Remaining Budget"
-                        disabled value = "@{{ submitData.proj.total_budget - pbc.expense.total }}">
-                    </div>
-                </span>
+        </div>
+      </div>
+    </div>
+    <div class = "form-group" ng-controller = "ProjBudgetCtrl as pbc" ng-init = "pbc.getTotalExpense(submitData.proj.id); pbc.getTotalBudget(submitData.proj.id)">
+      <div class = "row">
+        <div class = "col-md-12">
+            <label class = "form-label col-md-2">Total Budget</label>
+            <div class = "col-md-4">
+                <input type = "text" class = "form-control" disabled value = "@{{ +submitData.proj.total_budget + +pbc.budget.total }}"
+                placeholder="Total Budget" disabled>
             </div>
+            <span ng-if = "pbc.expense.total && submitData.proj.id" >
+                <label class = "form-label col-md-2">Remaining Budget</label>
+                <div class = "col-md-4">
+                    <input type = "text" class = "form-control" placeholder="Total Remaining Budget"
+                    disabled value = "@{{ +submitData.proj.total_budget + +pbc.budget.total - pbc.expense.total }}">
+                </div>
+            </span>
       </div>
       </div>
     </div>
