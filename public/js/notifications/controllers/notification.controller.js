@@ -33,6 +33,8 @@
             ResourcePerson.getResourcePersons().then(function (resourcePersons) {
                 console.log('Resource Persons:', resourcePersons);
                 $scope.resourcePersons = resourcePersons;
+                $scope.resourcePersons.unshift({id:'NA', name: 'No Resource Person'});
+
             });
 
             // instantiate program
@@ -131,6 +133,7 @@
             ResourcePerson.getResourcePersons().then(function (resourcePersons) {
                 console.log('Resource Persons:', resourcePersons);
                 $scope.resourcePersons = resourcePersons;
+                $scope.resourcePersons.unshift({id:'NA', name: 'No Resource Person'});
             });
 
             // instantiate program

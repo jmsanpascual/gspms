@@ -18,7 +18,7 @@
         </div>
         <label class = "form-label col-md-2">Program</label>
         <div class = "col-md-4">
-          <select class = "form-control" ng-init="submitData.proj.program_id = submitData.program.id" ng-model = "submitData.proj.program_id"
+          <select class = "form-control" ng-model = "submitData.proj.program_id"
           ng-options = "p.id as p.name for p in submitData.programs" ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
           </select>
         </div>
@@ -62,17 +62,29 @@
     <div class = "form-group">
       <div class = "row">
         <div class = "col-md-12">
-        <!-- <label class = "form-label col-md-2">Status</label>
-        <div class = "col-md-4">
-          <select class = "form-control" ng-model = "submitData.proj.proj_status_id"
-          ng-options = "c.id as c.name for c in submitData.status">
-          </select>
-        </div> -->
-        <label class = "form-label col-md-2">Total Budget</label>
-        <div class = "col-md-4">
-          <input type = "text" class = "form-control" ng-model = "submitData.proj.total_budget" placeholder="Total Budget"
-          ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+            <label class = "form-label col-md-2">Initial Budget</label>
+            <div class = "col-md-4">
+                <input type = "text" class = "form-control" ng-model = "submitData.proj.total_budget" placeholder="Total Budget"
+                ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+            </div>
         </div>
+      </div>
+    </div>
+    <div class = "form-group" ng-controller = "ProjBudgetCtrl as pbc" ng-init = "pbc.getTotalExpense(submitData.proj.id); pbc.getTotalBudget(submitData.proj.id)">
+      <div class = "row">
+        <div class = "col-md-12">
+            <label class = "form-label col-md-2">Total Budget</label>
+            <div class = "col-md-4">
+                <input type = "text" class = "form-control" disabled value = "@{{ +submitData.proj.total_budget + +pbc.budget.total }}"
+                placeholder="Total Budget" disabled>
+            </div>
+            <span ng-if = "pbc.expense.total && submitData.proj.id" >
+                <label class = "form-label col-md-2">Remaining Budget</label>
+                <div class = "col-md-4">
+                    <input type = "text" class = "form-control" placeholder="Total Remaining Budget"
+                    disabled value = "@{{ +submitData.proj.total_budget + +pbc.budget.total - pbc.expense.total }}">
+                </div>
+            </span>
       </div>
       </div>
     </div>
@@ -83,14 +95,14 @@
         @if(Session::get('role') != config('constants.role_champion'))
         <label class = "form-label col-md-2">Champion</label>
         <div class = "col-md-4">
-          <select class = "form-control" ng-init="submitData.proj.champion_id = submitData.champion.id" ng-model = "submitData.proj.champion_id"
+          <select class = "form-control" ng-model = "submitData.proj.champion_id"
           ng-options = "c.id as c.name for c in submitData.champions" ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
           </select>
         </div>
         @endif
         <label class = "form-label col-md-2">Resource Person</label>
         <div class = "col-md-4">
-          <select class = "form-control" ng-init="submitData.proj.resource_person_id = submitData.resource.id" ng-model = "submitData.proj.resource_person_id"
+          <select class = "form-control" ng-init="submitData.proj.resource_person_id = submitData.proj.resource_person_id || 'NA'" ng-model = "submitData.proj.resource_person_id"
           ng-options = "rp.id as rp.name for rp in submitData.resource_person" ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
           </select>
         </div>

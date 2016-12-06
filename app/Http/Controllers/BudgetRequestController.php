@@ -11,9 +11,14 @@ use Response;
 use Log;
 use App\Fund;
 use Exception;
+use App\UserRoles;
+
+use App\Traits\Notify;
 
 class BudgetRequestController extends Controller
 {
+	use Notify;
+
 	public function __construct()
     {
         DB::connection()->enableQueryLog();
@@ -71,6 +76,9 @@ class BudgetRequestController extends Controller
 			DB::beginTransaction();
 			$br['status_id'] = 1;
             $id = App\ProjectBudgetRequest::insertGetId($br);
+
+			$proj = App\Project::find($br['proj_id']);
+			$this->_notifyFinanceForApproval($proj);
             // get status name
             $stat_name = App\BudgetRequestStatus::where('id', $br['status_id'])
             	->value('name');
@@ -95,30 +103,27 @@ class BudgetRequestController extends Controller
 	private function _notifyFinanceForApproval($proj, $edit = FALSE)
     {
         try {
-            // logger($proj);
-            if($proj['proj_status_id'] != config('constants.proj_status_for_approval_finance')) return;
-
             if($edit) {
                 // notify finance of edited project
                 $finance = config('constants.role_finance');
                 $finance_emp = UserRoles::where('role_id', $finance)->lists('user_id');
 
                 $data = [
-                    'title' => 'Project Edited',
-                    'text' => trans('notifications.project_edited', ['name' => $proj['name']]),
+                    'title' => 'Budget Request Edit',
+                    'text' => trans('notifications.budget_request_edit_for_approval', ['name' => $proj['name']]),
                     'proj_id' => $proj['id'],
                     'user_ids' => $finance_emp
                 ];
 
-                $this->saveNotif($data);
+                return $this->saveNotif($data);
             }
 
             $finance = config('constants.role_finance');
             $finance_emp = UserRoles::where('role_id', $finance)->lists('user_id');
             // logger($finance_emp);
             $data = [
-                'title' => 'Project Newly Added',
-                'text' => trans('notifications.project_added', ['name' => $proj['name']]),
+                'title' => 'Budget Request',
+                'text' => trans('notifications.budget_request', ['name' => $proj['name']]),
                 'proj_id' => $proj['id'],
                 'user_ids' => $finance_emp
             ];
@@ -144,19 +149,25 @@ class BudgetRequestController extends Controller
             unset($upd_arr['id']);
             unset($upd_arr['status']);
             unset($upd_arr['token']);
-
+			DB::beginTransaction();
             $upd_arr['status_id'] = 1; // for approval
 
             App\ProjectBudgetRequest::where('id', $id)->update($upd_arr);
             $stat_name = App\BudgetRequestStatus::where('id', $upd_arr['status_id'])
                 ->value('name');
+
+			$proj = App\Project::find($upd_arr['proj_id']);
+			$this->_notifyFinanceForApproval($proj, true);
+
             $data['brequest'] = $request;
             $data['brequest']['status_id'] = $upd_arr['status_id'];
             $data['brequest']['status'] = $stat_name;
             $status = TRUE;
+			DB::commit();
         }
         catch(\Exception $e)
         {
+			DB::rollback();
             $msg = $e->getMessage();
         }
         $data['status'] = $status;

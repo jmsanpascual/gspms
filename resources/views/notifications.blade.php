@@ -70,12 +70,14 @@ ng-app='notification'
 
 @section('scripts')
 @parent
+
 {!! HTML::script('js/resource-person/services/resource-person.js') !!}
 {!! HTML::script('js/services/project-status.js') !!}
 {!! HTML::script('js/services/program.js') !!}
+{!! HTML::script('js/services/project.js') !!}
+{!! HTML::script('js/controllers/project.js') !!}
 {!! HTML::script('js/services/project-activities.js') !!}
 {!! HTML::script('js/services/user.js') !!}
-{!! HTML::script('js/services/project.js') !!}
 {!! HTML::script('js/services/activity-status.js') !!}
 {!! HTML::script('js/controllers/dynamic-element.js') !!}
 {!! HTML::script('js/controllers/project-activities.js') !!}
@@ -86,10 +88,12 @@ ng-app='notification'
 {!! HTML::script('js/services/categories.js') !!}
 {!! HTML::script('js/controllers/dynamic-element.js') !!}
 {!! HTML::script('js/controllers/item.js') !!}
+{!! HTML::script('js/controllers/project.js') !!}
 
 <!-- Attachment -->
 {!! HTML::script('js/project-attachments/project-attachment.module.js') !!}
 {!! HTML::script('js/project-attachments/project-attachment.controller.js') !!}
+{!! HTML::script('js/project-attachments/project-attachment.factory.js') !!}
 {!! HTML::script('js/project-attachments/project-attachment.service.js') !!}
 <!-- End Attachment  -->
 <!-- Related Project  -->

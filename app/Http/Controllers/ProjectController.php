@@ -283,7 +283,7 @@ class ProjectController extends Controller
                     'user_ids' => $finance_emp
                 ];
 
-                $this->saveNotif($data);
+                return $this->saveNotif($data);
             }
 
             $finance = config('constants.role_finance');
