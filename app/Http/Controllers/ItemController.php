@@ -14,6 +14,7 @@ use App\Project;
 use App\ProjectItemCategory;
 use App\Item;
 use File;
+use Exception;
 
 class ItemController extends Controller
 {
@@ -81,7 +82,10 @@ class ItemController extends Controller
             unset($br['token']);
             // unset($br['upload_files']);
             unset($br['project_attachment_id']);
-            $data = DB::transaction(function() use($br, $request){
+
+            $project = Project::findOrFail($br['proj_id']);
+            DB::beginTransaction();
+            // $data = DB::transaction(function() use($br, $request, $project){
                 $data = array();
                 $id = App\ProjectItemCategory::insertGetId($br);
                 // get status name
@@ -100,20 +104,24 @@ class ItemController extends Controller
 
                 $data['total_expense'] = $this->_getTotalExpense($br['proj_id']);
 
-                return $data;
-            });
+                if(($project->total_budget - $data['total_expense']) <= 0)
+                    throw new Exception('Insufficient project budget.');
+
+            //     return $data;
+            // });
 
             // Make the status to on-going from initiating
             $ongoingId = 1;
             $approvedId = 5;
-            $project = Project::findOrFail($br['proj_id']);
 
             if ($project->proj_status_id == $approvedId) {
                 $project->proj_status_id = $ongoingId;
                 $project->save();
             }
             $status = TRUE;
+            DB::commit();
        } catch (Exception $e) {
+           DB::rollback();
             $msg = $e->getMessage();
         }
         $data['msg'] = $msg;

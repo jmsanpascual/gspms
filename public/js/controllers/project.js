@@ -177,11 +177,14 @@ angular.module('project.controller', [
     }
 })
 
-.controller('ProjBudgetCtrl', function($http, ExpenseManager){
+.controller('ProjBudgetCtrl', function($http, ExpenseManager, BudgetManager){
     var vm = this;
     vm.expense;
+    vm.budget;
     // vm.proj_id;
     vm.getTotalExpense = getTotalExpense;
+    vm.getTotalBudget = getTotalBudget;
+
     // activate();
 
     function getTotalExpense(proj_id) {
@@ -191,6 +194,16 @@ angular.module('project.controller', [
             result = result.data;
             ExpenseManager.setTotal(result.total_expense);
             vm.expense = ExpenseManager.get();
+        });
+    }
+
+    function getTotalBudget(proj_id) {
+        if(!proj_id) return;
+
+        $http.get('../budget-request/getTotalBudget/'+proj_id).then(function(result){
+            result = result.data;
+            BudgetManager.setTotal(result.total_budget);
+            vm.budget = BudgetManager.get();
         });
     }
 });

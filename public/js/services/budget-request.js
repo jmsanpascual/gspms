@@ -14,4 +14,24 @@ angular.module('budgetRequest.service', ['ngResource'])
     		}
     	}
     );
+})
+
+.factory('BudgetManager', function(){
+    var budget = {
+        total:0
+    };
+    var services = {
+        get: getBudget,
+        setTotal: setTotalBudget
+    };
+
+    return services;
+
+    function setTotalBudget(total) {
+        budget.total = total;
+    }
+
+    function getBudget() {
+        return budget;
+    }
 });

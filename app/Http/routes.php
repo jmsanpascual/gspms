@@ -116,6 +116,7 @@ Route::resource('schools', 'SchoolController');
 
 Route::post('budget-request/request', 'BudgetRequestController@updateStatus');
 Route::post('budget-request/update', 'BudgetRequestController@update');
+Route::get('budget-request/getTotalBudget/{id}', 'BudgetRequestController@getTotalBudget');
 Route::resource('budget-request', 'BudgetRequestController');
 Route::resource('budget-request-status', 'BudgetRequestStatusController');
 
