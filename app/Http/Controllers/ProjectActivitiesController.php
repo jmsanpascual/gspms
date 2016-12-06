@@ -184,8 +184,10 @@ class ProjectActivitiesController extends Controller
                     // Update the activity tasks
                     if (!isset($tasks[$key]['id'])) {
                         $tasks[$key]['activity_id'] = $act_id;
-                        $taskId = App\ActivityTask::insertGetId($tasks[$key]);
+                        App\ActivityTask::insertGetId($tasks[$key]);
                         $taskIds[] = ['id' => $taskId, 'name' => $tasks[$key]['name']];
+                    } else {
+                        App\ActivityTask::where('id', $tasks[$key]['id'])->update($tasks[$key]);
                     }
                 }
             }

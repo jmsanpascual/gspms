@@ -24,6 +24,6 @@ class SchoolFund extends Model
 
     public function referer()
     {
-        return $this->hasOne('App\School', 'id');
+        return $this->belongsTo('App\School', 'school_id');
     }
 }

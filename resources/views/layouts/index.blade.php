@@ -70,12 +70,12 @@
                   <li>
                     <a href="{{ URL::to('/funds/view') }}">
                       @if(Session::get('role') == config('constants.role_head'))
-                        View/Add
+                        Add/View
                       @else
                         View
                       @endif
 
-                      Fund
+                      Funds
                     </a>
                   </li>
                   @endif
@@ -88,11 +88,20 @@
                   @if(Session::get('role') == config('constants.role_head'))
                   <li>
                     <a href="{{ URL::to('/funds/logs') }}">
-                      Logs
+                      Fund Logs
                     </a>
                   </li>
                   @endif
                 </ul>
+              </li>
+              @endif
+
+              @if(Session::get('role') == config('constants.role_champion')
+                || Session::get('role') == config('constants.role_exec'))
+              <li class="">
+                <a href="{{ route('resource-persons.view') }}" title="Forms">
+                    <i class="fa fa-user"></i> Resource Persons
+                </a>
               </li>
               @endif
 
@@ -101,15 +110,6 @@
                       <i class="icon-doc"></i> Projects
                   </a>
               </li>
-
-              @if(Session::get('role') == config('constants.role_champion')
-                || Session::get('role') == config('constants.role_exec'))
-              <li class="">
-                <a href="{{ route('resource-persons.view') }}" title="Forms">
-                    <i class="fa fa-user"></i> Resource Person
-                </a>
-              </li>
-              @endif
 
             </ul>
         </nav>

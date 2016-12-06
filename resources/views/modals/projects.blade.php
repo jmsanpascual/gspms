@@ -199,11 +199,12 @@
 		<div class = "pull-left">
 
         @if(Session::get('role') == config('constants.role_life')
-          || Session::get('role') == config('constants.role_head'))
+          || Session::get('role') == config('constants.role_head')
+          || Session::get('role') == config('constants.role_finance'))
           <button class = "btn btn-info btn-sm" ng-click="btnc.showItem()">
             View Item/Expense
         </button>
-        @else
+        @elseif (Session::get('role') == config('constants.role_champion'))
         <button class = "btn btn-info btn-sm" ng-click="btnc.showItem()"
         ng-if = "submitData.proj.proj_status_id != 3">
             Add Item/Expense
@@ -211,11 +212,11 @@
         @endif
 
         @if(Session::get('role') == config('constants.role_life')
-          || Session::get('role') == config('constants.role_head'))
+          || Session::get('role') == config('constants.role_finance'))
            <button class = "btn btn-warning btn-sm" ng-click="btnc.showReqBudget()">
             View Budget Request
         </button>
-        @else
+        @elseif(Session::get('role') == config('constants.role_champion'))
          <button class = "btn btn-warning btn-sm" ng-click="btnc.showReqBudget()"
          ng-if = "submitData.proj.proj_status_id != 3">
             Request Budget
@@ -224,13 +225,12 @@
 
         @if(Session::get('role') == config('constants.role_life')
           || Session::get('role') == config('constants.role_head'))
-      <a class = "btn btn-default btn-sm" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">Progress Report</a>
+      <a class = "btn btn-default btn-sm" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">View Progress Report</a>
       @endif
 
       <button class = "btn btn-success btn-sm" ng-click = "btnc.showRelated()">View Related Projects</button>
 
-      @if(Session::get('role') == config('constants.role_champion')
-        || Session::get('role') == config('constants.role_exec'))
+      @if(Session::get('role') == config('constants.role_champion'))
         <button class = "btn btn-primary btn-sm" ng-click="btnc.showAttachments()" ng-if = "submitData.proj.proj_status_id == 1 || submitData.proj.proj_status_id == 5">
             Add Attachments
         </button>

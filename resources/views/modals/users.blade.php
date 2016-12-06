@@ -126,7 +126,7 @@
 			<div class = "row">
 				<div class = "col-md-12">
 				<label class = "form-label col-md-3">Address</label>
-				<div class = "col-md-5">
+				<div class = "col-md-6">
 					<textarea class = "form-control" style ="resize:none" ng-model = "submitData.users.address"
 					placeholder = "Enter Address"></textarea>
 				</div>

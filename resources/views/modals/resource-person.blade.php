@@ -41,7 +41,7 @@
     <div class = "form-group">
       <div class = "row">
         <div class = "col-md-12">
-        <label class = "form-label col-md-3">Contact No</label>
+        <label class = "form-label col-md-3">Contact</label>
         <div class = "col-md-8">
           <input class="form-control" type = "text" ng-model = "submitData.person.contact_num" placeholder="Contact">
         </div>

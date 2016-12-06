@@ -6,24 +6,24 @@ ng-app='users'
 
 @section('content')
 
-  <div class="row">
-      <div class="col-md-12">
+  <!-- <div class="row">
+      <div class="col-md-12"> -->
           <!--breadcrumbs start -->
-          <ul class="breadcrumb">
+          <!-- <ul class="breadcrumb">
               <li>
                 <a href="#">Accounts</a>
               </li>
               <li>View List</li>
-          </ul>
+          </ul> -->
           <!--breadcrumbs end -->
-          <h1 class="h1">View List</h1>
+          <!-- <h1 class="h1">View List</h1>
       </div>
-  </div>
+  </div> -->
   <div class="row">
       <div class="col-md-12">
           <div class="panel panel-default">
               <div class="panel-heading">
-                  <h3 class="panel-title">Users</h3>
+                  <h3 class="panel-title">Accounts</h3>
                   <div class="actions pull-right">
                       <i class="fa fa-chevron-down"></i>
                       <i class="fa fa-times"></i>
