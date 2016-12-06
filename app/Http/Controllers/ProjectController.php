@@ -455,7 +455,7 @@ class ProjectController extends Controller
             $finance_emp = UserRoles::where('role_id', $finance)->lists('user_id');
 
             $data = [
-                'title' => 'Project Needs an Approval',
+                'title' => 'Project Approval',
                 'text' => trans('notifications.project_approval', ['name' => $proj->name]),
                 'proj_id' => $proj->id,
                 'user_ids' => $finance_emp
@@ -505,7 +505,7 @@ class ProjectController extends Controller
             $user_ids = UserRoles::where('role_id', $role)->lists('user_id');
 
             $data = [
-                'title' => 'Project Needs an Approval',
+                'title' => 'Project Approval',
                 'text' => trans('notifications.project_approval', ['name' => $proj->name]),
                 'proj_id' => $proj->id,
                 'user_ids' => $user_ids
