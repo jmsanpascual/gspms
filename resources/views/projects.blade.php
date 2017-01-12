@@ -48,7 +48,7 @@ ng-app='project.controller'
                       <th>Project Title</th>
                       <th>Start Date</th>
                       <th>End Date</th>
-                      <th>Total Budget</th>
+                      <th>Initial Budget</th>
                       <th>Status</th>
                       <th>Actions</th>
                     </tr>
