@@ -206,4 +206,26 @@ angular.module('project.controller', [
             vm.budget = BudgetManager.get();
         });
     }
+})
+
+.directive('dateFormat', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, element, attr, ngModelCtrl) {
+      //Angular 1.3 insert a formater that force to set model to date object, otherwise throw exception.
+      //Reset default angular formatters/parsers
+      ngModelCtrl.$formatters.length = 0;
+      ngModelCtrl.$parsers.length = 0;
+
+      ngModelCtrl.$formatters.push(function(valueFromModel) {
+         //return how data will be shown in input
+          if (valueFromModel) {
+             // For momentjs > 2.9 moment global va is not defined use momentjs instead of moment.
+              return valueFromModel.substr(0, valueFromModel.indexOf(' '));
+          }
+          else
+              return null;
+      });
+    }
+  };
 });
