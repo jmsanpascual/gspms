@@ -240,6 +240,7 @@ class ProjectController extends Controller
 
             $project['start_date'] = date('Y-m-d H:i:s', strtotime($project['start_date']));
             $project['end_date'] = date('Y-m-d H:i:s', strtotime($project['end_date']));
+
             $project['id'] = App\Project::insertGetId($project);
             // if the one adding is not the champion notify the champion about the added project
             if(Session::get('role') != config('constants.role_champion'))
@@ -357,7 +358,9 @@ class ProjectController extends Controller
             $previous_champion = App\Projects::find($id)->champion_id;
             $upd_arr['objective'] = $temp; // Assign the concatenated objectives
             unset($upd_arr['status_id']);
-            $upd_arr['proj_status_id'] = 2;
+            if(EMPTY($upd_arr['remarks']))
+                $upd_arr['proj_status_id'] = 2;
+
             if(EMPTY($upd_arr['champion_id'])  && Session::get('role') == config('constants.role_champion'))
                 $upd_arr['champion_id'] = Session::get('id');
 
@@ -367,7 +370,10 @@ class ProjectController extends Controller
 
             $stat = App\ProjectStatus::where('id', $upd_arr['proj_status_id'])->value('name');
             $data['proj'] = $request;
-            $data['proj']['proj_status_id'] = $upd_arr['proj_status_id'];
+
+            if(EMPTY($upd_arr['remarks']))
+                $data['proj']['proj_status_id'] = $upd_arr['proj_status_id'];
+                
             $data['proj']['status'] = $stat;
 
             // if the one updating is not the champion and selected champion has been changed
