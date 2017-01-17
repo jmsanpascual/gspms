@@ -198,6 +198,54 @@
         </div>
     </div>
     <!-- End Activities -->
+    <hr>
+    <!-- Expense -->
+    <div ng-if = "submitData.proj.id" ng-controller="ItemCtrl as ic">
+        <h3>Item/Expense</h3>
+        <hr ng-init = 'ic.proj_id = submitData.proj.id;ic.getProjItems()'>
+        @if(Session::get('role') == config('constants.role_champion'))
+        <button class = "btn btn-success pull-right" ng-click = "ic.add()"> Add Item/Expense</button>
+        @endif
+        <button class = "btn btn-danger pull-right" ng-click = "ic.getProjItems()"> Refresh</button>
+
+        <p class="text-danger"><strong>@{{ ic.message }}</strong></p>
+        <br>
+        <table datatable="ng" dt-options="ic.dtOptions" dt-columns="ic.dtColumnDefs" dt-instance="ic.dtInstance" class="table table-hover row-border hover">
+        <thead>
+            <tr>
+              <th>Item Name</th>
+              <th>Category</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total Amount</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat = "data in ic.items">
+              <td>@{{data.item_name}}</td>
+              <td>@{{data.category}}</td>
+              <td>@{{data.quantity}} (@{{data.quantity_label}})</td>
+              <td>@{{data.price}}</td>
+              <td>@{{ ((data.price) * (data.quantity)) }}</td>
+              <td>
+
+              @if(Session::get('role') == config('constants.role_finance'))
+                <button class="btn btn-warning btn-sm" ng-click="ic.edit($index, data)">
+                <i class="fa fa-edit"></i>
+                </button>
+			  @endif
+                @if(Session::get('role') == config('constants.role_champion'))
+                <!-- <button class="btn btn-danger btn-sm" ng-click="ic.delete($index ,data)">
+                   <i class="fa fa-trash-o"></i>
+                </button> -->
+                @endif
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    <!-- End Expense -->
   </form>
 @stop
 
@@ -207,17 +255,6 @@
 	ng-init = 'btnc.data.proj_id = submitData.proj.id; btnc.proj = submitData.proj'>
 		<div class = "pull-left">
 
-        @if(Session::get('role') == config('constants.role_life')
-          || Session::get('role') == config('constants.role_head'))
-          <button class = "btn btn-info btn-sm" ng-click="btnc.showItem()">
-            View Item/Expense
-        </button>
-        @else
-        <button class = "btn btn-info btn-sm" ng-click="btnc.showItem()"
-        ng-if = "submitData.proj.proj_status_id != 3">
-            Add Item/Expense
-        </button>
-        @endif
 
         @if(Session::get('role') == config('constants.role_life')
           || Session::get('role') == config('constants.role_head'))

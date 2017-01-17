@@ -10,7 +10,7 @@ angular.module('items.controller',
 
 .controller('ItemCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder,
     defaultModal, ItemsRestApi, CategoriesRestApi, $http, ExpenseManager) {
-    // $scope.proj_id = 1; //declared in modals/projects.blade.php
+    // vm.proj_id = 1; //declared in modals/projects.blade.php
     var vm = this;
     vm.message = '';
     vm.edit = edit;
@@ -22,8 +22,8 @@ angular.module('items.controller',
     this.getProjItems = function()
     {
         console.log('proj_id');
-        console.log($scope.proj_id);
-        ItemsRestApi.query({proj_id : $scope.proj_id}).$promise.then(function (result) {
+        console.log(vm.proj_id);
+        ItemsRestApi.query({proj_id : vm.proj_id}).$promise.then(function (result) {
            result = result[0];
            console.log(result);
           if (result.status) {
@@ -73,7 +73,7 @@ angular.module('items.controller',
             action: 'Add',
             categories : $scope.categories,
             category: $scope.categories[0].id,
-            items : {proj_id : $scope.proj_id}
+            items : {proj_id : vm.proj_id}
         };
 
         defaultModal.showModal(attr).result.then(function(data){
@@ -94,7 +94,7 @@ angular.module('items.controller',
             category: act.category_id,
             items : angular.copy(act)
         };
-        attr.items.proj_id = $scope.proj_id;
+        attr.items.proj_id = vm.proj_id;
 
         defaultModal.showModal(attr).result.then(function(data){
             console.log(data);
