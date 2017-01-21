@@ -105,11 +105,21 @@
               </li>
               @endif
 
-                <li ng-class = "{'active' : {{json_encode(($page == 'projects'))}} }">
-                  <a href="{{ route('view.project2') }}" title="Forms">
-                      <i class="icon-doc"></i> Projects
-                  </a>
+              @if(Session::get('role') == config('constants.role_champion'))
+              <li class="">
+                <a href="{{ route('volunteers.view') }}" title="Forms">
+                    <i class="fa fa-group"></i> Volunteers
+                </a>
               </li>
+              @endif
+
+              @if(Session::get('role') != config('constants.role_volunteer'))
+              <li ng-class = "{'active' : {{json_encode(($page == 'projects'))}} }">
+                <a href="{{ route('view.project2') }}" title="Forms">
+                    <i class="icon-doc"></i> Projects
+                </a>
+              </li>
+              @endif
 
             </ul>
         </nav>

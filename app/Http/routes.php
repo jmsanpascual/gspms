@@ -111,6 +111,13 @@ Route::get('resource-persons/view-resource-persons', array('as' => 'resource-per
 Route::post('resource-persons/update', 'ResourcePersonController@update');
 Route::resource('resource-persons', 'ResourcePersonController');
 
+// RESTful resource route for Volunteers
+Route::get('volunteers/view-volunteers', array('as' => 'volunteers.view', function () {
+    return view('volunteers');
+}));
+Route::post('volunteers/update', 'VolunteerController@update');
+Route::resource('volunteers', 'VolunteerController');
+
 // RESTful resource route for Schools
 Route::resource('schools', 'SchoolController');
 
