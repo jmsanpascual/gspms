@@ -92,10 +92,13 @@ Route::post('project-activities/update', 'ProjectActivitiesController@update');
 Route::post('project-activities/request', 'ProjectActivitiesController@updateStatus');
 Route::resource('project-activities', 'ProjectActivitiesController');
 
+Route::get('assign-task-view', function () {
+    return view('modals/task-assign');
+});
 Route::get('add-task-remarks-view', function () {
     return view('modals/task-remarks');
 });
-Route::post('add-task-remarks', 'ProjectActivitiesController@addTaskRemarks');
+Route::post('update-task', 'ProjectActivitiesController@updateTask');
 Route::delete('delete-task/{id}', 'ProjectActivitiesController@deleteTask');
 
 Route::resource('budget', 'BudgetController');

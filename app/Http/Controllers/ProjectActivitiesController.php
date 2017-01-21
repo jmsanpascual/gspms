@@ -260,7 +260,7 @@ class ProjectActivitiesController extends Controller
         return Response::json($data);
     }
 
-    public function addTaskRemarks(Request $request)
+    public function updateTask(Request $request)
     {
         $task = $request->all();
 

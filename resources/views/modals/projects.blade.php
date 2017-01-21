@@ -204,9 +204,9 @@
         <h3>Item/Expense</h3>
         <hr ng-init = 'ic.proj_id = submitData.proj.id;ic.getProjItems()'>
         @if(Session::get('role') == config('constants.role_champion'))
-        <button class = "btn btn-success pull-right" ng-click = "ic.add()"> Add Item/Expense</button>
+        <button class = "btn btn-success btn-sm pull-right" ng-click = "ic.add()"> Add Item/Expense</button>
         @endif
-        <button class = "btn btn-danger pull-right" ng-click = "ic.getProjItems()"> Refresh</button>
+        <button class = "btn btn-danger btn-sm pull-right" ng-click = "ic.getProjItems()"> Refresh</button>
 
         <p class="text-danger"><strong>@{{ ic.message }}</strong></p>
         <br>
