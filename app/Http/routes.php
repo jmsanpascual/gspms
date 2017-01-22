@@ -92,10 +92,13 @@ Route::post('project-activities/update', 'ProjectActivitiesController@update');
 Route::post('project-activities/request', 'ProjectActivitiesController@updateStatus');
 Route::resource('project-activities', 'ProjectActivitiesController');
 
+Route::get('assign-task-view', function () {
+    return view('modals/task-assign');
+});
 Route::get('add-task-remarks-view', function () {
     return view('modals/task-remarks');
 });
-Route::post('add-task-remarks', 'ProjectActivitiesController@addTaskRemarks');
+Route::post('update-task', 'ProjectActivitiesController@updateTask');
 Route::delete('delete-task/{id}', 'ProjectActivitiesController@deleteTask');
 
 Route::resource('budget', 'BudgetController');
@@ -110,6 +113,20 @@ Route::get('resource-persons/view-resource-persons', array('as' => 'resource-per
 }));
 Route::post('resource-persons/update', 'ResourcePersonController@update');
 Route::resource('resource-persons', 'ResourcePersonController');
+
+// RESTful resource route for Volunteers
+Route::get('volunteers/view-volunteers', array('as' => 'volunteers.view', function () {
+    return view('volunteers');
+}));
+Route::post('volunteers/update', 'VolunteerController@update');
+Route::resource('volunteers', 'VolunteerController');
+
+// RESTful resource route for Tasks
+Route::get('tasks/view-tasks', array('as' => 'tasks.view', function () {
+    return view('task');
+}));
+Route::post('tasks/update', 'TaskController@update');
+Route::resource('tasks', 'TaskController');
 
 // RESTful resource route for Schools
 Route::resource('schools', 'SchoolController');

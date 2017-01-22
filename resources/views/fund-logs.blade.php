@@ -2,19 +2,19 @@
 
 @section('content')
 
-  <div class="row">
-      <div class="col-md-12">
+  <!-- <div class="row">
+      <div class="col-md-12"> -->
           <!--breadcrumbs start -->
-          <ul class="breadcrumb">
+          <!-- <ul class="breadcrumb">
               <li>
                 <a href="#">Funds</a>
               </li>
               <li>Fund Logs</li>
-          </ul>
+          </ul> -->
           <!--breadcrumbs end -->
-          <h1 class="h1">Fund Logs</h1>
+          <!-- <h1 class="h1">Fund Logs</h1>
       </div>
-  </div>
+  </div> -->
   <div class="row" ng-app="fundLogs">
       <div class="col-md-12">
           <div class="panel panel-default">
@@ -26,6 +26,7 @@
                   </div>
               </div>
               <div class="panel-body" ng-controller="FundLogsCtrl as flc">
+                <button class = "btn btn-danger btn-sm pull-right" ng-click = "flc.refresh()">Refresh</button>
                 <div>
                   <table datatable="ng" dt-options="flc.dtOptions" dt-columns="flc.dtColumns"
                   dt-instance="flc.dtInstance" class="table table-hover row-border hover">

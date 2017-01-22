@@ -70,12 +70,12 @@
                   <li>
                     <a href="{{ URL::to('/funds/view') }}">
                       @if(Session::get('role') == config('constants.role_head'))
-                        View/Add
+                        Add/View
                       @else
                         View
                       @endif
 
-                      Fund
+                      Funds
                     </a>
                   </li>
                   @endif
@@ -88,7 +88,7 @@
                   @if(Session::get('role') == config('constants.role_head'))
                   <li>
                     <a href="{{ URL::to('/funds/logs') }}">
-                      Logs
+                      Fund Logs
                     </a>
                   </li>
                   @endif
@@ -96,17 +96,35 @@
               </li>
               @endif
 
-                <li ng-class = "{'active' : {{json_encode(($page == 'projects'))}} }">
-                  <a href="{{ route('view.project2') }}" title="Forms">
-                      <i class="icon-doc"></i> Projects
-                  </a>
-              </li>
-
               @if(Session::get('role') == config('constants.role_champion')
                 || Session::get('role') == config('constants.role_exec'))
               <li class="">
                 <a href="{{ route('resource-persons.view') }}" title="Forms">
-                    <i class="fa fa-user"></i> Resource Person
+                    <i class="fa fa-user"></i> Resource Persons
+                </a>
+              </li>
+              @endif
+
+              @if(Session::get('role') == config('constants.role_champion'))
+              <li class="">
+                <a href="{{ route('volunteers.view') }}" title="Forms">
+                    <i class="fa fa-group"></i> Volunteers
+                </a>
+              </li>
+              @endif
+
+              @if(Session::get('role') != config('constants.role_volunteer'))
+              <li ng-class = "{'active' : {{json_encode(($page == 'projects'))}} }">
+                <a href="{{ route('view.project2') }}" title="Forms">
+                    <i class="icon-doc"></i> Projects
+                </a>
+              </li>
+              @endif
+
+              @if(Session::get('role') == config('constants.role_volunteer'))
+              <li ng-class = "{'active' : {{json_encode(($page == 'projects'))}} }">
+                <a href="{{ route('tasks.view') }}" title="Forms">
+                    <i class="fa fa-file-text-o"></i> Tasks
                 </a>
               </li>
               @endif

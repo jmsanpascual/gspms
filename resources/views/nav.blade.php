@@ -10,6 +10,7 @@
 </div>
 <div class="user-nav">
     <ul ng-controller = "NotificationController as nc">
+        @if(Session::get('role') != config('constants.role_volunteer'))
         <li class="dropdown messages open">
             <span class="badge badge-danager animated bounceIn" id="new-messages" ng-if = "nc.count > 0"
                 ng-bind="nc.count"></span>
@@ -36,6 +37,7 @@
             </ul>
 
         </li>
+        @endif
         <li class="profile-photo">
             <img src="{{ asset('img/avatar.png') }}" alt="" class="img-circle">
         </li>

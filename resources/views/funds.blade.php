@@ -2,19 +2,19 @@
 
 @section('content')
 
-  <div class="row">
-      <div class="col-md-12">
+  <!-- <div class="row">
+      <div class="col-md-12"> -->
           <!--breadcrumbs start -->
-          <ul class="breadcrumb">
+          <!-- <ul class="breadcrumb">
               <li>
                 <a href="#">Funds</a>
               </li>
               <li>Funds</li>
-          </ul>
+          </ul> -->
           <!--breadcrumbs end -->
           <!-- <h1 class="h1">View List</h1> -->
-      </div>
-  </div>
+      <!-- </div>
+  </div> -->
   <div class="row" ng-app="funds">
       @if(Session::get('role') == config('constants.role_head'))
       <div class="col-md-12">

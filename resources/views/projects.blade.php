@@ -48,7 +48,7 @@ ng-app='project.controller'
                       <th>Project Title</th>
                       <th>Start Date</th>
                       <th>End Date</th>
-                      <th>Total Budget</th>
+                      <th>Initial Budget</th>
                       <th>Status</th>
                       <th>Actions</th>
                     </tr>
@@ -86,6 +86,8 @@ ng-app='project.controller'
 @section('scripts')
 @parent
 {!! HTML::script('js/resource-person/services/resource-person.js') !!}
+{!! HTML::script('js/volunteer/volunteer.module.js') !!}
+{!! HTML::script('js/volunteer/volunteer.factory.js') !!}
 {!! HTML::script('js/services/project-status.js') !!}
 {!! HTML::script('js/services/program.js') !!}
 {!! HTML::script('js/services/project.js') !!}

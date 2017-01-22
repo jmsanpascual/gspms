@@ -6,6 +6,7 @@ return [
     'role_exec' => 3,
     'role_head' => 1,
     'role_finance' => 5,
+    'role_volunteer' => 6,
     'act_status_for_approval' => 1,
     'proj_status_ongoing' => 1,
     'proj_status_for_approval_finance' => 2,

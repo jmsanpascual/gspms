@@ -33,13 +33,13 @@
         <div class = "col-md-4">
           <input type = "date" class = "form-control" ng-model = "submitData.proj.start_date" placeholder="Start Date"
           ng-disabled="submitData.proj.proj_status_id == {{config('constants.proj_status_approved')}} || submitData.proj.proj_status_id == {{config('constants.proj_status_ongoing')}} || {{json_encode(Session::get('role') == config('constants.role_life'))}} "
-          format-date>
+         date-format>
         </div>
         <label class = "form-label col-md-2">End Date</label>
         <div class = "col-md-4">
           <input type = "date" class = "form-control" ng-model = "submitData.proj.end_date" placeholder="End Date"
           ng-disabled="submitData.proj.proj_status_id == {{config('constants.proj_status_approved')}} || submitData.proj.proj_status_id == {{config('constants.proj_status_ongoing')}} || {{json_encode(Session::get('role') == config('constants.role_life'))}} "
-          format-date>
+          date-format>
         </div>
       </div>
       </div>
@@ -264,11 +264,11 @@
 
 
         @if(Session::get('role') == config('constants.role_life')
-          || Session::get('role') == config('constants.role_head'))
+          || Session::get('role') == config('constants.role_finance'))
            <button class = "btn btn-warning btn-sm" ng-click="btnc.showReqBudget()">
             View Budget Request
         </button>
-        @else
+        @elseif(Session::get('role') == config('constants.role_champion'))
          <button class = "btn btn-warning btn-sm" ng-click="btnc.showReqBudget()"
          ng-if = "submitData.proj.proj_status_id != 3">
             Request Budget
@@ -277,13 +277,12 @@
 
         @if(Session::get('role') == config('constants.role_life')
           || Session::get('role') == config('constants.role_head'))
-      <a class = "btn btn-default btn-sm" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">Progress Report</a>
+      <a class = "btn btn-default btn-sm" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">View Progress Report</a>
       @endif
 
       <button class = "btn btn-success btn-sm" ng-click = "btnc.showRelated()">View Related Projects</button>
 
-      @if(Session::get('role') == config('constants.role_champion')
-        || Session::get('role') == config('constants.role_exec'))
+      @if(Session::get('role') == config('constants.role_champion'))
         <button class = "btn btn-primary btn-sm" ng-click="btnc.showAttachments()" ng-if = "submitData.proj.proj_status_id == 1 || submitData.proj.proj_status_id == 5">
             Add Attachments
         </button>

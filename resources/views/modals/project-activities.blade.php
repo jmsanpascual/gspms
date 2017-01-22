@@ -21,7 +21,7 @@
 			<div class = "row">
 				<div class = "col-md-12">
 				<label class = "form-label col-md-4">Activity Name</label>
-				<div class = "col-md-6">
+				<div class = "col-md-8">
 					<input type = "text" class = "form-control" ng-model = "submitData.projAct.name" placeholder="Activity Name">
 				</div>
 
@@ -32,7 +32,7 @@
 			<div class = "row">
 				<div class = "col-md-12">
 				<label class = "form-label col-md-4">Start Date</label>
-				<div class = "col-md-6">
+				<div class = "col-md-8">
 					<input type = "date" class = "form-control" ng-model = "submitData.projAct.start_date" placeholder="Start Date"
 					format-date>
 				</div>
@@ -43,7 +43,7 @@
 			<div class = "row">
 				<div class = "col-md-12">
 				<label class = "form-label col-md-4">End Date</label>
-				<div class = "col-md-6">
+				<div class = "col-md-8">
 					<input type = "date" class = "form-control" ng-model = "submitData.projAct.end_date" placeholder="End Date"
 					format-date>
 				</div>
@@ -76,7 +76,7 @@
 			<div class = "row">
 				<div class = "col-md-12">
 					<label class = "form-label col-md-4">Description</label>
-					<div class = "col-md-6">
+					<div class = "col-md-8">
 						<textarea class = "form-control" style ="resize:none" ng-model = "submitData.projAct.description" placeholder="Description"></textarea>
 					</div>
 				</div>
@@ -86,15 +86,18 @@
 			<div class = "row">
 				<div class = "col-md-12">
 				<label class = "form-label col-md-4">Tasks</label>
-				<div class = "col-md-6">
+				<div class = "col-md-8">
 					<div class="objectives" ng-repeat='field in fields'>
             <input class="form-control" ng-model="submitData.projAct.tasks[$index].name"
 							type="text" ng-class="{'col-sm-12': $last}"
             	placeholder="Task @{{$index + 1}}" >
 						<button class="btn btn-primary btn-sm" type="button"
-							ng-click="doneAndUndoneTasks(submitData.projAct.tasks[$index])"
-							 >
+							ng-click="doneAndUndoneTasks(submitData.projAct.tasks[$index])">
               <i ng-class="{'fa fa-times': submitData.projAct.tasks[$index].done, 'fa fa-check': !submitData.projAct.tasks[$index].done}"></i>
+            </button> &nbsp;
+						<button class="btn btn-primary btn-sm" type="button"
+							ng-click="assignTask(submitData.projAct.tasks[$index])">
+              <i class="fa fa-user"></i>
             </button> &nbsp;
 						<button class="btn btn-primary btn-sm" type="button"
 							ng-click="addRemarks(submitData.projAct.tasks[$index])">
@@ -117,7 +120,7 @@
 			<div class = "row">
 				<div class = "col-md-12">
 				<label class = "form-label col-md-4">Remarks</label>
-				<div class = "col-md-6">
+				<div class = "col-md-8">
 					<textarea class = "form-control" style ="resize:none" ng-model = "submitData.projAct.remarks" placeholder="Remarks"></textarea>
 				</div>
 			</div>
@@ -127,7 +130,7 @@
 			<div class = "row">
 				<div class = "col-md-12">
 				<label class = "form-label col-md-4">Status</label>
-				<div class = "col-md-6">
+				<div class = "col-md-8">
 					<select class = "form-control" ng-model = "submitData.projAct.status_id"
 					ng-options = "c.id as c.name for c in submitData.status">
 					</select>

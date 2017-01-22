@@ -14,6 +14,8 @@
         vm.dtInstance = {};
         vm.funds = [];
 
+        vm.refresh = refresh;
+
         vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
         vm.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0),
@@ -26,6 +28,13 @@
         activate();
 
         function activate() {
+            $http.get('../funds/school-funds').then(function (result) {
+                vm.funds = result.data;
+                console.log(result);
+            });
+        }
+
+        function refresh() {
             $http.get('../funds/school-funds').then(function (result) {
                 vm.funds = result.data;
             });

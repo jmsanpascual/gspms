@@ -4,6 +4,8 @@ namespace App;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use Hash;
+
 class User extends Authenticatable
 {
     /**
@@ -14,7 +16,7 @@ class User extends Authenticatable
      use SoftDeletes;
 
     protected $fillable = [
-        'name', 'email', 'password',
+        'username', 'password',
     ];
 
     /**
@@ -23,7 +25,18 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'infos',
+        'roles',
+        'remember_token',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
+    protected $appends = [
+        'info',
+        // 'role'
     ];
 
     public function scopejoinUserInfo($query)
@@ -46,7 +59,41 @@ class User extends Authenticatable
         return $query->leftJoin($user_role, $this->getTable() . '.id', '=', $user_role . '.user_id');
     }
 
-    public function notifications() {
+    public function notifications()
+    {
         return $this->belongsToMany('App\Notification', 'user_notifications');
     }
+
+    public function infos()
+    {
+        return $this->belongsToMany('App\PersonalInfo', 'user_info');
+    }
+
+    public function first_post_pic ()
+    {
+        return $this->hasOne(PostPicture::class)->orderBy('id', 'asc');
+    }
+
+    public function roles() {
+        return $this->belongsToMany('App\Roles', 'user_roles', 'user_id', 'role_id');
+    }
+
+    public function setPasswordAttribute($pass)
+    {
+        $this->attributes['password'] = Hash::make($pass);
+    }
+
+    public function getInfoAttribute() {
+        if (array_key_exists('infos', $this->getRelations())) {
+            $info = $this['infos']->toArray();
+            return array_shift($info);
+        }
+    }
+
+    // public function getRoleAttribute() {
+    //     if (array_key_exists('roles', $this->getRelations())) {
+    //         $info = $this['roles']->toArray();
+    //         return array_shift($info);
+    //     }
+    // }
 }
