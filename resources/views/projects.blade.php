@@ -101,6 +101,7 @@ ng-app='project.controller'
 {!! HTML::script('js/services/categories.js') !!}
 {!! HTML::script('js/controllers/dynamic-element.js') !!}
 {!! HTML::script('js/controllers/item.js') !!}
+{!! HTML::script('js/services/item-manager.factory.js') !!}
 {!! HTML::script('js/controllers/project.js') !!}
 
 <!-- Attachment -->
@@ -119,4 +120,5 @@ ng-app='project.controller'
 <!-- Toast -->
 {!! HTML::script('js/others/toast.js') !!}
 <!-- End Toast -->
+{!! HTML::script('js/others/custom-prototypes.js') !!}
 @endsection

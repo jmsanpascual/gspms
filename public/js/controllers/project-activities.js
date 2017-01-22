@@ -9,11 +9,12 @@ angular.module('project.activites.controller',
     ])
 
 .controller('projActDTCtrl', function($rootScope, $scope, $compile, $timeout, DTOptionsBuilder, DTColumnDefBuilder,
-    reqDef, defaultModal, ProjectActivitiesRestApi, activityStatusRestApi) {
+    reqDef, defaultModal, ProjectActivitiesRestApi, activityStatusRestApi, ItemManager) {
     // $scope.proj_id = 1; //declared in modals/projects.blade.php
     var vm = this,
         approvedActivityId = 2,
-        approvedActivityCount = 0;
+        approvedActivityCount = 0,
+        items;
 
     vm.message = '';
     vm.percentage = '0%';
@@ -129,17 +130,24 @@ angular.module('project.activites.controller',
         DTColumnDefBuilder.newColumnDef(4).notSortable()
     ];
 
+    function setItemData(projAct) {
+        if(projAct.item_id) {
+            projAct.item = items.tmjFind(projAct.item_id, 'id');
+        }
+    }
 
     this.add = function()
     {
+        items = ItemManager.get();
         var attr = {
             size: 'md',
             templateUrl : '../project-activities/project-activities',
             saveUrl: '../project-activities',
             action: 'Add',
             // status : $scope.status,
-            projAct : {proj_id : $scope.proj_id}
-
+            projAct : {proj_id : $scope.proj_id},
+            items: items,
+            setItemData: setItemData
         };
 
         defaultModal.showModal(attr).result.then(function(data){
@@ -150,13 +158,16 @@ angular.module('project.activites.controller',
     }
 
     function edit(index, act) {
+        items = ItemManager.get();
         var attr = {
             size: 'md',
             templateUrl : '../project-activities/project-activities',
             saveUrl: '../project-activities/update',
             action: 'Edit',
             // status : $scope.status,
-            projAct : angular.copy(act)
+            projAct : angular.copy(act),
+            items: items,
+            setItemData: setItemData
         };
         attr.projAct.proj_id = $scope.proj_id;
 

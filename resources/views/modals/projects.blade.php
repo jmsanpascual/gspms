@@ -4,23 +4,23 @@
   @{{ submitData.action}} Project
 @stop
 @section('modal-content')
+
   <form role="form" id = "projForm">
     <h3>Project Information</h3>
     <hr>
-    <input type ="hidden" ng-model = "submitData.proj.id">
-    <input type ="hidden" ng-model = "submitData.proj.token">
     <div class = "form-group">
       <div class = "row">
         <div class = "col-md-12">
         <label class = "form-label col-md-2">Project Name</label>
         <div class = "col-md-4">
           <input type = "text" class = "form-control" ng-model = "submitData.proj.name" placeholder="Project Name"
-          ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+          ng-disabled="{{(json_encode(Session::get('role') == config('constants.role_life')))}}  || submitData.proj.proj_status_id == {{config('constants.proj_status_approved')}} || submitData.proj.proj_status_id == {{config('constants.proj_status_ongoing')}}" >
         </div>
         <label class = "form-label col-md-2">Program</label>
         <div class = "col-md-4">
           <select class = "form-control" ng-init="submitData.proj.program_id = submitData.program.id" ng-model = "submitData.proj.program_id"
-          ng-options = "p.id as p.name for p in submitData.programs" ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+          ng-options = "p.id as p.name for p in submitData.programs"
+          ng-disabled="{{json_encode(Session::get('role') == config('constants.role_life'))}} || submitData.proj.proj_status_id == {{config('constants.proj_status_approved')}} || submitData.proj.proj_status_id == {{config('constants.proj_status_ongoing')}}" >
           </select>
         </div>
       </div>
@@ -32,13 +32,13 @@
         <label class = "form-label col-md-2">Start Date</label>
         <div class = "col-md-4">
           <input type = "date" class = "form-control" ng-model = "submitData.proj.start_date" placeholder="Start Date"
-          ng-disabled="{{Session::get('role') == config('constants.role_life')}}"
+          ng-disabled="submitData.proj.proj_status_id == {{config('constants.proj_status_approved')}} || submitData.proj.proj_status_id == {{config('constants.proj_status_ongoing')}} || {{json_encode(Session::get('role') == config('constants.role_life'))}} "
           format-date>
         </div>
         <label class = "form-label col-md-2">End Date</label>
         <div class = "col-md-4">
           <input type = "date" class = "form-control" ng-model = "submitData.proj.end_date" placeholder="End Date"
-          ng-disabled="{{Session::get('role') == config('constants.role_life')}}"
+          ng-disabled="submitData.proj.proj_status_id == {{config('constants.proj_status_approved')}} || submitData.proj.proj_status_id == {{config('constants.proj_status_ongoing')}} || {{json_encode(Session::get('role') == config('constants.role_life'))}} "
           format-date>
         </div>
       </div>
@@ -50,12 +50,12 @@
         <label class = "form-label col-md-2">Partner Organization</label>
         <div class = "col-md-4">
           <input type = "text" class = "form-control" ng-model = "submitData.proj.partner_organization" placeholder="Partner Organization"
-          ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+          ng-disabled="submitData.proj.proj_status_id == {{config('constants.proj_status_approved')}} || submitData.proj.proj_status_id == {{config('constants.proj_status_ongoing')}} || {{json_encode(Session::get('role') == config('constants.role_life'))}} ">
         </div>
         <label class = "form-label col-md-2">Partner Community</label>
         <div class = "col-md-4">
           <input type = "text" class = "form-control" ng-model = "submitData.proj.partner_community" placeholder="Partner Community"
-          ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+          ng-disabled="submitData.proj.proj_status_id == {{config('constants.proj_status_approved')}} || submitData.proj.proj_status_id == {{config('constants.proj_status_ongoing')}} || {{json_encode(Session::get('role') == config('constants.role_life'))}} ">
         </div>
       </div>
       </div>
@@ -66,7 +66,7 @@
             <label class = "form-label col-md-2">Initial Budget</label>
             <div class = "col-md-4">
                 <input type = "text" class = "form-control" ng-model = "submitData.proj.total_budget" placeholder="Total Budget"
-                ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+                ng-disabled="{{json_encode(Session::get('role') == config('constants.role_life'))}} || submitData.proj.proj_status_id == {{config('constants.proj_status_approved')}} || submitData.proj.proj_status_id == {{config('constants.proj_status_ongoing')}}" >
             </div>
         </div>
       </div>
@@ -97,14 +97,16 @@
         <label class = "form-label col-md-2">Champion</label>
         <div class = "col-md-4">
           <select class = "form-control" ng-init="submitData.proj.champion_id = submitData.champion.id" ng-model = "submitData.proj.champion_id"
-          ng-options = "c.id as c.name for c in submitData.champions" ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+          ng-options = "c.id as c.name for c in submitData.champions"
+          ng-disabled="submitData.proj.proj_status_id == {{config('constants.proj_status_approved')}} || submitData.proj.proj_status_id == {{config('constants.proj_status_ongoing')}} || {{json_encode(Session::get('role') == config('constants.role_life'))}} ">
           </select>
         </div>
         @endif
         <label class = "form-label col-md-2">Resource Person</label>
         <div class = "col-md-4" ng-init = "submitData.proj.resource_person_id = submitData.resource.id || 'NA'">
           <select class = "form-control" ng-model = "submitData.proj.resource_person_id"
-          ng-options = "rp.id as rp.name for rp in submitData.resource_person" ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+          ng-options = "rp.id as rp.name for rp in submitData.resource_person"
+          ng-disabled="submitData.proj.proj_status_id == {{config('constants.proj_status_approved')}} || submitData.proj.proj_status_id == {{config('constants.proj_status_ongoing')}} || {{json_encode(Session::get('role') == config('constants.role_life'))}} ">
           </select>
         </div>
       </div>
@@ -117,14 +119,18 @@
         <div class = "col-md-10">
           <div class="objectives" ng-repeat='field in fields'>
             <input class="form-control" ng-model="submitData.proj.objective[$index]" type="text" ng-class="{'col-sm-12': $last}"
-            placeholder="Objective @{{$index + 1}}" ng-disabled="{{Session::get('role') == config('constants.role_life')}}">
+            placeholder="Objective @{{$index + 1}}"
+            ng-disabled="submitData.proj.proj_status_id == {{config('constants.proj_status_approved')}} || submitData.proj.proj_status_id == {{config('constants.proj_status_ongoing')}} || {{ json_encode(Session::get('role') == config('constants.role_life'))}} ">
             <button class="btn btn-primary btn-sm" type="button" ng-click="removeField($index)"
-            ng-if="{{Session::get('role') != config('constants.role_life')}}">
+            ng-if="submitData.proj.proj_status_id != {{config('constants.proj_status_approved')}} &&
+                submitData.proj.proj_status_id != {{config('constants.proj_status_ongoing')}} && {{json_encode(Session::get('role') != config('constants.role_life'))}}">
               <i class="fa fa-remove"></i>
-            </button>
+            </button
           </div>
         </div>
-        <div class="col-sm-6" ng-class="{'col-sm-offset-2': fields.length}" ng-if="{{Session::get('role') != config('constants.role_life')}}">
+        <div class="col-sm-6" ng-class="{'col-sm-offset-2': fields.length}"
+        ng-if="submitData.proj.proj_status_id != {{config('constants.proj_status_approved')}} &&
+            submitData.proj.proj_status_id != {{config('constants.proj_status_ongoing')}} && {{json_encode(Session::get('role') != config('constants.role_life'))}}">
           <button class="btn btn-primary btn-sm" type="button" ng-click="addField()">
             Add Objective
           </button>
@@ -143,6 +149,55 @@
       </div>
       </div>
     </div>
+
+    <!-- Expense -->
+    <div ng-if = "submitData.proj.id" ng-controller="ItemCtrl as ic">
+        <h3>Item/Expense</h3>
+        <hr ng-init = 'ic.proj_id = submitData.proj.id;ic.getProjItems()'>
+        @if(Session::get('role') == config('constants.role_champion'))
+        <button class = "btn btn-sm btn-success pull-right" ng-click = "ic.add()"> Add Item/Expense</button>
+        @endif
+        <button class = "btn btn-sm btn-danger pull-right" ng-click = "ic.getProjItems()"> Refresh</button>
+
+        <p class="text-danger"><strong>@{{ ic.message }}</strong></p>
+        <br>
+        <table datatable="ng" dt-options="ic.dtOptions" dt-columns="ic.dtColumnDefs" dt-instance="ic.dtInstance" class="table table-hover row-border hover">
+        <thead>
+            <tr>
+              <th>Item Name</th>
+              <th>Category</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total Amount</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat = "data in ic.items">
+              <td>@{{data.item_name}}</td>
+              <td>@{{data.category}}</td>
+              <td>@{{data.quantity}} (@{{data.quantity_label}})</td>
+              <td>@{{data.price}}</td>
+              <td>@{{ ((data.price) * (data.quantity)) }}</td>
+              <td>
+
+              @if(Session::get('role') == config('constants.role_finance'))
+                <button class="btn btn-warning btn-sm" ng-click="ic.edit($index, data)">
+                <i class="fa fa-edit"></i>
+                </button>
+			  @endif
+                @if(Session::get('role') == config('constants.role_champion'))
+                <!-- <button class="btn btn-danger btn-sm" ng-click="ic.delete($index ,data)">
+                   <i class="fa fa-trash-o"></i>
+                </button> -->
+                @endif
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    <!-- End Expense -->
+    <hr>
     <!-- Activities -->
     <div ng-if = "submitData.proj.id" ng-controller="projActDTCtrl as padtc">
         <h3>Activities</h3>
@@ -198,54 +253,6 @@
         </div>
     </div>
     <!-- End Activities -->
-    <hr>
-    <!-- Expense -->
-    <div ng-if = "submitData.proj.id" ng-controller="ItemCtrl as ic">
-        <h3>Item/Expense</h3>
-        <hr ng-init = 'ic.proj_id = submitData.proj.id;ic.getProjItems()'>
-        @if(Session::get('role') == config('constants.role_champion'))
-        <button class = "btn btn-success pull-right" ng-click = "ic.add()"> Add Item/Expense</button>
-        @endif
-        <button class = "btn btn-danger pull-right" ng-click = "ic.getProjItems()"> Refresh</button>
-
-        <p class="text-danger"><strong>@{{ ic.message }}</strong></p>
-        <br>
-        <table datatable="ng" dt-options="ic.dtOptions" dt-columns="ic.dtColumnDefs" dt-instance="ic.dtInstance" class="table table-hover row-border hover">
-        <thead>
-            <tr>
-              <th>Item Name</th>
-              <th>Category</th>
-              <th>Quantity</th>
-              <th>Price</th>
-              <th>Total Amount</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat = "data in ic.items">
-              <td>@{{data.item_name}}</td>
-              <td>@{{data.category}}</td>
-              <td>@{{data.quantity}} (@{{data.quantity_label}})</td>
-              <td>@{{data.price}}</td>
-              <td>@{{ ((data.price) * (data.quantity)) }}</td>
-              <td>
-
-              @if(Session::get('role') == config('constants.role_finance'))
-                <button class="btn btn-warning btn-sm" ng-click="ic.edit($index, data)">
-                <i class="fa fa-edit"></i>
-                </button>
-			  @endif
-                @if(Session::get('role') == config('constants.role_champion'))
-                <!-- <button class="btn btn-danger btn-sm" ng-click="ic.delete($index ,data)">
-                   <i class="fa fa-trash-o"></i>
-                </button> -->
-                @endif
-              </td>
-            </tr>
-          </tbody>
-        </table>
-    </div>
-    <!-- End Expense -->
   </form>
 @stop
 

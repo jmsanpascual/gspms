@@ -90,6 +90,7 @@ class ProjectController extends Controller
                         config('constants.proj_status_ongoing'),
                         config('constants.proj_status_disapproved'),
                         config('constants.proj_status_approved'),
+                        config('constants.proj_status_incomplete'),
                     ];
                     $data['proj']->whereIn('proj_status_id', $projStatusAllowed);
 
@@ -234,7 +235,7 @@ class ProjectController extends Controller
             }
 
             $project['objective'] = $temp;
-            $project['proj_status_id'] = 2; // FOR APPROVAL
+            $project['proj_status_id'] = config('constants.proj_status_incomplete'); // Incomplete
             if(EMPTY($project['champion_id'])  && Session::get('role') == config('constants.role_champion'))
                 $project['champion_id'] = Session::get('id');
 
@@ -355,11 +356,14 @@ class ProjectController extends Controller
                if (empty($temp)) $temp .= $value;
                else $temp .= $delimiter . $value;
             }
-            $previous_champion = App\Projects::find($id)->champion_id;
+            $previous_proj = App\Projects::find($id);
+            $previous_champion = $previous_proj->champion_id;
+
             $upd_arr['objective'] = $temp; // Assign the concatenated objectives
             unset($upd_arr['status_id']);
-            if(EMPTY($upd_arr['remarks']))
-                $upd_arr['proj_status_id'] = 2;
+            if($previous_proj->proj_status_id != config('constants.proj_status_approved') &&
+                $previous_proj->proj_status_id != config('constants.proj_status_incomplete'))
+                $upd_arr['proj_status_id'] = config('constants.proj_status_for_approval_finance');
 
             if(EMPTY($upd_arr['champion_id'])  && Session::get('role') == config('constants.role_champion'))
                 $upd_arr['champion_id'] = Session::get('id');
@@ -373,7 +377,7 @@ class ProjectController extends Controller
 
             if(EMPTY($upd_arr['remarks']))
                 $data['proj']['proj_status_id'] = $upd_arr['proj_status_id'];
-                
+
             $data['proj']['status'] = $stat;
 
             // if the one updating is not the champion and selected champion has been changed

@@ -12,6 +12,7 @@ use Log;
 use DB;
 use App\Project;
 use App\ProjectItemCategory;
+use App\ProjectActivities;
 use App\Item;
 use File;
 use Exception;
@@ -36,7 +37,7 @@ class ItemController extends Controller
 
             $item = (new App\ProjectItemCategory)->getTable();
             $category = (new App\Category)->getTable();
-            Log::info('line 24 - - - -');
+            // Log::info('line 24 - - - -');
             $token = csrf_token();
             $data['items'] = App\ProjectItemCategory::JoinCategory()
                 ->leftJoin('project_attachments', 'project_attachments.proj_item_category_id', '=', $item.'.id')
@@ -45,7 +46,7 @@ class ItemController extends Controller
                 DB::Raw('"'. $token . '" AS token'), 'project_attachments.id AS project_attachment_id')->where('proj_id', $proj_id)
                 ->get();
             $status = TRUE;
-            logger(json_encode($data));
+            // logger(json_encode($data));
         }
         catch(Exception $e)
         {
@@ -113,10 +114,18 @@ class ItemController extends Controller
             // Make the status to on-going from initiating
             $ongoingId = 1;
             $approvedId = 5;
-
+            // logger('proj status ' . $project->proj_status_id);
             if ($project->proj_status_id == $approvedId) {
                 $project->proj_status_id = $ongoingId;
                 $project->save();
+            } else if($project->proj_status_id == config('constants.proj_status_incomplete')) {
+                // check if already have a activities
+                $count = ProjectActivities::where('proj_id', $project->id)->count();
+                logger('test - - - -' . $count);
+                if($count) {
+                    $project->proj_status_id = config('constants.proj_status_for_approval_finance');
+                    $project->save();
+                }
             }
             $status = TRUE;
             DB::commit();

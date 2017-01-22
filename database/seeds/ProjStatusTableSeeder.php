@@ -22,7 +22,8 @@ class ProjStatusTableSeeder extends Seeder
             'Completed',
             'Disapproved',
             'Approved',
-            'For Approval - Life Director'
+            'For Approval - Life Director',
+            'Incomplete'
         ];
 
         $ins_array = [];

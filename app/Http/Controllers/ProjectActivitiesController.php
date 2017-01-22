@@ -12,6 +12,8 @@ use Lang;
 use Response;
 use DB;
 use App\Project;
+use App\ProjectItemCategory;
+use Exception;
 
 class ProjectActivitiesController extends Controller
 {
@@ -38,7 +40,7 @@ class ProjectActivitiesController extends Controller
                                     ->joinActivityStatus()
                                     ->select("$activity.id","$activity.name", "$activity.start_date",
                                     "$activity.end_date", "$activity.remarks", "$act_status.name AS status",
-                                    "$activity.status_id", "$activity.description", "proj_activities.activity_id",
+                                    "$activity.status_id", "$activity.description", "quantity", "item_id", "proj_activities.activity_id",
                                     DB::Raw('"'. $token . '" AS token'))
     								->where('proj_id', $proj_id)->get();
             // Log::info(' lINE 33 - - - - -');
@@ -91,17 +93,35 @@ class ProjectActivitiesController extends Controller
         $msg = '';
         try
         {
-            Log::info($req->all());
+            // Log::info($req->all());
             $proj_id = $req->get('proj_id');
             $activity = $req->all();
+            // logger($activity);
+            if(!EMPTY($activity['item'])) {
+                if(EMPTY($activity['quantity'])) {
+                    throw new Exception('Error. Quantity is required if there is an item specified');
+                }
+
+                // check quantity should not exceed to max
+                if($activity['quantity'] > $activity['item']['quantity']) {
+                    throw new Exception('Error. Quantity exceeded the maximum items available, Please try again.');
+                }
+
+                $activity['item_id'] = $activity['item']['id'];
+                unset($activity['item']);
+            } else if(!EMPTY($activity['quantity'])) {
+                if(EMPTY($activity['item'])) {
+                    throw new Exception('Error. Please specify items if there is a quantity.');
+                }
+            }
             unset($activity['proj_id']);
             unset($activity['token']);
-            Log::info($proj_id);
-            Log::info($activity);
+            // Log::info($proj_id);
+            // Log::info($activity);
             DB::beginTransaction();
             $activity['status_id'] = 1;
             $activity['start_date'] = date('Y-m-d H:i:s', strtotime($activity['start_date']));
-            Log::info(' start date '. $activity['start_date']);
+            // Log::info(' start date '. $activity['start_date']);
             $activity['end_date'] = date('Y-m-d H:i:s', strtotime($activity['end_date']));
 
             // Get and remove tasks before inserting the activity
@@ -119,10 +139,12 @@ class ProjectActivitiesController extends Controller
             }
 
             App\ActivityTask::insert($tasks); // Insert tasks
-
             $data['projAct'] = $req->all();
             $data['projAct']['id'] = $id;
             $data['projAct']['status'] = $stat;
+
+            if(!EMPTY($activity['item_id']))
+            $data['projAct']['item_id'] = $activity['item_id'];
 
             // Make the status to on-going from initiating
             $ongoingId = 1;
@@ -132,6 +154,13 @@ class ProjectActivitiesController extends Controller
             if ($project->proj_status_id == $approvedId) {
                 $project->proj_status_id = $ongoingId;
                 $project->save();
+            } else if($project->proj_status_id == config('constants.proj_status_incomplete')) {
+                // check if already have a expense
+                $count = ProjectItemCategory::where('proj_id', $project->id)->count();
+                if($count) {
+                    $project->proj_status_id = config('constants.proj_status_for_approval_finance');
+                    $project->save();
+                }
             }
 
             DB::commit();
@@ -141,6 +170,7 @@ class ProjectActivitiesController extends Controller
         {
             DB::rollback();
             $msg = $e->getMessage();
+            // logger($e);
         }
         $data['status'] = $status;
         $data['msg'] = $msg;
@@ -154,11 +184,29 @@ class ProjectActivitiesController extends Controller
         $msg = '';
         try
         {
+
+            $taskIds = [];
             $proj_id = $req->get('proj_id');
             $act_id = $req->get('id');
             $activity = $req->all();
+            if(!EMPTY($activity['item'])) {
+                if(EMPTY($activity['quantity'])) {
+                    throw new Exception('Error. Quantity is required if there is an item specified');
+                }
 
-            Log::info($activity);
+                // check quantity should not exceed to max
+                if($activity['quantity'] > $activity['item']['quantity']) {
+                    throw new Exception('Error. Quantity exceeded the maximum items available, Please try again.');
+                }
+
+                $activity['item_id'] = $activity['item']['id'];
+                unset($activity['item']);
+            } else if(!EMPTY($activity['quantity'])) {
+                if(EMPTY($activity['item'])) {
+                    throw new Exception('Error. Please specify items if there is a quantity.');
+                }
+                unset($activity['item']);
+            }
             unset($activity['proj_id']);
             unset($activity['id']);
             unset($activity['status']);
@@ -176,8 +224,6 @@ class ProjectActivitiesController extends Controller
             $id = App\Activities::where('id', $act_id)->update($activity);
             // $stat = App\ActivityStatus::where('id', $activity['status_id'])->value('name');
 
-            $taskIds = [];
-
             if (! empty($tasks)) {
                 // Update the tasks
                 foreach ($tasks as $key => $value) {
@@ -191,8 +237,12 @@ class ProjectActivitiesController extends Controller
             }
 
             $data['projAct'] = $req->all();
-            $data['projAct']['status_id'] = $activity['status_id'];
+            // $data['projAct']['status_id'] = $activity['status_id'];
             // $data['projAct']['status'] = $stat;
+
+            if(!EMPTY($activity['item_id']))
+            $data['projAct']['item_id'] = $activity['item_id'];
+
             DB::commit();
             $status = TRUE;
         }
@@ -200,6 +250,7 @@ class ProjectActivitiesController extends Controller
         {
             DB::rollback();
             $msg = $e->getMessage();
+            // logger($e);
         }
         $data['status'] = $status;
         $data['msg'] = $msg;
