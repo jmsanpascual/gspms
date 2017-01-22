@@ -121,6 +121,14 @@
               </li>
               @endif
 
+              @if(Session::get('role') == config('constants.role_volunteer'))
+              <li ng-class = "{'active' : {{json_encode(($page == 'projects'))}} }">
+                <a href="{{ route('tasks.view') }}" title="Forms">
+                    <i class="fa fa-file-text-o"></i> Tasks
+                </a>
+              </li>
+              @endif
+
             </ul>
         </nav>
         <!--sidebar left end-->
