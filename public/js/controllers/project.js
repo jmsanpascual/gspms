@@ -28,7 +28,7 @@ angular.module('project.controller', [
     vm.dtInstance = {};
     vm.projects = [];
 
-    this.refresh = function()
+    vm.refresh = function()
     {
         console.log('refresh ');
         Project.getProjects().then(function (result) {
@@ -41,7 +41,7 @@ angular.module('project.controller', [
             }
          });
     }
-    this.refresh();
+    vm.refresh();
 
     ResourcePerson.getResourcePersons().then(function (resourcePersons) {
         console.log('Resource Persons:', resourcePersons);
@@ -122,7 +122,8 @@ angular.module('project.controller', [
 
         // Add to datatable
         modal.result.then(function(data){
-            vm.projects.push(data);
+            // vm.projects.push(data);
+            vm.refresh();
         });
     }
 
@@ -146,7 +147,12 @@ angular.module('project.controller', [
 
         var modal = defaultModal.showModal(attr);
         modal.result.then(function (data) {
-            vm.projects.splice(index, 1, angular.copy(data.proj));
+            // vm.projects.splice(index, 1, angular.copy(data.proj));
+            //save
+            vm.refresh();
+        }, function() {
+            // close
+            vm.refresh();
         });
     }
 

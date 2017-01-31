@@ -189,7 +189,7 @@ common.controller('defaultModalInstanceCtrl', function ($scope, $uibModalInstanc
             };
         }
 
-        $http.post($scope.submitData.saveUrl, data, config).then(function(result){
+        return $http.post($scope.submitData.saveUrl, data, config).then(function(result){
             result = result.data;
             if(result.status)
             {

@@ -11,7 +11,9 @@
 @stop
 @section('modal-content')
 	<form role="form" id = "projForm">
-
+		<div ng-if = "submitData.projAct.id">
+			<span ng-init="submitData.setItemData(submitData.projAct)"></span>
+		</div>
 		<input type ="hidden" ng-model = "submitData.projAct.id">
 		<input type ="hidden" ng-model = "submitData.projAct.proj_id">
 		<input type ="hidden" ng-model = "submitData.projAct.token">
@@ -44,6 +46,28 @@
 				<div class = "col-md-8">
 					<input type = "date" class = "form-control" ng-model = "submitData.projAct.end_date" placeholder="End Date"
 					format-date>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class = "form-group">
+			<div class = "row">
+				<div class = "col-md-12">
+				<label class = "form-label col-md-4">Item Used</label>
+				<div class = "col-md-6">
+					<select class = "form-control" ng-model = "submitData.projAct.item"
+		            ng-options = "item as item.item_name + ' / per ' + item.quantity_label for item in submitData.items">
+		            </select>
+				</div>
+				</div>
+			</div>
+		</div>
+		<div class = "form-group">
+			<div class = "row">
+				<div class = "col-md-12">
+				<label class = "form-label col-md-4">Quantity (max: @{{ submitData.projAct.item.quantity }})</label>
+				<div class = "col-md-6">
+					<input type = "number" class = "form-control" ng-model = "submitData.projAct.quantity" placeholder="Quantity">
 				</div>
 			</div>
 			</div>

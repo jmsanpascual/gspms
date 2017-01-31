@@ -9,7 +9,7 @@ angular.module('items.controller',
     ])
 
 .controller('ItemCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder,
-    defaultModal, ItemsRestApi, CategoriesRestApi, $http, ExpenseManager) {
+    defaultModal, ItemsRestApi, CategoriesRestApi, $http, ExpenseManager, ItemManager) {
     // vm.proj_id = 1; //declared in modals/projects.blade.php
     var vm = this;
     vm.message = '';
@@ -29,7 +29,8 @@ angular.module('items.controller',
           if (result.status) {
               console.log('request');
               console.log(result.items);
-              vm.items =  result.items;
+              ItemManager.set(result.items);
+              vm.items = ItemManager.get();
           } else {
               alert('Unable to load datatable');
           }

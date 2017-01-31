@@ -14,6 +14,7 @@ return [
     'proj_status_disapproved' => 4,
     'proj_status_approved' => 5,
     'proj_status_for_approval_life' => 6,
+    'proj_status_incomplete' => 7,
     'budget_request_for_approval' => 1,
     'budget_request_approved' => 2,
 ];
