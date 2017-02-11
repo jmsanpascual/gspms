@@ -27,6 +27,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'infos',
+        'expertises',
         'roles',
         'remember_token',
         'created_at',
@@ -36,6 +37,7 @@ class User extends Authenticatable
 
     protected $appends = [
         'info',
+        'expertise',
         // 'role'
     ];
 
@@ -69,6 +71,11 @@ class User extends Authenticatable
         return $this->belongsToMany('App\PersonalInfo', 'user_info');
     }
 
+    public function expertises()
+    {
+        return $this->belongsToMany('App\Expertise', 'user_expertise');
+    }
+
     public function first_post_pic ()
     {
         return $this->hasOne(PostPicture::class)->orderBy('id', 'asc');
@@ -87,6 +94,13 @@ class User extends Authenticatable
         if (array_key_exists('infos', $this->getRelations())) {
             $info = $this['infos']->toArray();
             return array_shift($info);
+        }
+    }
+
+    public function getExpertiseAttribute() {
+        if (array_key_exists('expertises', $this->getRelations())) {
+            $expertises = $this['expertises']->toArray();
+            return array_shift($expertises);
         }
     }
 

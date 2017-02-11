@@ -24,7 +24,7 @@ class VolunteerController extends Controller
         $roleId = $this->roleId;
 
         try {
-            $volunteers = User::with(['infos', 'roles'])
+            $volunteers = User::with(['infos', 'roles', 'expertises'])
                 ->whereHas('roles', function ($query) use($roleId) {
                     $query->where('role_id', $roleId);
                 })->get();
@@ -48,7 +48,9 @@ class VolunteerController extends Controller
         try {
             $volunteer = $request->get('volunteer');
             $personalInfo = $volunteer['info'];
+            $expertise = $volunteer['expertise'];
             unset($volunteer['info']);
+            unset($volunteer['expertise']);
 
             $volunteer = new User($volunteer);
             $personalInfo = new PersonalInfo($personalInfo);
@@ -58,6 +60,7 @@ class VolunteerController extends Controller
             $volunteer->save();
             $volunteer->infos()->save($personalInfo);
             $volunteer->roles()->attach($this->roleId);
+            $volunteer->expertises()->attach($expertise['id']);
 
             DB::commit();
 
@@ -99,9 +102,11 @@ class VolunteerController extends Controller
             $volunteerInstance = User::find($volunteerId);
             $personalInfo = $volunteer['info'];
             $personalInfoId = $personalInfo['id'];
+            $expertise = $volunteer['expertise'];
 
             unset($volunteer['info']);
             unset($volunteer['role']);
+            unset($volunteer['expertise']);
             unset($personalInfo['pivot']);
 
             DB::beginTransaction();
@@ -114,6 +119,7 @@ class VolunteerController extends Controller
 
             User::where('id', $volunteerId)->update($volunteer);
             PersonalInfo::where('id', $personalInfoId)->update($personalInfo);
+            $volunteerInstance->expertises()->sync([$expertise['id']]);
 
             DB::commit();
 

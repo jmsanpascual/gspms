@@ -88,6 +88,7 @@ ng-app='project.controller'
 {!! HTML::script('js/resource-person/services/resource-person.js') !!}
 {!! HTML::script('js/volunteer/volunteer.module.js') !!}
 {!! HTML::script('js/volunteer/volunteer.factory.js') !!}
+{!! HTML::script('js/volunteer/expertise/expertise.factory.js') !!}
 {!! HTML::script('js/services/project-status.js') !!}
 {!! HTML::script('js/services/program.js') !!}
 {!! HTML::script('js/services/project.js') !!}

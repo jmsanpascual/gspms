@@ -67,6 +67,18 @@
     <div class = "form-group">
       <div class = "row">
         <div class = "col-md-12">
+        <label class = "form-label col-md-3">Expertise</label>
+        <div class = "col-md-8">
+          <select class = "form-control" ng-model = "submitData.volunteer.expertise.id"
+            ng-options = "expertise.id as expertise.name for expertise in submitData.expertises">
+          </select>
+        </div>
+      </div>
+      </div>
+    </div>
+    <div class = "form-group">
+      <div class = "row">
+        <div class = "col-md-12">
         <label class = "form-label col-md-3">Email</label>
         <div class = "col-md-8">
           <input type = "text" class = "form-control" ng-model = "submitData.volunteer.info.email"

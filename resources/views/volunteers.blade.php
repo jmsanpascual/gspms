@@ -26,6 +26,7 @@
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Email</th>
+                        <th>Expertise</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
@@ -35,6 +36,7 @@
                         <td ng-bind="volunteer.info.first_name"></td>
                         <td ng-bind="volunteer.info.last_name"></td>
                         <td ng-bind="volunteer.info.email"></td>
+                        <td ng-bind="volunteer.expertise.name"></td>
                         <td>
                           <button class="btn btn-warning btn-sm" ng-click="vc.edit($index, volunteer)">
                             <i class="fa fa-edit"></i>
