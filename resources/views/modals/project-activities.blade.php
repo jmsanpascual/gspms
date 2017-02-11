@@ -155,6 +155,9 @@
 		</span>
 		@endif
 		@if(Session::get('role') == config('constants.role_champion'))
+		<button class = "btn btn-default" ng-click = "asc.requestChange()" >Request for change</button>
+		@endif
+		@if(Session::get('role') == config('constants.role_champion'))
 		<button class = "btn btn-info" ng-click = "asc.completed()" ng-if = "submitData.projAct.status_id == 2">Completed</button>
 		@endif
 	</span>

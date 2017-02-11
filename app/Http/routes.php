@@ -121,6 +121,9 @@ Route::get('volunteers/view-volunteers', array('as' => 'volunteers.view', functi
 Route::post('volunteers/update', 'VolunteerController@update');
 Route::resource('volunteers', 'VolunteerController');
 
+// RESTful routes for Volunteer ExpertiseController
+Route::resource('expertise', 'ExpertiseController');
+
 // RESTful resource route for Tasks
 Route::get('tasks/view-tasks', array('as' => 'tasks.view', function () {
     return view('task');
