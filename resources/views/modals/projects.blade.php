@@ -242,6 +242,7 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Status</th>
+                <th>Phase</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -251,6 +252,7 @@
                 <td>@{{data.start_date}}</td>
                 <td>@{{data.end_date}}</td>
                 <td>@{{data.status}}</td>
+                <td>@{{data.phase_id}}</td>
                 <td>
                   <span ng-if ="submitData.proj.proj_status_id != 3">
                     <button class="btn btn-warning btn-sm" ng-click="padtc.edit($index, data)">
