@@ -28,9 +28,10 @@ angular.module('dynamicElement', ['volunteer'])
     }
 })
 
-.controller('DynamicElementTaskController', function ($scope, $rootScope, $http, defaultModal, Volunteer) {
+.controller('DynamicElementTaskController', function ($scope, $rootScope, $http, defaultModal, Volunteer, Expertise) {
     var arrayCount = getLen();
     var volunteers = [];
+    var expertises = [];
 
     $scope.fields = arrayCount.length <= 0 ? [{id: 0}] : arrayCount;
     $scope.$parent.submitData.projAct.tasks = !$scope.$parent.submitData.projAct.tasks ? [] : $scope.$parent.submitData.projAct.tasks;
@@ -39,6 +40,7 @@ angular.module('dynamicElement', ['volunteer'])
 
     function activate() {
         getVolunteers();
+        getAllExpertise();
     }
 
     function getVolunteers() {
@@ -48,6 +50,17 @@ angular.module('dynamicElement', ['volunteer'])
         }, function(error) {
             // toast.error('Unable to load volunteers')
             alert('Unable to load volunteers at the moment.');
+            console.log('Error:', error);
+        });
+    }
+
+    function getAllExpertise() {
+        Expertise.getAll().then(function (newExpertise) {
+            console.log('Expertise:', newExpertise);
+            expertises = newExpertise;
+        }, function(error) {
+            // toast.error('Unable to load volunteers')
+            alert('Unable to load expertise at the moment.');
             console.log('Error:', error);
         });
     }
@@ -109,16 +122,53 @@ angular.module('dynamicElement', ['volunteer'])
             templateUrl: '../assign-task-view',
             action: 'Assign a',
             task: task,
-            volunteers: volunteers
+            volunteers: angular.copy(volunteers),
+            expertises: expertises,
+            expertiseId: (expertises.length) ? expertises[0].id : '',
+            onChange: updateVolunteerList
         };
 
         if (task.id) {
             attrs.saveUrl = '../update-task';
         }
 
+        if (task.user_id) {
+            console.log('Id available!');
+            var volLen = volunteers.length;
+
+            for (var i = 0; i < volLen; i++) {
+                if (task.user_id == volunteers[i].id) {
+                    console.log('Match!');
+                    var expertise = volunteers[i].expertise;
+                    attrs.expertiseId = (expertise) ? expertise.id : expertises[0].id;
+                    break;
+                }
+            }
+        }
+
+        updateVolunteerList(attrs.expertiseId);
+
         defaultModal.showModal(attrs).result.then(function(data){
             console.log('Volunteer was assigned successfully', data);
         });
+
+        function updateVolunteerList(expertiseId) {
+            console.log('ExpertiseId: ', expertiseId);
+            attrs.volunteers.length = 0;
+            var len = volunteers.length;
+
+            for (var i = 0; i < len; i++) {
+                var expertise = volunteers[i].expertise;
+
+                if (expertise && expertise.id == expertiseId) {
+                    attrs.volunteers.push(volunteers[i]);
+                }
+            }
+
+            if (attrs.volunteers.length) {
+                attrs.task.user_id = attrs.volunteers[0].id;
+            }
+        }
     };
 
     function getLen() {

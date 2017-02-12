@@ -41,7 +41,7 @@ class ProjectActivitiesController extends Controller
                                     ->select("$activity.id","$activity.name", "$activity.start_date",
                                     "$activity.end_date", "$activity.remarks", "$act_status.name AS status",
                                     "$activity.status_id", "$activity.description", "quantity", "item_id", "proj_activities.activity_id",
-                                    DB::Raw('"'. $token . '" AS token'))
+                                    "$activity.phase_id", DB::Raw('"'. $token . '" AS token'))
     								->where('proj_id', $proj_id)->get();
             // Log::info(' lINE 33 - - - - -');
             // Log::info(json_encode(DB::getQueryLog()));
@@ -230,7 +230,7 @@ class ProjectActivitiesController extends Controller
                     // Update the activity tasks
                     if (!isset($tasks[$key]['id'])) {
                         $tasks[$key]['activity_id'] = $act_id;
-                        App\ActivityTask::insertGetId($tasks[$key]);
+                        $taskId = App\ActivityTask::insertGetId($tasks[$key]);
                         $taskIds[] = ['id' => $taskId, 'name' => $tasks[$key]['name']];
                     } else {
                         App\ActivityTask::where('id', $tasks[$key]['id'])->update($tasks[$key]);

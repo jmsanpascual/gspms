@@ -1,15 +1,15 @@
 'use strict'
-angular.module('project.activites.controller',
-    [
-    'projectActivities.service',
-    'datatables',
-    'common.service',
-    'ui.bootstrap',
-    'activityStatus.service'
+angular.module('project.activites.controller', [
+        'projectActivities.service',
+        'datatables',
+        'common.service',
+        'ui.bootstrap',
+        'activityStatus.service',
+        'activityDependencies'
     ])
 
 .controller('projActDTCtrl', function($rootScope, $scope, $compile, $timeout, DTOptionsBuilder, DTColumnDefBuilder,
-    reqDef, defaultModal, ProjectActivitiesRestApi, activityStatusRestApi, ItemManager) {
+    reqDef, defaultModal, ProjectActivitiesRestApi, activityStatusRestApi, ItemManager, Phase, ProgressCalculator) {
     // $scope.proj_id = 1; //declared in modals/projects.blade.php
     var vm = this,
         approvedActivityId = 2,
@@ -17,12 +17,19 @@ angular.module('project.activites.controller',
         items;
 
     vm.message = '';
-    vm.percentage = '0%';
+    vm.percent = { value: 0 };
+    vm.phaseProgress = { hide: true };
 
     vm.edit = edit;
     vm.delete = deleteRow;
     vm.dtInstance = {};
     vm.project_activities = [];
+    vm.phases = [];
+    vm.phasesPercentages = [
+        { id: 1, percent: 0, class: 'progress-bar-info' },
+        { id: 2, percent: 0, class: 'progress-bar-warning' },
+        { id: 3, percent: 0, class: 'progress-bar-danger' }
+    ];
 
     // Watch the length of activities to update the percentage of progress bar
     // $scope.$watch('padtc.project_activities.length', function (newVal, oldVal) {
@@ -30,35 +37,21 @@ angular.module('project.activites.controller',
     //     vm.percentage = (Math.round((approvedActivityCount / newVal) * 100)) + '%';
     // });
 
+    activate();
+
+    function activate() {
+        Phase.getAll().then(function (phases) {
+            console.log('Phases:', phases);
+            vm.phases = phases;
+        }, function (error) {
+            alert('Unable to load phases at the moment.');
+            console.log('Error:', error);
+        });
+    }
+
     $rootScope.$on('update-percentage', function (event, percentage) {
-        // vm.percentage = Math.round((percentage / vm.project_activities.length)) + '%';
-        var activitiesLen = vm.project_activities.length,
-            subTaskPercentage = 0,
-            approvedTaskCount = 0;
-
-        for (var i = 0; i < activitiesLen; i++) {
-
-            if (vm.project_activities[i].status_id == approvedActivityId) {
-                  var tasks = vm.project_activities[i].tasks,
-                      tasksLen = tasks.length;
-
-                  approvedTaskCount = 0;
-
-                  for (var x = 0;  x < tasksLen; x++) {
-                      if (tasks[x].done) {
-                          approvedTaskCount++;
-                      }
-                  }
-
-                  subTaskPercentage += (Math.round((approvedTaskCount / tasksLen) * 100));
-            }
-        }
-
-        if (activitiesLen > 0) {
-            vm.percentage = Math.round((subTaskPercentage / activitiesLen)) + '%';
-        } else {
-            vm.percentage = '0%';
-        }
+        ProgressCalculator.calculatePhasesPercentages(vm.project_activities,
+            vm.phasesPercentages, vm.percent);
     });
 
     this.getProjActivities = function(proj_id)
@@ -68,58 +61,14 @@ angular.module('project.activites.controller',
 
           if (result.status) {
               vm.project_activities =  result.proj_activities;
-              var activitiesLen = result.proj_activities.length,
-                  subTaskPercentage = 0,
-                  approvedTaskCount = 0;
-
-              for (var i = 0; i < activitiesLen; i++) {
-
-                  if (result.proj_activities[i].status_id == approvedActivityId) {
-                        var tasks = result.proj_activities[i].tasks,
-                            tasksLen = tasks.length;
-
-                        approvedTaskCount = 0;
-
-                        for (var x = 0;  x < tasksLen; x++) {
-                            if (tasks[x].done) {
-                                approvedTaskCount++;
-                            }
-                        }
-
-                        subTaskPercentage += (Math.round((approvedTaskCount / tasksLen) * 100));
-                  }
-              }
-
-              if (activitiesLen > 0) {
-                  $timeout(function () {
-                      vm.percentage = Math.round((subTaskPercentage / activitiesLen)) + '%';
-                  }, 500);
-              } else {
-                  $timeout(function () {
-                      vm.percentage = '0%';
-                  }, 500);
-              }
+              vm.percentage = ProgressCalculator.calculatePhasesPercentages(
+                  vm.project_activities, vm.phasesPercentages, vm.percent);
           } else {
               alert('Unable to load datatable');
           }
        });
     }
 
-    // $scope.status = {};
-
-    // activityStatusRestApi.query().$promise.then(function(result){
-    //     var result = result[0];
-    //     if(result.status)
-    //     {
-    //         $scope.status = result.activity_status;
-    //     }
-    //     else
-    //     {
-    //         alert(result.status);
-    //     }
-    // });
-
-    // .fromSource('js/controllers/data.json')
     vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
 
     vm.dtColumnDefs = [
@@ -127,7 +76,8 @@ angular.module('project.activites.controller',
         DTColumnDefBuilder.newColumnDef(1),
         DTColumnDefBuilder.newColumnDef(2),
         DTColumnDefBuilder.newColumnDef(3),
-        DTColumnDefBuilder.newColumnDef(4).notSortable()
+        DTColumnDefBuilder.newColumnDef(4),
+        DTColumnDefBuilder.newColumnDef(5).notSortable()
     ];
 
     function setItemData(projAct) {
@@ -145,9 +95,13 @@ angular.module('project.activites.controller',
             saveUrl: '../project-activities',
             action: 'Add',
             // status : $scope.status,
-            projAct : {proj_id : $scope.proj_id},
+            projAct : {
+                proj_id : $scope.proj_id,
+                phase_id: (vm.phases.length) ? vm.phases[0].id : ''
+            },
             items: items,
-            setItemData: setItemData
+            setItemData: setItemData,
+            phases: vm.phases
         };
 
         defaultModal.showModal(attr).result.then(function(data){
@@ -167,7 +121,8 @@ angular.module('project.activites.controller',
             // status : $scope.status,
             projAct : angular.copy(act),
             items: items,
-            setItemData: setItemData
+            setItemData: setItemData,
+            phases: vm.phases
         };
         attr.projAct.proj_id = $scope.proj_id;
 
@@ -231,7 +186,7 @@ angular.module('project.activites.controller',
         approvedTaskCount = 0,
         percentage = undefined;
 
-    $scope.percentage = '0%';
+    $scope.percentage = '0';
 
     for (var i = 0; i < taskLen; i++) {
         if (tasks[i].done) {
@@ -240,7 +195,7 @@ angular.module('project.activites.controller',
     }
 
     if (approvedTaskCount > 0) {
-        $scope.percentage = (Math.round((approvedTaskCount / taskLen) * 100)) + '%';
+        $scope.percentage = (Math.round((approvedTaskCount / taskLen) * 100));
     }
 
     // Watch the length of activity tasks to update the percentage of progress bar
@@ -250,7 +205,7 @@ angular.module('project.activites.controller',
         approvedTaskCount = 0;
         tasks = $scope.submitData.projAct.tasks;
         taskLen = newVal;
-        $scope.percentage = '0%';
+        $scope.percentage = '0';
 
         for (var i = 0; i < taskLen; i++) {
             if (tasks[i].done) {
@@ -260,7 +215,7 @@ angular.module('project.activites.controller',
 
         if (approvedTaskCount > 0) {
             percentage = (Math.round((approvedTaskCount / taskLen) * 100));
-            $scope.percentage = percentage + '%';
+            $scope.percentage = percentage;
             // $scope.submitData.projAct
         } else {
             percentage = 0;
@@ -269,7 +224,7 @@ angular.module('project.activites.controller',
 
     $rootScope.$on('task-updated', function () {
         approvedTaskCount = 0;
-        $scope.percentage = '0%';
+        $scope.percentage = 0;
 
         for (var i = 0; i < taskLen; i++) {
             if (tasks[i].done) {
@@ -279,7 +234,7 @@ angular.module('project.activites.controller',
 
         if (approvedTaskCount > 0) {
             percentage = (Math.round((approvedTaskCount / taskLen) * 100));
-            $scope.percentage = percentage + '%';
+            $scope.percentage = percentage;
         } else {
             percentage = 0;
         }

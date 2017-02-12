@@ -101,6 +101,9 @@ Route::get('add-task-remarks-view', function () {
 Route::post('update-task', 'ProjectActivitiesController@updateTask');
 Route::delete('delete-task/{id}', 'ProjectActivitiesController@deleteTask');
 
+// RESTful route for Activity Phases
+Route::resource('phase', 'PhaseController');
+
 Route::resource('budget', 'BudgetController');
 
 Route::get('budget-request/add', array(function () {
@@ -120,6 +123,9 @@ Route::get('volunteers/view-volunteers', array('as' => 'volunteers.view', functi
 }));
 Route::post('volunteers/update', 'VolunteerController@update');
 Route::resource('volunteers', 'VolunteerController');
+
+// RESTful routes for Volunteer ExpertiseController
+Route::resource('expertise', 'ExpertiseController');
 
 // RESTful resource route for Tasks
 Route::get('tasks/view-tasks', array('as' => 'tasks.view', function () {

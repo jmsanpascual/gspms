@@ -196,10 +196,26 @@
     <div ng-if = "submitData.proj.id" ng-controller="projActDTCtrl as padtc">
         <h3>Activities</h3>
 
-        <div class="progress" ng-if="padtc.project_activities.length">
+        <div class="progress" ng-if="padtc.project_activities.length"
+          ng-mouseover="padtc.phaseProgress.hide = false"
+          ng-mouseout="padtc.phaseProgress.hide = true">
+
           <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
-          aria-valuemin="0" aria-valuemax="100" ng-style="{width: padtc.percentage}">
-            @{{ padtc.percentage }}
+          aria-valuemin="0" aria-valuemax="100" ng-style="{width: padtc.percent.value + '%'}">
+            @{{ padtc.percent.value }}%
+          </div>
+
+        </div>
+
+        <div class="progress" ng-hide="padtc.phaseProgress.hide">
+          <div class="progress-bar" aria-valuemin="0" aria-valuemax="33"
+            ng-repeat="phase in padtc.phasesPercentages"
+            ng-style="{width: phase.percent + '%'}"
+            ng-class="phase.class">
+            <span class="sr-only">
+              @{{ phase.percent }}% Complete Phase @{{ phase.id }}
+            </span>
+              Phase @{{ phase.id }} @ @{{ phase.percent }}%
           </div>
         </div>
 
@@ -220,6 +236,7 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Status</th>
+                <th>Phase</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -229,6 +246,7 @@
                 <td>@{{data.start_date}}</td>
                 <td>@{{data.end_date}}</td>
                 <td>@{{data.status}}</td>
+                <td>@{{data.phase_id}}</td>
                 <td>
                   <span ng-if ="submitData.proj.proj_status_id != 3">
                     <button class="btn btn-warning btn-sm" ng-click="padtc.edit($index, data)">

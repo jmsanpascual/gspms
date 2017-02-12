@@ -7,13 +7,14 @@
 
     VolunteerController.$inject = [
         'Volunteer',
+        'Expertise',
         'DTOptionsBuilder',
         'DTColumnDefBuilder',
         'defaultModal'
     ];
 
     /* @ngInject */
-    function VolunteerController(Volunteer, DTOptionsBuilder,
+    function VolunteerController(Volunteer, Expertise, DTOptionsBuilder,
         DTColumnDefBuilder, defaultModal) {
 
         var vm = this;
@@ -21,6 +22,7 @@
         vm.message = '';
         vm.dtInstance = {};
         vm.volunteers = [];
+        vm.expertises = [];
 
         vm.add = add;
         vm.edit = edit;
@@ -40,6 +42,7 @@
 
         function activate() {
             getVolunteers();
+            getAllExpertise();
         }
 
         function getVolunteers() {
@@ -53,12 +56,29 @@
             });
         }
 
+        function getAllExpertise() {
+            Expertise.getAll().then(function (expertise) {
+                console.log('Expertise:', expertise);
+                vm.expertises = expertise;
+            }, function(error) {
+                // toast.error('Unable to load volunteers')
+                alert('Unable to load expertise at the moment.');
+                console.log('Error:', error);
+            });
+        }
+
         function add() {
             var attr = {
                 size: 'md',
                 templateUrl : 'create',
                 resource: true,
-                action: 'Add'
+                action: 'Add',
+                expertises: vm.expertises,
+                volunteer: {
+                    expertise: {
+                        id: (vm.expertises.length) ? vm.expertises[0].id : ''
+                    }
+                }
             };
 
             var modal = defaultModal.showModal(attr);
@@ -74,6 +94,12 @@
                     data.volunteer.id = response.volunteerId;
                     data.volunteer.info.id = response.personalInfoId;
 
+                    for (var index in vm.expertises) {
+                        if (data.volunteer.expertise.id == vm.expertises[index].id) {
+                            data.volunteer.expertise.name = vm.expertises[index].name;
+                        }
+                    }
+
                     var volunteer = Volunteer.getInstance(data.volunteer);
                     vm.volunteers.push(volunteer);
                 });
@@ -86,7 +112,8 @@
                 templateUrl : 'create',
                 action: 'Edit',
                 resource: true,
-                volunteer: volunteer
+                volunteer: volunteer,
+                expertises: vm.expertises
             };
 
             var modal = defaultModal.showModal(attr);

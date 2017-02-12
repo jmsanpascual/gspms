@@ -26,6 +26,7 @@
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Email</th>
+                        <th>Expertise</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
@@ -35,6 +36,7 @@
                         <td ng-bind="volunteer.info.first_name"></td>
                         <td ng-bind="volunteer.info.last_name"></td>
                         <td ng-bind="volunteer.info.email"></td>
+                        <td ng-bind="volunteer.expertise.name"></td>
                         <td>
                           <button class="btn btn-warning btn-sm" ng-click="vc.edit($index, volunteer)">
                             <i class="fa fa-edit"></i>
@@ -50,12 +52,57 @@
               </div>
           </div>
       </div>
-  </div>
 
+      <div class="col-md-12">
+          <div class="panel panel-default">
+              <div class="panel-heading">
+                  <h3 class="panel-title">Expertise</h3>
+                  <div class="actions pull-right">
+                      <i class="fa fa-chevron-down"></i>
+                      <i class="fa fa-times"></i>
+                  </div>
+              </div>
+              <div class="panel-body" ng-controller="ExpertiseController as ec">
+                <button class="btn btn-success btn-sm pull-right" ng-click="ec.add()">Add Expertise</button>
+                <button class="btn btn-danger btn-sm pull-right" ng-click="ec.getAllExpertise()" style="margin-right:5px">Refresh</button>
+                <div>
+                  <p class="text-danger"><strong ng-bind="ec.message"></strong></p>
+                  <br>
+                  <table datatable="ng" dt-options="ec.dtOptions" dt-columns="ec.dtColumns"
+                  dt-instance="ec.dtInstance" class="table table-hover row-border hover">
+                    <thead>
+                      <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat = "expertise in ec.expertises">
+                        <td ng-bind="expertise.id"></td>
+                        <td ng-bind="expertise.name"></td>
+                        <td>
+                          <button class="btn btn-warning btn-sm" ng-click="ec.edit($index, expertise)">
+                            <i class="fa fa-edit"></i>
+                          </button>
+                          <button class="btn btn-danger btn-sm" ng-click="ec.remove($index, expertise)">
+                            <i class="fa fa-trash-o"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+          </div>
+      </div>
+  </div>
 @endsection
 
 @section('scripts')
 {!! HTML::script('js/volunteer/volunteer.module.js') !!}
 {!! HTML::script('js/volunteer/volunteer.controller.js') !!}
 {!! HTML::script('js/volunteer/volunteer.factory.js') !!}
+{!! HTML::script('js/volunteer/expertise/expertise.controller.js') !!}
+{!! HTML::script('js/volunteer/expertise/expertise.factory.js') !!}
 @endsection
