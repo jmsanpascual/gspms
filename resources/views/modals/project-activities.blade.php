@@ -4,8 +4,8 @@
 	@{{ submitData.action}} Activity
 	<div class="progress" ng-controller="ActivityTaskController" ng-show="submitData.projAct.tasks && submitData.projAct.tasks.length">
 		<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
-		aria-valuemin="0" aria-valuemax="100" ng-style="{width: percentage}">
-			@{{ percentage }}
+		aria-valuemin="0" aria-valuemax="100" ng-style="{width: percentage + '%'}">
+			@{{ percentage }}%
 		</div>
 	</div>
 @stop
@@ -48,6 +48,18 @@
 					format-date>
 				</div>
 			</div>
+			</div>
+		</div>
+		<div class = "form-group">
+			<div class = "row">
+				<div class = "col-md-12">
+				<label class = "form-label col-md-4">Phases</label>
+				<div class = "col-md-6">
+					<select class = "form-control" ng-model = "submitData.projAct.phase_id"
+		            ng-options = "phase.id as phase.name for phase in submitData.phases">
+          </select>
+				</div>
+				</div>
 			</div>
 		</div>
 		<div class = "form-group">

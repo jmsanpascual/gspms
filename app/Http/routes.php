@@ -101,6 +101,9 @@ Route::get('add-task-remarks-view', function () {
 Route::post('update-task', 'ProjectActivitiesController@updateTask');
 Route::delete('delete-task/{id}', 'ProjectActivitiesController@deleteTask');
 
+// RESTful route for Activity Phases
+Route::resource('phase', 'PhaseController');
+
 Route::resource('budget', 'BudgetController');
 
 Route::get('budget-request/add', array(function () {
