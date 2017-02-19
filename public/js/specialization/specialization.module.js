@@ -3,10 +3,10 @@
  * @copyright 2017
  */
 
-(function(app) {
+(function() {
     'use strict';
 
-    app.registerModule('specialization', [
+    angular.module('specialization', [
 
     ]);
-})(angularAppConfig);
+})();

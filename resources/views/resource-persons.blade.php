@@ -73,4 +73,11 @@
 {!! HTML::script('js/resource-person/services/school.js') !!}
 {!! HTML::script('js/resource-person/services/resource-person.js') !!}
 {!! HTML::script('js/resource-person/controllers/resource-person.js') !!}
+
+<!-- Specialization -->
+{!! HTML::script('js/specialization/specialization.module.js') !!}
+{!! HTML::script('js/specialization/specialization.controller.js') !!}
+{!! HTML::script('js/specialization/specialization-manager.factory.js') !!}
+{!! HTML::script('js/specialization/specialization-resource.factory.js') !!}
+<!-- end specialization -->
 @endsection

@@ -26,8 +26,8 @@
 
         function getPrograms() {
             $http.get('programs').then(function(result) {
-                var programs = result[0];
-                ProgramManager.set(programs);
+                var result = result[0];
+                ProgramManager.set(result.programs);
             });
         }
 

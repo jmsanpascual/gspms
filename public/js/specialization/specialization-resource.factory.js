@@ -16,13 +16,16 @@
     function Specialization($resource) {
         var otherMethods = {
             update: {
-                'method': 'PUT',
+                'method': 'POST',
                 'params': {
                     'id': '@id'
                 }
+            },
+            get: {
+                isArray: true
             }
         };
 
-        return $resource('specialization/:id', {id: '@id'}, otherMethods);
+        return $resource('../specialization/:id', {id: '@id'}, otherMethods);
     }
 })();

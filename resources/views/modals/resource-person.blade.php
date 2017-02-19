@@ -82,9 +82,9 @@
     </div>
   </form>
   <hr>
-  <div ng-if = "submitData.resourcePerson.id" ng-controller="SpecializationController as sc">
+  <div ng-if = "submitData.person.id" ng-controller="SpecializationController as sc">
       <h3>Specialization</h3>
-      <hr ng-init = 'sc.resource_person_id = submitData.projAct.id;sc.refresh()'>
+      <hr ng-init = 'sc.resource_id = submitData.person.id;sc.refresh()'>
       <button class = "btn btn-sm btn-success pull-right" ng-click = "sc.add()"> Add Specialization</button>
       <button class = "btn btn-sm btn-danger pull-right" ng-click = "sc.refresh()"> Refresh</button>
 
@@ -93,16 +93,19 @@
       <table datatable="ng" dt-options="sc.dtOptions" dt-columns="sc.dtColumnDefs" dt-instance="sc.dtInstance" class="table table-hover row-border hover">
       <thead>
           <tr>
-            <th>Specialization</th>
+            <th>Program</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat = "data in sc.activityitemexpense">
-            <td>@{{data.item_name}}</td>
+          <tr ng-repeat = "data in sc.specialization">
+            <td>@{{data.program}}</td>
             <td>
               <button class="btn btn-warning btn-sm" ng-click="sc.edit(data)">
               <i class="fa fa-edit"></i>
+              </button>
+              <button class="btn btn-danger btn-sm" ng-click="sc.delete(data)">
+              <i class="fa fa-trash"></i>
               </button>
             </td>
           </tr>

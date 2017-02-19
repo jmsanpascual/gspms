@@ -195,6 +195,10 @@ Route::resource('project-expense', 'ProjectExpenseController');
 Route::get('activity-item-expense/form/{action}', 'ActivityItemExpenseController@form');
 Route::post('activity-item-expense/update', 'ActivityItemExpenseController@update');
 Route::resource('activity-item-expense', 'ActivityItemExpenseController');
+// --- specialization
+Route::get('specialization/form/{action}', 'SpecializationController@form');
+Route::post('specialization/update', 'SpecializationController@update');
+Route::resource('specialization', 'SpecializationController');
 
 // RESTful resource route for Activity Status
 Route::resource('activity-status', 'ActivityStatusController');
