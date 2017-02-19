@@ -16,7 +16,9 @@ angular.module('project.controller', [
     'upload',
     'toast',
     'project-related',
-    'notification'
+    'notification',
+    'projectExpense',
+    'activityItemExpense'
 ])
 
 .controller('projDTCtrl', function($scope, DTOptionsBuilder, DTColumnDefBuilder,
@@ -196,7 +198,7 @@ angular.module('project.controller', [
     function getTotalExpense(proj_id) {
         if(!proj_id) return;
 
-        $http.get('../items/getTotalExpense/'+proj_id).then(function(result) {
+        $http.get('../project-expense/total_expense/'+proj_id).then(function(result) {
             result = result.data;
             ExpenseManager.setTotal(result.total_expense);
             vm.expense = ExpenseManager.get();

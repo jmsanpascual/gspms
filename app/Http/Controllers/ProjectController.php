@@ -107,6 +107,13 @@ class ProjectController extends Controller
                     // $data['proj']->where('proj_status_id', '!=', config('constants.proj_status_ongoing'));
                 }
             }
+            // if want to get delayed projects
+            // if($request->delayed) {
+            //     // get where end date is less than today
+            //     $data['proj'] = $data['proj']->where('end_date', '<', date('Y-m-d H:i:s'))
+            //     // and project status is not completed
+            //                     ->where('proj_status_id', config('constants.proj_status_completed'));
+            // }
 
             $data['proj'] = $data['proj']->get($select);
             $min_duration = 0;
@@ -145,7 +152,7 @@ class ProjectController extends Controller
         }
         catch(Exception $e)
         {
-            logger($e->getError());
+            logger($e);
             $msg = $e->getMessage();
         }
         $data['status'] = $status;

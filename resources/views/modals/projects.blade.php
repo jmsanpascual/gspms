@@ -151,17 +151,17 @@
     </div>
 
     <!-- Expense -->
-    <div ng-if = "submitData.proj.id" ng-controller="ProjectCategory as pc">
-        <h3>Budget</h3>
-        <hr ng-init = 'pc.proj_id = submitData.proj.id;pc.getProjItems()'>
+    <div ng-if = "submitData.proj.id" ng-controller="ProjectExpenseController as pec">
+        <h3>Project Expense</h3>
+        <hr ng-init = 'pec.proj_id = submitData.proj.id;pec.refresh()'>
         @if(Session::get('role') == config('constants.role_champion'))
-        <button class = "btn btn-sm btn-success pull-right" ng-click = "pc.add()"> Add Item/Expense</button>
+        <button class = "btn btn-sm btn-success pull-right" ng-click = "pec.add()"> Add Project Expense</button>
         @endif
-        <button class = "btn btn-sm btn-danger pull-right" ng-click = "pc.getProjItems()"> Refresh</button>
+        <button class = "btn btn-sm btn-danger pull-right" ng-click = "pec.refresh()"> Refresh</button>
 
-        <p class="text-danger"><strong>@{{ pc.message }}</strong></p>
+        <p class="text-danger"><strong>@{{ pec.message }}</strong></p>
         <br>
-        <table datatable="ng" dt-options="pc.dtOptions" dt-columns="pc.dtColumnDefs" dt-instance="pc.dtInstance" class="table table-hover row-border hover">
+        <table datatable="ng" dt-options="pec.dtOptions" dt-columns="pec.dtColumnDefs" dt-instance="pec.dtInstance" class="table table-hover row-border hover">
         <thead>
             <tr>
               <th>Category</th>
@@ -170,13 +170,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat = "data in pc.budget">
+            <tr ng-repeat = "data in pec.projectexpense">
               <td>@{{data.category}}</td>
               <td>@{{data.amount}}</td>
               <td>
-
               @if(Session::get('role') == config('constants.role_finance'))
-                <button class="btn btn-warning btn-sm" ng-click="pc.edit($index, data)">
+                <button class="btn btn-warning btn-sm" ng-click="pec.edit(data)">
                 <i class="fa fa-edit"></i>
                 </button>
 			  @endif
