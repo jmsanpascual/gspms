@@ -5,71 +5,49 @@
 @endsection
 
 @section('app')
-ng-app='notification'
+ng-app='dashboard'
 @endsection
 
 @section('content')
+
   <div class="row">
       <div class="col-md-12">
           <!--breadcrumbs start -->
           <ul class="breadcrumb">
               <li>
-                <a href="#">Notifications</a>
+                <a href="#">Dashboard</a>
               </li>
           </ul>
           <!--breadcrumbs end -->
-          <h1 class="h1">Notification Lists</h1>
+          <h1 class="h1">Dashboard</h1>
       </div>
   </div>
-  <div class="row">
-      <div class="col-md-12">
-          <div class="panel panel-default">
-              <div class="panel-heading">
-                  <h3 class="panel-title">Notification Lists</h3>
-                  <div class="actions pull-right">
-                      <i class="fa fa-chevron-down"></i>
-                      <i class="fa fa-times"></i>
-                  </div>
-              </div>
-              <div class="panel-body">
-
-                <div ng-controller="NotificationListController as nc">
-                  <button class = "btn btn-danger btn-sm pull-right" ng-click = "nc.getNotif()">Refresh</button>
-                  <p class="text-danger"><strong ng-bind="nc.message"></strong></p>
-                  <br>
-                  <table datatable="ng" dt-options="nc.dtOptions" dt-columns="nc.dtColumnDefs" dt-instance="nc.dtInstance" class="table table-hover row-border hover">
-                  <thead>
-                    <tr>
-                      <th>Title</th>
-                      <th>Message</th>
-                      <th>Date</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr ng-repeat = "notif in nc.notifications">
-                      <td ng-bind="notif.title"></td>
-                      <td ng-bind="notif.text"></td>
-                      <td ng-bind="notif.created_at"></td>
-                      <td>@{{ (notif.read_flag) ? 'Read' : 'Unread'}}</td>
-                      <td>
-                        <button class="btn btn-warning btn-sm" ng-click="nc.showNotif(notif)">
-                        <i class="fa fa-eye"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                  </table>
-                </div>
-              </div>
-          </div>
-      </div>
-  </div>
+  <!-- TO DOS -->
+  @include('dashboard.todo')
+  <!-- End TO DOS -->
+  <!-- DELAYED PROJECTS -->
+  @include('dashboard.delayed-projects')
+  <!-- End DELAYED PROJECTS -->
+  <!-- UPCOMING -->
+  <!-- include('dashboard.upcoming') -->
+  <!-- End UPCOMING -->
 @endsection
 
 @section('scripts')
 @parent
+<!-- DASHBOARD  -->
+{!! HTML::script('js/dashboard/dashboard.module.js') !!}
+{!! HTML::script('js/dashboard/todo.controller.js') !!}
+{!! HTML::script('js/dashboard/upcoming.controller.js') !!}
+{!! HTML::script('js/dashboard/delayed-projects.controller.js') !!}
+{!! HTML::script('js/dashboard/dashboard.run.js') !!}
+{!! HTML::script('js/dashboard/factories/champion-manager.factory.js') !!}
+{!! HTML::script('js/dashboard/factories/program-manager.factory.js') !!}
+{!! HTML::script('js/dashboard/factories/resource-person-manager.factory.js') !!}
+{!! HTML::script('js/dashboard/factories/status-manager.factory.js') !!}
+
+<!-- END Dashboard -->
+
 {!! HTML::script('js/activity-dependencies/activity-dependencies.module.js') !!}
 {!! HTML::script('js/activity-dependencies/phase.factory.js') !!}
 {!! HTML::script('js/activity-dependencies/progress-calculator.factory.js') !!}
@@ -83,7 +61,7 @@ ng-app='notification'
 {!! HTML::script('js/services/project-status.js') !!}
 {!! HTML::script('js/services/program.js') !!}
 {!! HTML::script('js/services/project.js') !!}
-{!! HTML::script('js/controllers/project.js') !!}
+
 {!! HTML::script('js/services/project-activities.js') !!}
 {!! HTML::script('js/services/user.js') !!}
 {!! HTML::script('js/services/activity-status.js') !!}

@@ -112,6 +112,18 @@ ng-app='project.controller'
 {!! HTML::script('js/services/item-manager.factory.js') !!}
 {!! HTML::script('js/controllers/project.js') !!}
 
+<!-- project expense  -->
+{!! HTML::script('js/project-expense/project-expense.module.js') !!}
+{!! HTML::script('js/project-expense/project-expense-manager.factory.js') !!}
+{!! HTML::script('js/project-expense/project-expense-resource.factory.js') !!}
+{!! HTML::script('js/project-expense/project-expense.controller.js') !!}
+<!-- Activity item expense  -->
+{!! HTML::script('js/activity-item-expense/activity-item-expense.module.js') !!}
+{!! HTML::script('js/activity-item-expense/activity-item-expense-manager.factory.js') !!}
+{!! HTML::script('js/activity-item-expense/activity-item-expense-resource.factory.js') !!}
+{!! HTML::script('js/activity-item-expense/activity-item-expense.controller.js') !!}
+
+<!-- end project expense -->
 <!-- Attachment -->
 {!! HTML::script('js/project-attachments/project-attachment.module.js') !!}
 {!! HTML::script('js/project-attachments/project-attachment.controller.js') !!}

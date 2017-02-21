@@ -13,6 +13,7 @@ use App\UserNotification;
 
 class NotificationController extends Controller
 {
+
     public function index()
     {
 
@@ -88,5 +89,32 @@ class NotificationController extends Controller
     public function lists()
     {
         return view('notifications');
+    }
+
+    public function dashboard() 
+    {
+        return view('dashboard');
+    }
+
+    public function todos() 
+    {
+        // check all notification that is not yet read
+        $id = auth()->id();
+        $select = ['notifications.*', 'un.id as userNotifId'];
+        $notif = \App\Notification::join('user_notifications as un', 'un.notification_id', '=', 'notifications.id')
+                    ->where('un.user_id', $id)->where('un.read_flag', 0)->orderBy('created_at', 'desc')->get($select);
+
+        return $notif;
+    }
+
+    public function delayedProjects()
+    {
+        //  refer to project controller
+        //  index function
+    }
+
+    public function upcoming() 
+    {
+        
     }
 }

@@ -5,7 +5,8 @@ angular.module('resourcePersons', [
     'common.service',
     'ui.bootstrap',
     'resourcePersonService',
-    'schoolService'
+    'schoolService',
+    'specialization'
 ])
 
 .controller('resourcePersonDTCtrl', function($scope, $compile, ResourcePerson, SchoolRestApi,
@@ -37,7 +38,7 @@ angular.module('resourcePersons', [
             alert('Unable to load resource persons');
             console.log('Error:', err);
         });
-        
+
     }
     this.getResourcePersons();
 

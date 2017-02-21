@@ -151,38 +151,31 @@
     </div>
 
     <!-- Expense -->
-    <div ng-if = "submitData.proj.id" ng-controller="ItemCtrl as ic">
-        <h3>Item/Expense</h3>
-        <hr ng-init = 'ic.proj_id = submitData.proj.id;ic.getProjItems()'>
+    <div ng-if = "submitData.proj.id" ng-controller="ProjectExpenseController as pec">
+        <h3>Project Expense</h3>
+        <hr ng-init = 'pec.proj_id = submitData.proj.id;pec.refresh()'>
         @if(Session::get('role') == config('constants.role_champion'))
-        <button class = "btn btn-sm btn-success pull-right" ng-click = "ic.add()"> Add Item/Expense</button>
+        <button class = "btn btn-sm btn-success pull-right" ng-click = "pec.add()"> Add Project Expense</button>
         @endif
-        <button class = "btn btn-sm btn-danger pull-right" ng-click = "ic.getProjItems()"> Refresh</button>
+        <button class = "btn btn-sm btn-danger pull-right" ng-click = "pec.refresh()"> Refresh</button>
 
-        <p class="text-danger"><strong>@{{ ic.message }}</strong></p>
+        <p class="text-danger"><strong>@{{ pec.message }}</strong></p>
         <br>
-        <table datatable="ng" dt-options="ic.dtOptions" dt-columns="ic.dtColumnDefs" dt-instance="ic.dtInstance" class="table table-hover row-border hover">
+        <table datatable="ng" dt-options="pec.dtOptions" dt-columns="pec.dtColumnDefs" dt-instance="pec.dtInstance" class="table table-hover row-border hover">
         <thead>
             <tr>
-              <th>Item Name</th>
               <th>Category</th>
-              <th>Quantity</th>
-              <th>Price</th>
-              <th>Total Amount</th>
+              <th>Amount</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat = "data in ic.items">
-              <td>@{{data.item_name}}</td>
+            <tr ng-repeat = "data in pec.projectexpense">
               <td>@{{data.category}}</td>
-              <td>@{{data.quantity}} (@{{data.quantity_label}})</td>
-              <td>@{{data.price}}</td>
-              <td>@{{ ((data.price) * (data.quantity)) }}</td>
+              <td>@{{data.amount}}</td>
               <td>
-
               @if(Session::get('role') == config('constants.role_finance'))
-                <button class="btn btn-warning btn-sm" ng-click="ic.edit($index, data)">
+                <button class="btn btn-warning btn-sm" ng-click="pec.edit(data)">
                 <i class="fa fa-edit"></i>
                 </button>
 			  @endif

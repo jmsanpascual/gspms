@@ -180,10 +180,29 @@ Route::resource('programs', 'ProgramController');
 Route::resource('project-status', 'ProjectStatusController');
 
 // RESTful resource route for notifications
+Route::get('dashboard', 'NotificationController@dashboard');
+Route::get('todo', 'NotificationController@todo');
+Route::get('delayed', 'ProjectController@index');
+Route::get('upcoming', 'NotificationController@upcoming');
 Route::get('notifications/projects/{id}/{userNotifId}', 'NotificationController@projects');
 Route::get('notifications/lists', 'NotificationController@lists');
 Route::get('notifications/getAllNotif', 'NotificationController@getAllNotif');
 Route::resource('notifications', 'NotificationController');
+
+
+Route::get('project-expense/form/{action}', 'ProjectExpenseController@form');
+Route::post('project-expense/update', 'ProjectExpenseController@update');
+Route::get('project-expense/total_expense/{proj_id}', 'ProjectExpenseController@getTotalExpense');
+Route::resource('project-expense', 'ProjectExpenseController');
+
+// --- activity item exense
+Route::get('activity-item-expense/form/{action}', 'ActivityItemExpenseController@form');
+Route::post('activity-item-expense/update', 'ActivityItemExpenseController@update');
+Route::resource('activity-item-expense', 'ActivityItemExpenseController');
+// --- specialization
+Route::get('specialization/form/{action}', 'SpecializationController@form');
+Route::post('specialization/update', 'SpecializationController@update');
+Route::resource('specialization', 'SpecializationController');
 
 // RESTful resource route for Activity Status
 Route::resource('activity-status', 'ActivityStatusController');

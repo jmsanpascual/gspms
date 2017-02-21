@@ -5,7 +5,7 @@ loginModule.controller('LoginCtrl', function ($scope, $http, $window) {
     $scope.login = function () {
         $http.post('login', $scope.user).then(function (response) {
             if (response.data.status) {
-                $window.location.href = 'index';
+                $window.location.href = 'dashboard';
             } else {
                 alert('Ivalid username or password');
             }
