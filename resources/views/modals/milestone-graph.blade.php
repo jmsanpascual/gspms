@@ -12,7 +12,7 @@ Phase 1: (@{{ submitData.milestoneDates.phase_1 }}) <div class="progress">
     <span class="sr-only">
       @{{ submitData.phase1.percent }}% Complete Phase @{{ submitData.phase1.id }}
     </span>
-      @{{ submitData.phase1.percent * 3 }}%
+      @{{ (submitData.phase1.percent * 3) - ((submitData.phase1.percent * 3) % 1) }}%
   </div>
 </div>
 Phase 2: (@{{ submitData.milestoneDates.phase_2 }}) <div class="progress">
@@ -22,7 +22,7 @@ Phase 2: (@{{ submitData.milestoneDates.phase_2 }}) <div class="progress">
     <span class="sr-only">
       @{{ submitData.phase2.percent }}% Complete Phase @{{ submitData.phase2.id }}
     </span>
-      @{{ submitData.phase2.percent * 3 }}%
+      @{{ (submitData.phase2.percent * 3) - ((submitData.phase2.percent * 3) % 1) }}%
   </div>
 </div>
 Phase 3: (@{{ submitData.milestoneDates.phase_3 }}) <div class="progress">
@@ -32,7 +32,7 @@ Phase 3: (@{{ submitData.milestoneDates.phase_3 }}) <div class="progress">
     <span class="sr-only">
       @{{ submitData.phase3.percent }}% Complete Phase @{{ submitData.phase3.id }}
     </span>
-      @{{ submitData.phase3.percent * 3 }}%
+      @{{ (submitData.phase3.percent * 3) - ((submitData.phase3.percent * 3) % 1) }}%
   </div>
 </div>
 @stop
