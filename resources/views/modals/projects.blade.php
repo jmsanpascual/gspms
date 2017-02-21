@@ -200,7 +200,18 @@
     <hr>
     <!-- Activities -->
     <div ng-if = "submitData.proj.id" ng-controller="projActDTCtrl as padtc">
-        <h3>Activities</h3>
+        <h3 ng-init="mc.activate(submitData.proj, padtc)" ng-controller="MilestoneController as mc">Activities
+          @if(Session::get('role') == config('constants.role_life'))
+          <button class="btn btn-success btn-sm" ng-click="mc.add()">
+            Milestone
+          </button>
+          @endif
+          @if(Session::get('role') == config('constants.role_champion'))
+          <button class="btn btn-success btn-sm" ng-click="mc.view()">
+            Milestone
+          </button>
+          @endif
+        </h3>
 
         <div class="progress" ng-if="padtc.project_activities.length"
           ng-mouseover="padtc.phaseProgress.hide = false"

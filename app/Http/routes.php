@@ -101,6 +101,10 @@ Route::get('add-task-remarks-view', function () {
 Route::post('update-task', 'ProjectActivitiesController@updateTask');
 Route::delete('delete-task/{id}', 'ProjectActivitiesController@deleteTask');
 
+// RESTful route for Activity Milestone
+Route::get('milestone-graph', 'MilestoneController@graph');
+Route::resource('milestone', 'MilestoneController');
+
 // RESTful route for Activity Phases
 Route::resource('phase', 'PhaseController');
 
