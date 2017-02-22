@@ -73,7 +73,8 @@
 @stop
 
 @section('btn')
-    @if(Session::get('role') == config('constants.role_champion') || Session::get('role') == config('constants.role_finance'))
+    @if(Session::get('role') == config('constants.role_champion') || Session::get('role') == config('constants.role_finance')
+      || Session::get('role') == config('constants.role_volunteer'))
 	<button class = "btn btn-success" ng-click="save('data')">Save</button>
     @endif
 @stop

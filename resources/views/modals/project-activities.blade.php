@@ -160,7 +160,7 @@
         @if(Session::get('role') == config('constants.role_champion'))
         <button class = "btn btn-sm btn-success pull-right" ng-click = "aiec.add()"> Add Item/Expense</button>
         @endif
-        <button class = "btn btn-sm btn-danger pull-right" ng-click = "aiec.refresh()"> Refresh</button>
+        <button class = "btn btn-sm btn-danger pull-right" ng-click = "aiec.refresh()" style="margin-right:5px"> Refresh</button>
 
         <p class="text-danger"><strong>@{{ aiec.message }}</strong></p>
         <br>

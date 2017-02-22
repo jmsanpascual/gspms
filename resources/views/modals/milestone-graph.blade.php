@@ -28,7 +28,7 @@ Phase 2: (@{{ submitData.milestoneDates.phase_2 }}) <div class="progress">
 Phase 3: (@{{ submitData.milestoneDates.phase_3 }}) <div class="progress">
   <div class="progress-bar" aria-valuemin="0" aria-valuemax="33"
     ng-style="{width: (submitData.phase3.percent * 3) + '%'}"
-    ng-class="submitData.phase3submitData.class">
+    ng-class="submitData.phase3.class">
     <span class="sr-only">
       @{{ submitData.phase3.percent }}% Complete Phase @{{ submitData.phase3.id }}
     </span>
