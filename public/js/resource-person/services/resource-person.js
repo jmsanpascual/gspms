@@ -5,6 +5,11 @@ angular.module('resourcePersonService', ['ngResource'])
 .factory('ResourcePerson', function (ResourcePersonApi) {
     var _self = this;
 
+    var get = function(params) {
+        return ResourcePersonApi.getResourcePersons(params).$promise.then(function(person) {
+            return person; 
+        });
+    }
     var getResourcePerson = function (params) {
         return ResourcePersonApi.get(params).$promise.then(function (persons) {
             return persons;
@@ -32,6 +37,7 @@ angular.module('resourcePersonService', ['ngResource'])
     }
 
     return {
+        get: get,
         getResourcePerson: getResourcePerson,
         getResourcePersons: getResourcePersons,
         addResourcePerson: addResourcePerson,
@@ -44,6 +50,11 @@ angular.module('resourcePersonService', ['ngResource'])
         update : {
             url: '../resource-persons/update',
             method: 'POST'
+        },
+        getResourcePersons: {
+            url: '../resource-persons/getResourcePerson',
+            method: 'POST',
+            isArray:true
         }
     });
 

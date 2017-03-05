@@ -18,17 +18,19 @@ angular.module('project.controller', [
     'project-related',
     'notification',
     'projectExpense',
-    'activityItemExpense'
+    'activityItemExpense',
 ])
 
 .controller('projDTCtrl', function($scope, DTOptionsBuilder, DTColumnDefBuilder,
-  reqDef, defaultModal, Project, ProgramRestApi, ProjectStatusRestApi, UserRestApi, ResourcePerson) {
+  reqDef, defaultModal, Project, ProgramRestApi, ProjectStatusRestApi, UserRestApi, ResourcePerson,
+  ResourcePersonManager) {
     var vm = this;
     vm.message = '';
     vm.edit = edit;
     vm.delete = deleteRow;
     vm.dtInstance = {};
     vm.projects = [];
+    vm.resourcePersons = [];
 
     vm.refresh = function()
     {
@@ -45,12 +47,29 @@ angular.module('project.controller', [
     }
     vm.refresh();
 
-    ResourcePerson.getResourcePersons().then(function (resourcePersons) {
-        console.log('Resource Persons:', resourcePersons);
-        $scope.resourcePersons = resourcePersons;
+    vm.getResourcePerson = function(program_id, data) {
+        return ResourcePerson.get({program_id: program_id}).then(function (resourcePersons) {
+            console.log('Resource Persons:', resourcePersons);
+            resourcePersons.unshift({id:'NA', name: 'No Resource Person'});
+            if(data) {
+                return data.resource_person = resourcePersons;
+            }
 
-        $scope.resourcePersons.unshift({id:'NA', name: 'No Resource Person'});
-    });
+            // ResourcePersonManager.set(resourcePersons);
+            // vm.resourcePersons = ResourcePersonManager.get();
+            vm.resourcePersons = resourcePersons;
+            
+        });
+    }
+
+    // vm.resourcePersons.unshift({id:'NA', name: 'No Resource Person'});
+
+    // ResourcePerson.getResourcePersons().then(function (resourcePersons) {
+    //     console.log('Resource Persons:', resourcePersons);
+    //     vm.resourcePersons = resourcePersons;
+
+    //     vm.resourcePersons.unshift({id:'NA', name: 'No Resource Person'});
+    // });
 
     // instantiate program
     ProgramRestApi.query().$promise.then(function (programs) {
@@ -59,6 +78,7 @@ angular.module('project.controller', [
 
        if (result.status) {
            $scope.program = result.program;
+           vm.getResourcePerson($scope.program[0]);
        } else {
            console.log(result.msg);
        }
@@ -116,9 +136,10 @@ angular.module('project.controller', [
             status : $scope.status,
             champions : $scope.champions,
             champion: $scope.champions[0],
-            resource_person : $scope.resourcePersons,
-            resource: $scope.resourcePersons[0],
-            proj: {objective: {}}
+            resource_person : vm.resourcePersons,
+            resource: vm.resourcePersons[0],
+            proj: {objective: {}},
+            getResourcePerson: vm.getResourcePerson
         };
         var modal = defaultModal.showModal(attr);
 
@@ -142,9 +163,10 @@ angular.module('project.controller', [
             status : $scope.status,
             champions : $scope.champions,
             champion: {id: proj.champion_id},
-            resource_person : $scope.resourcePersons,
+            resource_person : vm.resourcePersons,
             resource: {id: proj.resource_person_id},
-            proj : angular.copy(proj)
+            proj : angular.copy(proj),
+            getResourcePerson: vm.getResourcePerson
         };
 
         var modal = defaultModal.showModal(attr);

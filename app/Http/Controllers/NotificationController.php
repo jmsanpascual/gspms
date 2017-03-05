@@ -25,7 +25,7 @@ class NotificationController extends Controller
                     // ->join('projects as p', 'p.id', '=', 'notifications.project_id')
         $data['count'] = $notif->count();
 
-        $data['notif'] = $notif->orderBy('created_at', 'desc')->get($select)->take(10);
+        $data['notif'] = $notif->orderBy('created_at', 'desc')->get($select)->take(6);
         return $data;
     }
 
@@ -91,12 +91,12 @@ class NotificationController extends Controller
         return view('notifications');
     }
 
-    public function dashboard() 
+    public function dashboard()
     {
         return view('dashboard');
     }
 
-    public function todos() 
+    public function todos()
     {
         // check all notification that is not yet read
         $id = auth()->id();
@@ -113,8 +113,8 @@ class NotificationController extends Controller
         //  index function
     }
 
-    public function upcoming() 
+    public function upcoming()
     {
-        
+
     }
 }

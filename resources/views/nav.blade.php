@@ -11,7 +11,7 @@
 <div class="user-nav">
     <ul ng-controller = "NotificationController as nc">
         @if(Session::get('role') != config('constants.role_volunteer'))
-        <li class="dropdown messages open">
+        <li class="dropdown messages">
             <span class="badge badge-danager animated bounceIn" id="new-messages" ng-if = "nc.count > 0"
                 ng-bind="nc.count"></span>
             <button type="button" class="btn btn-default dropdown-toggle options" id="toggle-mail" data-toggle="dropdown" aria-expanded="true">

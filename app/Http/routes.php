@@ -115,6 +115,7 @@ Route::get('resource-persons/view-resource-persons', array('as' => 'resource-per
     return view('resource-persons');
 }));
 Route::post('resource-persons/update', 'ResourcePersonController@update');
+Route::post('resource-persons/getResourcePerson', 'ResourcePersonController@getResourcePersons');
 Route::resource('resource-persons', 'ResourcePersonController');
 
 // RESTful resource route for Volunteers

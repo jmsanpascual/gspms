@@ -19,7 +19,7 @@
         <label class = "form-label col-md-2">Program</label>
         <div class = "col-md-4">
           <select class = "form-control" ng-init="submitData.proj.program_id = submitData.program.id" ng-model = "submitData.proj.program_id"
-          ng-options = "p.id as p.name for p in submitData.programs"
+          ng-options = "p.id as p.name for p in submitData.programs" ng-change ="submitData.getResourcePerson(submitData.proj.program_id, submitData)"
           ng-disabled="{{json_encode(Session::get('role') == config('constants.role_life'))}} || submitData.proj.proj_status_id == {{config('constants.proj_status_approved')}} || submitData.proj.proj_status_id == {{config('constants.proj_status_ongoing')}}" >
           </select>
         </div>
@@ -153,7 +153,7 @@
     <!-- Expense -->
     <div ng-if = "submitData.proj.id" ng-controller="ProjectExpenseController as pec">
         <h3>Project Expense</h3>
-        <hr ng-init = 'pec.proj_id = submitData.proj.id;pec.refresh()'>
+        <hr ng-init = 'pec.proj_id = submitData.proj.id;submitData.refreshExpense = pec.refresh;pec.refresh();'>
         @if(Session::get('role') == config('constants.role_champion'))
         <button class = "btn btn-sm btn-success pull-right" ng-click = "pec.add()"> Add Project Expense</button>
         @endif
@@ -166,6 +166,7 @@
             <tr>
               <th>Category</th>
               <th>Amount</th>
+              <th>Remaining Amount</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -173,6 +174,7 @@
             <tr ng-repeat = "data in pec.projectexpense">
               <td>@{{data.category}}</td>
               <td>@{{data.amount}}</td>
+              <td>@{{data.remaining_amount}}</td>
               <td>
               @if(Session::get('role') == config('constants.role_finance'))
                 <button class="btn btn-warning btn-sm" ng-click="pec.edit(data)">
@@ -219,12 +221,13 @@
         </div>
 
         <hr>
-     <div ng-init = 'proj_id = submitData.proj.id; padtc.getProjActivities(submitData.proj.id)'>
+        <div ng-init = 'proj_id = submitData.proj.id; padtc.getProjActivities(submitData.proj.id);
+            padtc.refreshExpense = submitData.refreshExpense;'>
           @if(Session::get('role') == config('constants.role_champion'))
           <button class = "btn btn-success btn-sm pull-right" ng-click = "padtc.add()"
           ng-if = "submitData.proj.proj_status_id != 3"> Add Activity</button>
           @endif
-          <button class = "btn btn-danger btn-sm pull-right" ng-click = "padtc.getProjActivities()"
+          <button class = "btn btn-danger btn-sm pull-right" ng-click = "padtc.getProjActivities(submitData.proj.id)"
           ng-if = "submitData.proj.proj_status_id != 3"> Refresh</button>
           <p class="text-danger"><strong>@{{ padtc.message }}</strong></p>
           <br>

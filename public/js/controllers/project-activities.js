@@ -56,6 +56,9 @@ angular.module('project.activites.controller', [
 
     this.getProjActivities = function(proj_id)
     {
+        // if(refreshWithExpense)
+            // vm.refreshExpense();
+
         ProjectActivitiesRestApi.query({proj_id : $scope.proj_id}).$promise.then(function (result) {
            result = result[0];
 
@@ -107,6 +110,12 @@ angular.module('project.activites.controller', [
         defaultModal.showModal(attr).result.then(function(data){
             console.log(data);
             vm.project_activities.push(data.projAct);
+            // reload the expense
+            vm.refreshExpense();
+        }, function() {
+             // reload the expense
+            vm.refreshExpense();
+            console.log('reloading expense');
         });
 
     }
@@ -130,6 +139,10 @@ angular.module('project.activites.controller', [
             console.log(data);
             vm.project_activities.splice(index, 1, angular.copy(data.projAct));
 
+            // reload the expense
+            vm.refreshExpense();
+            console.log('reloading expense');
+
             if (data.taskIds) {
                 var taskIds = data.taskIds,
                     taskIdsLen = taskIds.length,
@@ -148,6 +161,10 @@ angular.module('project.activites.controller', [
                     }
                 }
             }
+        }, function() {
+             // reload the expense
+            vm.refreshExpense();
+            console.log('reloading expense');
         });
     }
 
