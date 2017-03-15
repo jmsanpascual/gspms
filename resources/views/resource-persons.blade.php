@@ -70,6 +70,7 @@
 @endsection
 
 @section('scripts')
+@parent
 {!! HTML::script('js/resource-person/services/school.js') !!}
 {!! HTML::script('js/resource-person/services/resource-person.js') !!}
 {!! HTML::script('js/resource-person/controllers/resource-person.js') !!}

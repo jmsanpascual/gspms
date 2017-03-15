@@ -38,6 +38,9 @@ Route::post('addUser', 'UserController@create');
 Route::get('getRoles', 'UserController@getRoles');
 Route::get('showUserDetails', 'UserController@getRoles');
 
+Route::get('projects/user/getChampion', 'UserController@getChampion');
+Route::get('projects/programs', 'ProgramController@index');
+
 Route::get('user/getChampion', 'UserController@getChampion');
 Route::get('user/getResourcePerson', 'UserController@getResourcePerson');
 Route::resource('user', 'UserController');
@@ -177,10 +180,11 @@ Route::resource('programs', 'ProgramController');
 Route::resource('project-status', 'ProjectStatusController');
 
 // RESTful resource route for notifications
-Route::get('dashboard', 'NotificationController@dashboard');
+Route::get('readNotif/{id}', 'NotificationController@read');
+Route::get('welcome', 'NotificationController@dashboard');
 Route::get('todo', 'NotificationController@todo');
-Route::get('delayed', 'ProjectController@index');
-Route::get('upcoming', 'NotificationController@upcoming');
+Route::get('delayed', 'ProjectController@delayed');
+Route::get('upcoming', 'ProjectController@upcoming');
 Route::get('notifications/projects/{id}/{userNotifId}', 'NotificationController@projects');
 Route::get('notifications/lists', 'NotificationController@lists');
 Route::get('notifications/getAllNotif', 'NotificationController@getAllNotif');

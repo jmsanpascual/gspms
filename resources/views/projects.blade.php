@@ -85,59 +85,5 @@ ng-app='project.controller'
 
 @section('scripts')
 @parent
-{!! HTML::script('js/activity-dependencies/activity-dependencies.module.js') !!}
-{!! HTML::script('js/activity-dependencies/phase.factory.js') !!}
-{!! HTML::script('js/activity-dependencies/progress-calculator.factory.js') !!}
-{!! HTML::script('js/resource-person/services/resource-person.js') !!}
-{!! HTML::script('js/volunteer/volunteer.module.js') !!}
-{!! HTML::script('js/volunteer/volunteer.factory.js') !!}
-{!! HTML::script('js/volunteer/expertise/expertise.factory.js') !!}
-{!! HTML::script('js/services/project-status.js') !!}
-{!! HTML::script('js/services/program.js') !!}
-{!! HTML::script('js/services/project.js') !!}
-{!! HTML::script('js/services/project-activities.js') !!}
-{!! HTML::script('js/services/user.js') !!}
-{!! HTML::script('js/services/activity-status.js') !!}
-{!! HTML::script('js/controllers/dynamic-element.js') !!}
-{!! HTML::script('js/controllers/project-activities.js') !!}
-{!! HTML::script('js/services/budget-request.js') !!}
-{!! HTML::script('js/services/budget-request-status.js') !!}
-{!! HTML::script('js/controllers/budget-request.js') !!}
-{!! HTML::script('js/services/item.js') !!}
-{!! HTML::script('js/services/categories.js') !!}
-{!! HTML::script('js/controllers/dynamic-element.js') !!}
-{!! HTML::script('js/controllers/item.js') !!}
-{!! HTML::script('js/services/item-manager.factory.js') !!}
-{!! HTML::script('js/controllers/project.js') !!}
-{!! HTML::script('js/resource-person/resource-person-manager.factory.js') !!}
 
-<!-- project expense  -->
-{!! HTML::script('js/project-expense/project-expense.module.js') !!}
-{!! HTML::script('js/project-expense/project-expense-manager.factory.js') !!}
-{!! HTML::script('js/project-expense/project-expense-resource.factory.js') !!}
-{!! HTML::script('js/project-expense/project-expense.controller.js') !!}
-<!-- Activity item expense  -->
-{!! HTML::script('js/activity-item-expense/activity-item-expense.module.js') !!}
-{!! HTML::script('js/activity-item-expense/activity-item-expense-manager.factory.js') !!}
-{!! HTML::script('js/activity-item-expense/activity-item-expense-resource.factory.js') !!}
-{!! HTML::script('js/activity-item-expense/activity-item-expense.controller.js') !!}
-
-<!-- end project expense -->
-<!-- Attachment -->
-{!! HTML::script('js/project-attachments/project-attachment.module.js') !!}
-{!! HTML::script('js/project-attachments/project-attachment.controller.js') !!}
-{!! HTML::script('js/project-attachments/project-attachment.factory.js') !!}
-{!! HTML::script('js/project-attachments/project-attachment.service.js') !!}
-<!-- End Attachment  -->
-<!-- Related Project  -->
-{!! HTML::script('js/project-related/project-related.module.js') !!}
-{!! HTML::script('js/project-related/project-related.controller.js') !!}
-<!-- End Related Project  -->
-<!-- UPLOAD -->
-{!! HTML::script('js/upload/upload.js') !!}
-<!-- END UPLOAD -->
-<!-- Toast -->
-{!! HTML::script('js/others/toast.js') !!}
-<!-- End Toast -->
-{!! HTML::script('js/others/custom-prototypes.js') !!}
 @endsection

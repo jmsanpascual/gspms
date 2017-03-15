@@ -42,7 +42,7 @@
 <tbody>
 	<tr>
 		<td colspan=  "4" class = "sub-title">
-			<h3>Project Information<h3></td>
+			<h3>Project Charter<h3></td>
 	</tr><!--
 	foreach($upd_arr['objective'] as $key => $value) {
                if (empty($temp)) $temp .= $value;

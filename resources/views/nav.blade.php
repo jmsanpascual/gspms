@@ -1,6 +1,6 @@
 <!--logo start-->
 <div class="brand">
-    <a href="#" class="logo"><span>De La</span> Salle</a>
+    <a href="/gspms/public/welcome" class="logo"><span>De La</span> Salle</a>
 </div>
 <!--logo end-->
 <div class="toggle-navigation toggle-left">
@@ -8,7 +8,7 @@
         <i class="fa fa-bars"></i>
     </button>
 </div>
-<div class="user-nav">
+<div class="user-nav" ng-controller ="projDTCtrl as pc">
     <ul ng-controller = "NotificationController as nc">
         @if(Session::get('role') != config('constants.role_volunteer'))
         <li class="dropdown messages">
@@ -22,10 +22,10 @@
                     <h1>You have <strong ng-bind="nc.count"></strong> new messages</h1>
                 </li>
                 <li ng-repeat = "notif in nc.notifications">
-                    <a href="javascript:;" ng-click ="nc.showNotif(notif, $index)">
+                    <a href="javascript:;" ng-click ="nc.read(pc.edit($index, notif), notif, $index);">
                         <div class="message-info">
                             <span class="sender" style = "font-weight:bold;" ng-bind="::notif.title"></span>
-                            <span class="time" ng-bind="::notif.created_at"></span>
+                            <span class="time" ng-bind="::notif.notif_created"></span>
                             <div class="message-content" ng-bind="::notif.text"></div>
                         </div>
                     </a>
@@ -62,5 +62,4 @@
     {!! HTML::script('js/notifications/controllers/notification.controller.js') !!}
     {!! HTML::script('js/notifications/factories/notification.factory.js') !!}
     {!! HTML::script('js/notifications/factories/notification-manager.factory.js') !!}
-
 @stop

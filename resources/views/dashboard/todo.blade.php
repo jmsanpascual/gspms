@@ -17,22 +17,27 @@
                 <table datatable="ng" dt-options="tc.dtOptions" dt-columns="tc.dtColumnDefs" dt-instance="tc.dtInstance" class="table table-hover row-border hover">
                 <thead>
                   <tr>
-                    <th>Title</th>
-                    <th>Message</th>
-                    <th>Date</th>
-                    <th>Actions</th>
+                      <th>Project Title</th>
+                      <th>Start Date</th>
+                      <th>End Date</th>
+                      <th>Initial Budget</th>
+                      <th>Status</th>
+                      <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat = "todo in tc.todos">
-                    <td ng-bind="todo.title"></td>
-                    <td ng-bind="todo.text"></td>
-                    <td ng-bind="todo.created_at"></td>
-                    <td>
-                      <button class="btn btn-warning btn-sm" ng-click="tc.show(todo)">
-                      <i class="fa fa-eye"></i>
-                      </button>
-                    </td>
+                    <tr ng-repeat = "project in tc.todos">
+                        <td ng-bind="project.name"></td>
+                        <td ng-bind="project.start_date"></td>
+                        <td ng-bind="project.end_date"></td>
+                        <td ng-bind="project.total_budget"></td>
+                        <td ng-bind="project.status"></td>
+                        <td>
+                          <button class="btn btn-warning btn-sm" ng-click="dpc.show(project)">
+                          <i class="fa fa-eye"></i>
+                          </button>
+                        </td>
+                    </tr>
                   </tr>
                 </tbody>
                 </table>

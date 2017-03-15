@@ -20,8 +20,9 @@
 
         function activate() {
             getPrograms();
-            getResourcePerson();
+            // getResourcePerson();
             getChampion();
+            getStatus();
         }
 
         function getPrograms() {
