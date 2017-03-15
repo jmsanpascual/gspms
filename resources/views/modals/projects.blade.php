@@ -194,7 +194,9 @@
     <!-- End Expense -->
     <hr>
     <!-- Activities -->
-    <div ng-if = "submitData.proj.id" ng-controller="projActDTCtrl as padtc">
+    <div ng-if = "submitData.proj.id" ng-controller="projActDTCtrl as padtc"
+      ng-init="padtc.activate(submitData.proj)">
+
         <h3 ng-init="mc.activate(submitData.proj, padtc)" ng-controller="MilestoneController as mc">Activities
           @if(Session::get('role') == config('constants.role_life'))
           <button class="btn btn-success btn-sm" ng-click="mc.add()">
@@ -220,14 +222,17 @@
         </div>
 
         <div class="progress" ng-hide="padtc.phaseProgress.hide">
+
+          <!-- ng-style="{width: phase.percent + '%'}" -->
           <div class="progress-bar" aria-valuemin="0" aria-valuemax="33"
             ng-repeat="phase in padtc.phasesPercentages"
-            ng-style="{width: phase.percent + '%'}"
+            ng-style="{width: '33.33%'}"
             ng-class="phase.class">
             <span class="sr-only">
               @{{ phase.percent }}% Complete Phase @{{ phase.id }}
             </span>
-              Phase @{{ phase.id }} @ @{{ phase.percent }}%
+              <!-- Phase @{{ phase.id }} @ @{{ phase.percent }}%  -->
+              @{{ phase.daysLeft }} Days Left @ @{{ phase.percent }}% / 33.33%
           </div>
         </div>
 

@@ -58,7 +58,7 @@ angular.module('project.controller', [
             // ResourcePersonManager.set(resourcePersons);
             // vm.resourcePersons = ResourcePersonManager.get();
             vm.resourcePersons = resourcePersons;
-            
+
         });
     }
 

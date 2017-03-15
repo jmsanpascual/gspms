@@ -20,10 +20,12 @@ angular.module('project.activites.controller', [
     vm.percent = { value: 0 };
     vm.phaseProgress = { hide: true };
 
+    vm.activate = activate;
     vm.edit = edit;
     vm.delete = deleteRow;
     vm.dtInstance = {};
     vm.project_activities = [];
+    vm.milestoneDates = {};
     vm.phases = [];
     vm.phasesPercentages = [
         { id: 1, percent: 0, class: 'progress-bar-info' },
@@ -37,9 +39,11 @@ angular.module('project.activites.controller', [
     //     vm.percentage = (Math.round((approvedActivityCount / newVal) * 100)) + '%';
     // });
 
-    activate();
+    // activate();
 
-    function activate() {
+    function activate(project) {
+        vm.project = project;
+
         Phase.getAll().then(function (phases) {
             console.log('Phases:', phases);
             vm.phases = phases;
@@ -50,8 +54,8 @@ angular.module('project.activites.controller', [
     }
 
     $rootScope.$on('update-percentage', function (event, percentage) {
-        ProgressCalculator.calculatePhasesPercentages(vm.project_activities,
-            vm.phasesPercentages, vm.percent);
+        ProgressCalculator.calculatePhasesPercentages(vm.project,
+            vm.project_activities, vm.phasesPercentages, vm.percent);
     });
 
     this.getProjActivities = function(proj_id)
@@ -65,7 +69,7 @@ angular.module('project.activites.controller', [
           if (result.status) {
               vm.project_activities =  result.proj_activities;
               vm.percentage = ProgressCalculator.calculatePhasesPercentages(
-                  vm.project_activities, vm.phasesPercentages, vm.percent);
+                  vm.project, vm.project_activities, vm.phasesPercentages, vm.percent);
           } else {
               alert('Unable to load datatable');
           }

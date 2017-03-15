@@ -5,10 +5,10 @@
         .module('activityDependencies')
         .factory('ProgressCalculator', ProgressCalculator);
 
-    ProgressCalculator.$inject = [];
+    ProgressCalculator.$inject = ['Milestone'];
 
     /* @ngInject */
-    function ProgressCalculator() {
+    function ProgressCalculator(Milestone) {
         var approvedActivityId = 2,
             factory = {
                 calculatePhasesPercentages: calculatePhasesPercentages
@@ -16,7 +16,7 @@
 
         return factory;
 
-        function calculatePhasesPercentages(activities, phasesReference, percentageReference) {
+        function calculatePhasesPercentages(project, activities, phasesReference, percentageReference) {
             var activitiesLen = activities.length,
                 subTaskPercentage = 0,
                 approvedTaskCount = 0,
@@ -77,18 +77,24 @@
             // phasesReference is an array declared outside this function
             var phasesReferenceLen = phasesReference.length;
 
-            // phases and phasesLengths are both objects declared inside this function
-            for (var i = 1; i <= phasesReferenceLen; i++) {
-                var phase = phases[i],
-                    phaseReference = phasesReference[i - 1];
+            Milestone.getMilestone({ id: project.id }).then(function (milestone) {
+                console.log('Milestone at Progress Calculator: ', milestone);
 
-                if (phaseReference.id == i) {
-                    // Get the total percentage of this phase
-                    phaseReference.percent = (phase.subTaskPercentage / phasesLengths[i]);
-                    // Divide the total precentage of this phase to the total phases count
-                    phaseReference.percent = (phaseReference.percent / phasesReferenceLen).toFixed(2);
+                // phases and phasesLengths are both objects declared inside this function
+                for (var i = 1; i <= phasesReferenceLen; i++) {
+                    var phase = phases[i],
+                        phaseReference = phasesReference[i - 1];
+
+                    if (phaseReference.id == i) {
+                        // Get the total percentage of this phase
+                        phaseReference.percent = (phase.subTaskPercentage / phasesLengths[i]);
+                        // Divide the total precentage of this phase to the total phases count
+                        phaseReference.percent = (phaseReference.percent / phasesReferenceLen).toFixed(2);
+                        // Days Left before the project needs to be finished
+                        phaseReference.daysLeft = getDateDifference(new Date(), milestone['phase_' + i]);
+                    }
                 }
-            }
+            });
         }
 
         // Gets the total length of the phases
@@ -103,6 +109,13 @@
             }
 
             return phasesLen;
+        }
+
+        function getDateDifference(newDate, oldDate) {
+            oldDate = new Date(oldDate);
+            var timeDiff = Math.abs(oldDate.getTime() - newDate.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            return diffDays;
         }
     }
 })();
