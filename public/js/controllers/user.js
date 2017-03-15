@@ -5,7 +5,6 @@ angular.module('users', [
     'common.service',
     'ui.bootstrap',
     'roles.service',
-    'notification',
 ])
 
 .controller('userDTCtrl', function($scope, $compile, DTOptionsBuilder, DTColumnDefBuilder, reqDef, defaultModal, rolesRestApi) {
@@ -21,25 +20,22 @@ angular.module('users', [
         $scope.roles = result.roles;
     });
 
-    this.refresh = function(){
-
+    vm.refresh = function(){
         vm.persons = [];
         console.log('reset');
         reqDef.get('fetchUsers').then(function(result){
-
-                console.log(result);
-
-                if (result.status) {
-                    // console.log('users');
-                    // console.log(result.users);
-                    vm.persons = result.users;
-                } else {
-                    alert('Unable to load datatable');
-                }
-
-            }, function(err){
+            console.log(result);
+            if (result.status) {
+                // console.log('users');
+                // console.log(result.users);
+                vm.persons = result.users;
+            } else {
                 alert('Unable to load datatable');
-            });
+            }
+
+        }, function(err){
+            alert('Unable to load datatable');
+        });
     }
     vm.refresh();
     console.log('persons');

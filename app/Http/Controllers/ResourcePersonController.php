@@ -34,6 +34,28 @@ class ResourcePersonController extends Controller
         }
     }
 
+    public function getResourcePersons(Request $request)
+    {
+        try {
+            $resourcePerson = ResourcePerson::select(
+                'resource_persons.id',
+                DB::raw('CONCAT(pi.first_name, " ", pi.last_name) as name')
+            )->join('personal_info as pi', 'pi.id', '=',
+            'resource_persons.personal_info_id')
+            ->join('specializations as sp', 'sp.resource_person_id', '=', 'resource_persons.id');
+
+            if($request->program_id)
+                $resourcePerson->where('sp.program_id', $request->program_id);
+
+            $resourcePerson = $resourcePerson->groupBy('resource_persons.id')->get();
+
+            return $resourcePerson;
+        } catch(Exception $e) {
+            logger($e);
+            return Response::json([['error' => $e->getMessage()]]);
+        }
+    }
+
     public function create()
     {
         return view('modals/resource-person');

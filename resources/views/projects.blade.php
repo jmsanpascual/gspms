@@ -111,6 +111,7 @@ ng-app='project.controller'
 {!! HTML::script('js/controllers/item.js') !!}
 {!! HTML::script('js/services/item-manager.factory.js') !!}
 {!! HTML::script('js/controllers/project.js') !!}
+{!! HTML::script('js/resource-person/resource-person-manager.factory.js') !!}
 
 <!-- project expense  -->
 {!! HTML::script('js/project-expense/project-expense.module.js') !!}
