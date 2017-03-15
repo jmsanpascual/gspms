@@ -20,9 +20,11 @@
 		}
 
 		function getTodos() {
-			$http.get('todo').then(function(result) {
+			$http.get('../todo').then(function(result) {
 				var result = result.data;
-				vm.todos = result;
+				if(!result.status) return alert(result.msg);
+
+				vm.todos = result.todo;
 			});
 		}
 

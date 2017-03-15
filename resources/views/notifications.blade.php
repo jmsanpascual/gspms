@@ -1,6 +1,8 @@
 @extends('layouts.index')
 
 @section('css')
+
+<base href = "/gspms/public/projects/">
 {!! HTML::style('js/upload/upload.css'); !!}
 @endsection
 
@@ -31,7 +33,7 @@ ng-app='notification'
                       <i class="fa fa-times"></i>
                   </div>
               </div>
-              <div class="panel-body">
+              <div class="panel-body" ng-controller = "projDTCtrl as pc">
 
                 <div ng-controller="NotificationListController as nc">
                   <button class = "btn btn-danger btn-sm pull-right" ng-click = "nc.getNotif()">Refresh</button>
@@ -51,10 +53,10 @@ ng-app='notification'
                     <tr ng-repeat = "notif in nc.notifications">
                       <td ng-bind="notif.title"></td>
                       <td ng-bind="notif.text"></td>
-                      <td ng-bind="notif.created_at"></td>
+                      <td ng-bind="notif.notif_created"></td>
                       <td>@{{ (notif.read_flag) ? 'Read' : 'Unread'}}</td>
                       <td>
-                        <button class="btn btn-warning btn-sm" ng-click="nc.showNotif(notif)">
+                        <button class="btn btn-warning btn-sm" ng-click="nc.read(pc.edit($index, notif),notif, $index)">
                         <i class="fa fa-eye"></i>
                         </button>
                       </td>
@@ -70,49 +72,4 @@ ng-app='notification'
 
 @section('scripts')
 @parent
-{!! HTML::script('js/activity-dependencies/activity-dependencies.module.js') !!}
-{!! HTML::script('js/activity-dependencies/phase.factory.js') !!}
-{!! HTML::script('js/activity-dependencies/progress-calculator.factory.js') !!}
-{!! HTML::script('js/resource-person/services/resource-person.js') !!}
-{!! HTML::script('js/volunteer/volunteer.module.js') !!}
-{!! HTML::script('js/volunteer/volunteer.factory.js') !!}
-{!! HTML::script('js/volunteer/expertise/expertise.factory.js') !!}
-
-
-{!! HTML::script('js/resource-person/services/resource-person.js') !!}
-{!! HTML::script('js/services/project-status.js') !!}
-{!! HTML::script('js/services/program.js') !!}
-{!! HTML::script('js/services/project.js') !!}
-{!! HTML::script('js/controllers/project.js') !!}
-{!! HTML::script('js/services/project-activities.js') !!}
-{!! HTML::script('js/services/user.js') !!}
-{!! HTML::script('js/services/activity-status.js') !!}
-{!! HTML::script('js/controllers/dynamic-element.js') !!}
-{!! HTML::script('js/controllers/project-activities.js') !!}
-{!! HTML::script('js/services/budget-request.js') !!}
-{!! HTML::script('js/services/budget-request-status.js') !!}
-{!! HTML::script('js/controllers/budget-request.js') !!}
-{!! HTML::script('js/services/item.js') !!}
-{!! HTML::script('js/services/categories.js') !!}
-{!! HTML::script('js/controllers/dynamic-element.js') !!}
-{!! HTML::script('js/controllers/item.js') !!}
-{!! HTML::script('js/controllers/project.js') !!}
-
-
-<!-- Attachment -->
-{!! HTML::script('js/project-attachments/project-attachment.module.js') !!}
-{!! HTML::script('js/project-attachments/project-attachment.controller.js') !!}
-{!! HTML::script('js/project-attachments/project-attachment.factory.js') !!}
-{!! HTML::script('js/project-attachments/project-attachment.service.js') !!}
-<!-- End Attachment  -->
-<!-- Related Project  -->
-{!! HTML::script('js/project-related/project-related.module.js') !!}
-{!! HTML::script('js/project-related/project-related.controller.js') !!}
-<!-- End Related Project  -->
-<!-- UPLOAD -->
-{!! HTML::script('js/upload/upload.js') !!}
-<!-- END UPLOAD -->
-<!-- Toast -->
-{!! HTML::script('js/others/toast.js') !!}
-<!-- End Toast -->
 @endsection

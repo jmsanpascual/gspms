@@ -170,7 +170,7 @@ angular.module('project.controller', [
         };
 
         var modal = defaultModal.showModal(attr);
-        modal.result.then(function (data) {
+        return modal.result.then(function (data) {
             // vm.projects.splice(index, 1, angular.copy(data.proj));
             //save
             vm.refresh();

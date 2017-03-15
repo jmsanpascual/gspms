@@ -18,24 +18,26 @@
                 <table datatable="ng" dt-options="uc.dtOptions" dt-columns="uc.dtColumnDefs" dt-instauce="uc.dtInstauce" class="table table-hover row-border hover">
                 <thead>
                   <tr>
-                    <th>Title</th>
-                    <th>Message</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                      <th>Project Title</th>
+                      <th>Start Date</th>
+                      <th>End Date</th>
+                      <th>Initial Budget</th>
+                      <th>Status</th>
+                      <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat = "notif in uc.notifications">
-                    <td ng-bind="notif.title"></td>
-                    <td ng-bind="notif.text"></td>
-                    <td ng-bind="notif.created_at"></td>
-                    <td>@{{ (notif.read_flag) ? 'Read' : 'Unread'}}</td>
-                    <td>
-                      <button class="btn btn-warning btn-sm" ng-click="uc.showNotif(notif)">
-                      <i class="fa fa-eye"></i>
-                      </button>
-                    </td>
+                  <tr ng-repeat = "project in uc.upcomings">
+                      <td ng-bind="project.name"></td>
+                      <td ng-bind="project.start_date"></td>
+                      <td ng-bind="project.end_date"></td>
+                      <td ng-bind="project.total_budget"></td>
+                      <td ng-bind="project.status"></td>
+                      <td>
+                        <button class="btn btn-warning btn-sm" ng-click="pc.edit($index, project)">
+                        <i class="fa fa-eye"></i>
+                        </button>
+                      </td>
                   </tr>
                 </tbody>
                 </table>

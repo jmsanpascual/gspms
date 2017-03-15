@@ -100,6 +100,7 @@
 @endsection
 
 @section('scripts')
+@parent
 {!! HTML::script('js/volunteer/volunteer.module.js') !!}
 {!! HTML::script('js/volunteer/volunteer.controller.js') !!}
 {!! HTML::script('js/volunteer/volunteer.factory.js') !!}

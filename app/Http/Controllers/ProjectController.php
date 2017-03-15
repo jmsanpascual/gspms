@@ -161,6 +161,91 @@ class ProjectController extends Controller
         return array($data);
     }
 
+    public function upcoming(Request $request)
+    {
+        try{
+            $proj = (new App\Projects)->getTable();
+            $stat = (new App\ProjectStatus)->getTable();
+            $data['proj'] = App\Projects::JoinStatus();
+
+
+            $select = [
+                $proj . '.name',
+                $stat . '.name AS status',
+                $proj . '.id',
+                'start_date',
+                'end_date',
+                'objective',
+                'total_budget',
+                'champion_id',
+                'program_id',
+                'proj_status_id',
+                'resource_person_id',
+                'partner_organization',
+                'partner_community',
+                'remarks'
+            ];
+
+            // $projStatusAllowed = [
+            //     config('constants.proj_status_ongoing'),
+            //     config('constants.proj_status_disapproved'),
+            //     config('constants.proj_status_approved'),
+            //     config('constants.proj_status_incomplete'),
+            // ];
+
+            // $data['proj']->whereIn('proj_status_id', $projStatusAllowed);
+            $data['proj'] = $data['proj']->where('start_date', '>', date('Y-m-d H:i:s'))->get($select);
+        } catch(Exception $e) {
+            logger($e);
+            $msg = $e->getMessage();
+        }
+
+        return $data;
+    }
+
+    public function delayed(Request $request)
+    {
+        try{
+            $proj = (new App\Projects)->getTable();
+            $stat = (new App\ProjectStatus)->getTable();
+            $data['proj'] = App\Projects::JoinStatus();
+
+
+            $select = [
+                $proj . '.name',
+                $stat . '.name AS status',
+                $proj . '.id',
+                'start_date',
+                'end_date',
+                'objective',
+                'total_budget',
+                'champion_id',
+                'program_id',
+                'proj_status_id',
+                'resource_person_id',
+                'partner_organization',
+                'partner_community',
+                'remarks'
+            ];
+
+            // $projStatusAllowed = [
+            //     config('constants.proj_status_ongoing'),
+            //     config('constants.proj_status_disapproved'),
+            //     config('constants.proj_status_approved'),
+            //     config('constants.proj_status_incomplete'),
+            // ];
+
+            // $data['proj']->whereIn('proj_status_id', $projStatusAllowed);
+            $data = $data['proj']->where('end_date', '<', date('Y-m-d H:i:s'))
+                ->where('proj_status_id', 3)->get($select);
+        } catch(Exception $e) {
+            logger($e);
+            $msg = $e->getMessage();
+        }
+
+        return $data;
+    }
+
     public function _convertToYearMonthDays($days)
     {
         $yearMonths = 12;
