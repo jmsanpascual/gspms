@@ -221,20 +221,20 @@
 
         </div>
 
-        <div class="progress" ng-hide="padtc.phaseProgress.hide">
+        <!-- <div class="progress" ng-hide="padtc.phaseProgress.hide"> -->
 
           <!-- ng-style="{width: phase.percent + '%'}" -->
-          <div class="progress-bar" aria-valuemin="0" aria-valuemax="33"
+          <!-- <div class="progress-bar" aria-valuemin="0" aria-valuemax="33"
             ng-repeat="phase in padtc.phasesPercentages"
             ng-style="{width: '33.33%'}"
             ng-class="phase.class">
             <span class="sr-only">
               @{{ phase.percent }}% Complete Phase @{{ phase.id }}
-            </span>
+            </span> -->
               <!-- Phase @{{ phase.id }} @ @{{ phase.percent }}%  -->
-              @{{ phase.daysLeft }} Days Left @ @{{ phase.percent }}% / 33.33%
-          </div>
-        </div>
+              <!-- @{{ phase.daysLeft }} Days Left @ @{{ phase.percent }}% / 33.33% -->
+          <!-- </div>
+        </div> -->
 
         <hr>
         <div ng-init = 'proj_id = submitData.proj.id; padtc.getProjActivities(submitData.proj.id);
@@ -307,7 +307,16 @@
 
         @if(Session::get('role') == config('constants.role_life')
           || Session::get('role') == config('constants.role_head'))
-      <a class = "btn btn-default btn-sm" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">View Progress Report</a>
+        <div class="dropdown" style = "display: inline !important">
+          <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">View Reports
+          <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a target="_blank" href="{{asset('projects/report/progress')}}/@{{submitData.proj.id}}">Progress Report</a></li>
+            <li><a target="_blank" href="{{asset('projects/report/summary')}}/@{{submitData.proj.id}}">Project Summary Report</a></li>
+            <li><a target="_blank" href="{{asset('project-expense/report')}}/@{{submitData.proj.id}}">Budget/Expense Report</a></li>
+          </ul>
+        </div>
+      <!-- <a class = "btn btn-default btn-sm" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">View Progress Report</a> -->
       @endif
 
       <button class = "btn btn-success btn-sm" ng-click = "btnc.showRelated()">View Related Projects</button>

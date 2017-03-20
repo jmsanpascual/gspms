@@ -34,7 +34,7 @@ ng-app='dashboard'
   @include('dashboard.delayed-projects')
   <!-- End DELAYED PROJECTS -->
   <!-- UPCOMING -->
-  @include('dashboard.upcoming')
+  <!-- include('dashboard.upcoming') -->
   <!-- End UPCOMING -->
   </div>
 @endsection

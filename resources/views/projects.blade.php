@@ -82,3 +82,8 @@ ng-app='project.controller'
       </div>
   </div>
 @endsection
+
+@section('scripts')
+@parent
+
+@endsection

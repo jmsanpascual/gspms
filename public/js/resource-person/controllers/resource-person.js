@@ -100,12 +100,13 @@ angular.module('resourcePersons', [
             //     name: resourcePerson.school
             // },
             resourcePerson: {
+                id: resourcePerson.id,
                 profession: resourcePerson.profession
             }
         };
 
 
-            console.log(attr.school);
+            console.log(resourcePerson);
 
         function getSchool() {
             var len = rp.schools.length;
@@ -126,6 +127,7 @@ angular.module('resourcePersons', [
             var request = {
                 personalInfo: data.person,
                 resourcePerson: {
+                    'id' : data.resourcePerson.id,
                     'school_id': data.resourcePerson.school.id,
                     'profession': data.resourcePerson.profession
                 }

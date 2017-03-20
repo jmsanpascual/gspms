@@ -13,6 +13,7 @@ use Response;
 use DB;
 use App\Project;
 use App\ProjectItemCategory;
+use App\ProjectExpense;
 use Exception;
 
 class ProjectActivitiesController extends Controller
@@ -147,8 +148,8 @@ class ProjectActivitiesController extends Controller
             $data['projAct']['item_id'] = $activity['item_id'];
 
             // Make the status to on-going from initiating
-            $ongoingId = 1;
-            $approvedId = 5;
+            $ongoingId = config('constants.proj_status_ongoing');
+            $approvedId = config('constants.proj_status_approved');
             $project = Project::findOrFail($proj_id);
 
             if ($project->proj_status_id == $approvedId) {
@@ -156,7 +157,7 @@ class ProjectActivitiesController extends Controller
                 $project->save();
             } else if($project->proj_status_id == config('constants.proj_status_incomplete')) {
                 // check if already have a expense
-                $count = ProjectItemCategory::where('proj_id', $project->id)->count();
+                $count = ProjectExpense::where('proj_id', $project->id)->count();
                 if($count) {
                     $project->proj_status_id = config('constants.proj_status_for_approval_finance');
                     $project->save();

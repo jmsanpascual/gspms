@@ -686,7 +686,60 @@ class ProjectController extends Controller
         return Response::json($data);
     }
 
-    public function report($id)
+    public function progressReport($id)
+    {
+        $status = FALSE;
+        $msg = '';
+        try
+        {
+            $data['proj'] = App\Projects::leftJoin('programs', 'programs.id','=','projects.program_id')
+            ->leftJoin('resource_persons AS rp', 'rp.id', '=', 'projects.resource_person_id')
+            ->leftJoin('personal_info AS rpi', 'rpi.id','=', 'rp.personal_info_id')
+            ->leftJoin('users', 'users.id', '=', 'projects.champion_id')
+            ->leftJoin('user_info', 'user_info.user_id','=','users.id')
+            ->leftJoin('personal_info AS champ', 'champ.id', '=','user_info.personal_info_id')
+            ->where('projects.id', $id)->first(['projects.*','programs.name AS program',
+                'rpi.first_name', 'rpi.middle_name', 'rpi.last_name',
+                DB::raw('CONCAT(champ.first_name, " ", champ.middle_name, " ", champ.last_name) AS champ_name')]);
+
+            $data['total_expense'] = App\ProjectItemCategory::where('proj_id', $id)
+            ->sum(DB::raw('quantity * price'));
+
+            $data['total_budget_request'] = App\ProjectBudgetRequest::where('proj_id', $id)
+    			// 2 = approve
+    			->where('status_id', 2)->sum('amount');
+
+            $data['total_budget'] = $data['proj']->total_budget + $data['total_budget_request'];
+
+            $data['proj_id'] = $id;
+
+            $start_date =  Carbon::createFromFormat('Y-m-d H:i:s',$data['proj']->start_date);
+            $end_date =  Carbon::createFromFormat('Y-m-d H:i:s', $data['proj']->end_date);
+            $days = $end_date->diffInDays($start_date);
+            $data['duration'] = $this->_convertToYearMonthDays($days);
+
+
+            // $data['chart'] = $this->createChart($id);
+            $html = view('reports/project', $data);
+            $html = utf8_encode($html);
+            $pdf = new \mPDF();
+            $pdf->writeHTML($html);
+            $pdf->SetFooter('Generated date: ' . date('F d, Y'));
+            $pdf->Output();
+            exit();
+        }
+        catch(\Exception $e)
+        {
+
+            $msg = $e->getMessage();
+        }
+        $data['status'] = $status;
+        $data['msg'] = $msg;
+
+        return Response::json($data);
+    }
+
+    public function summaryReport($id)
     {
         $status = FALSE;
         $msg = '';
