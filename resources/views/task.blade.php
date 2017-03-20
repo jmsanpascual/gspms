@@ -58,4 +58,14 @@
 {!! HTML::script('js/volunteer/task/task.module.js') !!}
 {!! HTML::script('js/volunteer/task/task.controller.js') !!}
 {!! HTML::script('js/volunteer/task/task.factory.js') !!}
+<!-- project expense  -->
+{!! HTML::script('js/project-expense/project-expense.module.js') !!}
+{!! HTML::script('js/project-expense/project-expense-manager.factory.js') !!}
+{!! HTML::script('js/project-expense/project-expense-resource.factory.js') !!}
+{!! HTML::script('js/project-expense/project-expense.controller.js') !!}
+<!-- Activity item expense  -->
+{!! HTML::script('js/activity-item-expense/activity-item-expense.module.js') !!}
+{!! HTML::script('js/activity-item-expense/activity-item-expense-manager.factory.js') !!}
+{!! HTML::script('js/activity-item-expense/activity-item-expense-resource.factory.js') !!}
+{!! HTML::script('js/activity-item-expense/activity-item-expense.controller.js') !!}
 @endsection

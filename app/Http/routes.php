@@ -82,7 +82,8 @@ Route::get('projects/compare', function() {
 Route::get('projects/get-on-going-projects', 'ProjectController@getOnGoingProjects');
 Route::post('projects/update-total-budget', 'ProjectController@updateTotalBudget');
 Route::get('projects/chart/{id}', 'ProjectController@createChart')->name('proj_chart');
-Route::get('projects/report/{id}', 'ProjectController@report')->name('proj_report');
+Route::get('projects/report/progress/{id}', 'ProjectController@progressReport')->name('proj_report');
+Route::get('projects/report/summary/{id}', 'ProjectController@summaryReport')->name('proj_report');
 Route::get('projects/fetch/{id}', 'ProjectController@fetchProj');
 Route::post('projects/request/', 'ProjectController@updateStatus');
 Route::post('projects/update', 'ProjectController@update');
@@ -103,6 +104,10 @@ Route::get('add-task-remarks-view', function () {
 });
 Route::post('update-task', 'ProjectActivitiesController@updateTask');
 Route::delete('delete-task/{id}', 'ProjectActivitiesController@deleteTask');
+
+// RESTful route for Activity Milestone
+Route::get('milestone-graph', 'MilestoneController@graph');
+Route::resource('milestone', 'MilestoneController');
 
 // RESTful route for Activity Phases
 Route::resource('phase', 'PhaseController');
@@ -191,6 +196,7 @@ Route::get('notifications/getAllNotif', 'NotificationController@getAllNotif');
 Route::resource('notifications', 'NotificationController');
 
 
+Route::get('project-expense/report/{projId}', 'ProjectExpenseController@report');
 Route::get('project-expense/form/{action}', 'ProjectExpenseController@form');
 Route::post('project-expense/update', 'ProjectExpenseController@update');
 Route::get('project-expense/total_expense/{proj_id}', 'ProjectExpenseController@getTotalExpense');

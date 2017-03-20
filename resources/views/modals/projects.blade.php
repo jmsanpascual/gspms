@@ -194,8 +194,21 @@
     <!-- End Expense -->
     <hr>
     <!-- Activities -->
-    <div ng-if = "submitData.proj.id" ng-controller="projActDTCtrl as padtc">
-        <h3>Activities</h3>
+    <div ng-if = "submitData.proj.id" ng-controller="projActDTCtrl as padtc"
+      ng-init="padtc.activate(submitData.proj)">
+
+        <h3 ng-init="mc.activate(submitData.proj, padtc)" ng-controller="MilestoneController as mc">Activities
+          @if(Session::get('role') == config('constants.role_life'))
+          <button class="btn btn-success btn-sm" ng-click="mc.add()">
+            Milestone
+          </button>
+          @endif
+          @if(Session::get('role') == config('constants.role_champion'))
+          <button class="btn btn-success btn-sm" ng-click="mc.view()">
+            Milestone
+          </button>
+          @endif
+        </h3>
 
         <div class="progress" ng-if="padtc.project_activities.length"
           ng-mouseover="padtc.phaseProgress.hide = false"
@@ -209,14 +222,17 @@
         </div>
 
         <div class="progress" ng-hide="padtc.phaseProgress.hide">
+
+          <!-- ng-style="{width: phase.percent + '%'}" -->
           <div class="progress-bar" aria-valuemin="0" aria-valuemax="33"
             ng-repeat="phase in padtc.phasesPercentages"
-            ng-style="{width: phase.percent + '%'}"
+            ng-style="{width: '33.33%'}"
             ng-class="phase.class">
             <span class="sr-only">
               @{{ phase.percent }}% Complete Phase @{{ phase.id }}
             </span>
-              Phase @{{ phase.id }} @ @{{ phase.percent }}%
+              <!-- Phase @{{ phase.id }} @ @{{ phase.percent }}%  -->
+              @{{ phase.daysLeft }} Days Left @ @{{ phase.percent }}% / 33.33%
           </div>
         </div>
 
@@ -291,7 +307,16 @@
 
         @if(Session::get('role') == config('constants.role_life')
           || Session::get('role') == config('constants.role_head'))
-      <a class = "btn btn-default btn-sm" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">View Progress Report</a>
+        <div class="dropdown" style = "display: inline !important">
+          <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">View Reports
+          <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a target="_blank" href="{{asset('projects/report/progress')}}/@{{submitData.proj.id}}">Progress Report</a></li>
+            <li><a target="_blank" href="{{asset('projects/report/summary')}}/@{{submitData.proj.id}}">Project Summary Report</a></li>
+            <li><a target="_blank" href="{{asset('project-expense/report')}}/@{{submitData.proj.id}}">Budget/Expense Report</a></li>
+          </ul>
+        </div>
+      <!-- <a class = "btn btn-default btn-sm" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">View Progress Report</a> -->
       @endif
 
       <button class = "btn btn-success btn-sm" ng-click = "btnc.showRelated()">View Related Projects</button>

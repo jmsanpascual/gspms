@@ -34,7 +34,7 @@ class NotificationController extends Controller
                     // ->join('projects as p', 'p.id', '=', 'notifications.project_id')
         $data['count'] = $notif->count();
 
-        $data['notif'] = $notif->orderBy('created_at', 'desc')->get($select)->take(6);
+        $data['notif'] = $notif->orderBy('notifications.created_at', 'desc')->get($select)->take(6);
         return $data;
     }
 

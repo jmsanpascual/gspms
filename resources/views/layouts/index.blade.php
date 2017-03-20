@@ -160,6 +160,8 @@
     {!! HTML::script('js/activity-dependencies/activity-dependencies.module.js') !!}
     {!! HTML::script('js/activity-dependencies/phase.factory.js') !!}
     {!! HTML::script('js/activity-dependencies/progress-calculator.factory.js') !!}
+    {!! HTML::script('js/activity-dependencies/milestone.controller.js') !!}
+    {!! HTML::script('js/activity-dependencies/milestone.factory.js') !!}
     {!! HTML::script('js/resource-person/services/resource-person.js') !!}
     {!! HTML::script('js/volunteer/volunteer.module.js') !!}
     {!! HTML::script('js/volunteer/volunteer.factory.js') !!}

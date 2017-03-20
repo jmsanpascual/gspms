@@ -99,11 +99,12 @@ class ResourcePersonController extends Controller
     public function update(Request $request)
     {
         try {
-            $unsetArr = ['name', 'profession', 'school', 'personal_info_id'];
+            $unsetArr = ['name', 'profession', 'school', 'personal_info_id', 'school_id'];
             $personalInfo = $request->get('personalInfo'); // Personal info
             $resourcePerson = $request->get('resourcePerson'); // Resource person info
+            $resourceId = $resourcePerson['id'];
+            unset($resourcePerson['id']);
 
-            $resourceId = $personalInfo['id'];
             $personalInfo['id'] = $personalInfo['personal_info_id'];
 
             for ($i = 0; $i < count($unsetArr); $i++) {
@@ -111,8 +112,8 @@ class ResourcePersonController extends Controller
                     unset($personalInfo[$unsetArr[$i]]);
                 }
             }
-
             PersonalInfo::where('id', $personalInfo['id'])->update($personalInfo);
+            $rPerson = ResourcePerson::find($resourceId);
             ResourcePerson::where('id', $resourceId)->update($resourcePerson);
 
             return Response::json(['result' => true]);
