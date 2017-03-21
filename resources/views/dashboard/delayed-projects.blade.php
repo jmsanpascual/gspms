@@ -34,7 +34,7 @@
                     <td ng-bind="project.total_budget"></td>
                     <td ng-bind="project.status"></td>
                     <td>
-                      <button class="btn btn-warning btn-sm" ng-click="dpc.show(project)">
+                      <button class="btn btn-warning btn-sm" ng-click="pc.edit($index, project)">
                       <i class="fa fa-eye"></i>
                       </button>
                     </td>

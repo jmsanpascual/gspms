@@ -312,8 +312,8 @@
           <span class="caret"></span></button>
           <ul class="dropdown-menu">
             <li><a target="_blank" href="{{asset('projects/report/progress')}}/@{{submitData.proj.id}}">Progress Report</a></li>
-            <li><a target="_blank" href="{{asset('projects/report/summary')}}/@{{submitData.proj.id}}">Project Summary Report</a></li>
-            <li><a target="_blank" href="{{asset('project-expense/report')}}/@{{submitData.proj.id}}">Budget/Expense Report</a></li>
+            <!-- <li><a target="_blank" href="{{asset('projects/report/summary')}}/@{{submitData.proj.id}}">Project Summary Report</a></li> -->
+            <li><a target="_blank" href="{{asset('projects/report/expense')}}/@{{submitData.proj.id}}">Budget/Expense Report</a></li>
           </ul>
         </div>
       <!-- <a class = "btn btn-default btn-sm" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">View Progress Report</a> -->

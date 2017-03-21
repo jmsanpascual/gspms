@@ -14,6 +14,11 @@ class Activities extends Model
         'project',
     ];
 
+    protected $cast =[
+        'quantity' => 'int',
+        'price' => 'int'
+    ];
+
     public function projects() {
         return $this->belongsToMany('App\Project', 'proj_activities', 'activity_id', 'proj_id');
     }

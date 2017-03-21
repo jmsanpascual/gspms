@@ -236,8 +236,16 @@ class ProjectController extends Controller
             // ];
 
             // $data['proj']->whereIn('proj_status_id', $projStatusAllowed);
-            $data = $data['proj']->where('end_date', '<', date('Y-m-d H:i:s'))
-                ->where('proj_status_id', 3)->get($select);
+            $data = $data['proj']->where(function($query){
+                //delayed projects
+                $query->where('proj_status_id', '!=', config('constants.proj_status_completed'))
+                    ->where('end_date', '<', date('Y-m-d H:i:s'));
+            })
+            // completed but delayed
+                ->orWhere(function($query){
+                $query->where('proj_status_id', config('constants.proj_status_completed'))
+                    ->where('end_date', '<', DB::raw('actual_end'));
+            })->get($select);
         } catch(Exception $e) {
             logger($e);
             $msg = $e->getMessage();
@@ -525,10 +533,16 @@ class ProjectController extends Controller
             $this->_completedProj($req, $findProj);
             // logger($req);
             // missing check if for approval
-            $stat = $proj->update([
+            $upd_params = [
                 'proj_status_id' => $req->get('id'),
                 'remarks' => $req->get('remarks')
-            ]);
+            ];
+            if($req->id == config('constants.proj_status_completed')) {
+                // if completed add acutal end on update
+                $upd_params['actual_end'] = date('Y-m-d H:i:s');
+            }
+
+            $stat = $proj->update($upd_params);
 
             $data['stat'] = App\ProjectStatus::where('id', $req->get('id'))->first(['id','name']);
             // Log::info('stat' . json_encode($data['stat']));
@@ -574,8 +588,8 @@ class ProjectController extends Controller
         if($req->id != config('constants.proj_status_completed')) return;
         // if project  completed check for remaining budget and add it in the current year funds
         try {
-            $total_expense = App\ProjectItemCategory::where('proj_id', $proj['id'])
-            ->sum(DB::raw('quantity * price'));
+            $total_expense = App\ProjectExpense::where('proj_id', $proj['id'])
+            ->sum('amount');
             $remaining_funds = $proj['total_budget'] - $total_expense;
 
             $year = date('Y');
@@ -702,8 +716,8 @@ class ProjectController extends Controller
                 'rpi.first_name', 'rpi.middle_name', 'rpi.last_name',
                 DB::raw('CONCAT(champ.first_name, " ", champ.middle_name, " ", champ.last_name) AS champ_name')]);
 
-            $data['total_expense'] = App\ProjectItemCategory::where('proj_id', $id)
-            ->sum(DB::raw('quantity * price'));
+            $data['total_expense'] = App\ProjectExpense::where('proj_id', $id)
+            ->sum('amount');
 
             $data['total_budget_request'] = App\ProjectBudgetRequest::where('proj_id', $id)
     			// 2 = approve
@@ -739,41 +753,28 @@ class ProjectController extends Controller
         return Response::json($data);
     }
 
-    public function summaryReport($id)
+    public function summaryReport()
     {
         $status = FALSE;
         $msg = '';
         try
         {
-            $data['proj'] = App\Projects::leftJoin('programs', 'programs.id','=','projects.program_id')
-            ->leftJoin('resource_persons AS rp', 'rp.id', '=', 'projects.resource_person_id')
-            ->leftJoin('personal_info AS rpi', 'rpi.id','=', 'rp.personal_info_id')
-            ->leftJoin('users', 'users.id', '=', 'projects.champion_id')
-            ->leftJoin('user_info', 'user_info.user_id','=','users.id')
-            ->leftJoin('personal_info AS champ', 'champ.id', '=','user_info.personal_info_id')
-            ->where('projects.id', $id)->first(['projects.*','programs.name AS program',
-                'rpi.first_name', 'rpi.middle_name', 'rpi.last_name',
-                DB::raw('CONCAT(champ.first_name, " ", champ.middle_name, " ", champ.last_name) AS champ_name')]);
-
-            $data['total_expense'] = App\ProjectItemCategory::where('proj_id', $id)
-            ->sum(DB::raw('quantity * price'));
-
-            $data['total_budget_request'] = App\ProjectBudgetRequest::where('proj_id', $id)
-    			// 2 = approve
-    			->where('status_id', 2)->sum('amount');
-
-            $data['total_budget'] = $data['proj']->total_budget + $data['total_budget_request'];
-
-            $data['proj_id'] = $id;
-
-            $start_date =  Carbon::createFromFormat('Y-m-d H:i:s',$data['proj']->start_date);
-            $end_date =  Carbon::createFromFormat('Y-m-d H:i:s', $data['proj']->end_date);
-            $days = $end_date->diffInDays($start_date);
-            $data['duration'] = $this->_convertToYearMonthDays($days);
-
-
-            // $data['chart'] = $this->createChart($id);
-            $html = view('reports/project', $data);
+            // $projects = Project::get();
+            $completed = App\Project::where('proj_status_id', config('constants.proj_status_completed'))->get();
+            $onTime = App\Project::where('proj_status_id', config('constants.proj_status_completed'))
+                ->where('end_date', '>=', DB::raw('actual_end'))->get();
+                logger($onTime);
+            $delayed = App\Project::where(function($query){
+                //delayed projects
+                $query->where('proj_status_id', '!=', config('constants.proj_status_completed'))
+                    ->where('end_date', '<', date('Y-m-d H:i:s'));
+            })
+            // completed but delayed
+                ->orWhere(function($query){
+                $query->where('proj_status_id', config('constants.proj_status_completed'))
+                    ->where('end_date', '<', DB::raw('actual_end'));
+            })->get();
+            $html = view('reports/project-summary', compact('delayed', 'onTime', 'completed'));
             $html = utf8_encode($html);
             $pdf = new \mPDF();
             $pdf->writeHTML($html);
@@ -783,7 +784,43 @@ class ProjectController extends Controller
         }
         catch(\Exception $e)
         {
+            logger($e);
+            $msg = $e->getMessage();
+        }
+        $data['status'] = $status;
+        $data['msg'] = $msg;
 
+        return Response::json($data);
+    }
+
+    public function expenseReport($id)
+    {
+        $status = FALSE;
+        $msg = '';
+        try
+        {
+            $select = [
+                'activities.name',
+                'activity_item_expenses.quantity',
+                'activity_item_expenses.price',
+                'project_expenses.category as category'
+            ];
+            $activity = App\Activities::leftJoin('proj_activities', 'proj_activities.activity_id', '=', 'activities.id')
+                        ->leftJoin('activity_item_expenses', 'activities.id', '=', 'activity_item_expenses.activity_id')
+                        ->leftJoin('project_expenses', 'project_expenses.proj_id', '=', 'proj_activities.proj_id')
+                        ->where('proj_activities.proj_id', $id)->orderBy('activities.id')->get($select);
+            // logger($activity);
+            $html = view('reports/project-expense', compact('activity'));
+            $html = utf8_encode($html);
+            $pdf = new \mPDF();
+            $pdf->writeHTML($html);
+            $pdf->SetFooter('Generated date: ' . date('F d, Y'));
+            $pdf->Output();
+            exit();
+        }
+        catch(\Exception $e)
+        {
+            logger($e);
             $msg = $e->getMessage();
         }
         $data['status'] = $status;
@@ -794,7 +831,7 @@ class ProjectController extends Controller
 
     public function createChart($id)
     {
-        Log::info('create chart');
+        // Log::info('create chart');
         header("Content-type: image/png");
 
         $chart = new \PieChart(500, 260);
