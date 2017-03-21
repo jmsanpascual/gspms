@@ -221,20 +221,20 @@
 
         </div>
 
-        <div class="progress" ng-hide="padtc.phaseProgress.hide">
+        <!-- <div class="progress" ng-hide="padtc.phaseProgress.hide"> -->
 
           <!-- ng-style="{width: phase.percent + '%'}" -->
-          <div class="progress-bar" aria-valuemin="0" aria-valuemax="33"
+          <!-- <div class="progress-bar" aria-valuemin="0" aria-valuemax="33"
             ng-repeat="phase in padtc.phasesPercentages"
             ng-style="{width: '33.33%'}"
             ng-class="phase.class">
             <span class="sr-only">
               @{{ phase.percent }}% Complete Phase @{{ phase.id }}
-            </span>
+            </span> -->
               <!-- Phase @{{ phase.id }} @ @{{ phase.percent }}%  -->
-              @{{ phase.daysLeft }} Days Left @ @{{ phase.percent }}% / 33.33%
-          </div>
-        </div>
+              <!-- @{{ phase.daysLeft }} Days Left @ @{{ phase.percent }}% / 33.33% -->
+          <!-- </div>
+        </div> -->
 
         <hr>
         <div ng-init = 'proj_id = submitData.proj.id; padtc.getProjActivities(submitData.proj.id);
