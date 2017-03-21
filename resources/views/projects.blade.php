@@ -40,6 +40,11 @@ ng-app='project.controller'
                   <button class = "btn btn-success btn-sm pull-right" ng-click = "proj.add()"> Add Project</button>
                   @endif
                   <button class = "btn btn-danger btn-sm pull-right" ng-click = "proj.refresh()">Refresh</button>
+                  &nbsp;
+                  <a class="btn btn-default btn-sm pull-right" target="_blank" href = "{{asset('projects/report/summary')}}">
+                      View Project Summarry Report
+                  </a>
+
                   <p class="text-danger"><strong ng-bind="proj.message"></strong></p>
                   <br>
                   <table datatable="ng" dt-options="proj.dtOptions" dt-columns="proj.dtColumnDefs" dt-instance="proj.dtInstance" class="table table-hover row-border hover">
