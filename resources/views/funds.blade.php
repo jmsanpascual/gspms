@@ -1,20 +1,6 @@
 @extends('layouts.index')
 
 @section('content')
-
-  <!-- <div class="row">
-      <div class="col-md-12"> -->
-          <!--breadcrumbs start -->
-          <!-- <ul class="breadcrumb">
-              <li>
-                <a href="#">Funds</a>
-              </li>
-              <li>Funds</li>
-          </ul> -->
-          <!--breadcrumbs end -->
-          <!-- <h1 class="h1">View List</h1> -->
-      <!-- </div>
-  </div> -->
   <div class="row" ng-app="funds">
       @if(Session::get('role') == config('constants.role_head'))
       <div class="col-md-12">
@@ -48,12 +34,6 @@
                         <label class="col-sm-3 control-label">Received Date</label>
                         <div class="col-sm-8">
                           <input class="form-control" type="date" placeholder="Received Date" ng-model="fc.fund.received_date" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">Year</label>
-                        <div class="col-sm-8">
-                          <input class="form-control" type="number" placeholder="Year" ng-model="fc.fund.year" readonly>
                         </div>
                     </div>
                     <div class="form-group">

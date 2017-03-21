@@ -1,20 +1,6 @@
 @extends('layouts.index')
 
 @section('content')
-
-  <!-- <div class="row">
-      <div class="col-md-12"> -->
-          <!--breadcrumbs start -->
-          <!-- <ul class="breadcrumb">
-              <li>
-                <a href="#">Resource Person</a>
-              </li>
-              <li>View List</li>
-          </ul> -->
-          <!--breadcrumbs end -->
-          <!-- <h1 class="h1">View List</h1>
-      </div>
-  </div> -->
   <div class="row" ng-app="resourcePersons">
       <div class="col-md-12">
           <div class="panel panel-default">
@@ -27,7 +13,7 @@
               </div>
               <div class="panel-body" ng-controller="resourcePersonDTCtrl as rp">
                 <button class="btn btn-success btn-sm pull-right" ng-click="rp.add()">Add Resource Person</button>
-                <button class = "btn btn-danger btn-sm pull-right" ng-click = "rp.getResourcePersons()"> Refresh</button>
+                <button class = "btn btn-danger btn-sm pull-right" ng-click = "rp.getResourcePersons()" style="margin-right:5px"> Refresh</button>
                 <div>
                   <p class="text-danger"><strong ng-bind="rp.message"></strong></p>
                   <br>

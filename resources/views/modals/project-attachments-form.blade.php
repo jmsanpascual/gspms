@@ -8,7 +8,7 @@
 		<input type ="hidden" ng-model = "submitData.attachment.id">
 		<input type ="hidden" ng-model = "submitData.attachment.project_id">
 		<input type ="hidden" ng-model = "submitData.attachment.token">
-		<div class = "form-group" ng-controller="ProjItemController as pic">
+		<!-- <div class = "form-group" ng-controller="ProjItemController as pic">
 			<div class = "row">
 				<label class = "form-label col-md-4">Item Name</label>
 				<div class = "col-md-6" ng-init = "submitData.attachment.proj_item_category_id = submitData.attachment.proj_item_category_id || ''">
@@ -18,7 +18,7 @@
 					</select>
 				</div>
 			</div>
-		</div>
+		</div> -->
 		<div class = "form-group">
 			<div class = "row">
 				<label class = "form-label col-md-4">Subject</label>

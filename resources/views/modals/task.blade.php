@@ -4,7 +4,8 @@
   @{{ submitData.action}} Activity
 @stop
 @section('modal-content')
-  <form role="form" id = "projForm">
+  <form role="form" id = "projForm" ng-controller="ProjectExpenseController as pec"
+    ng-init="pec.proj_id = submitData.task.activity.project.id;">
     <input type ="hidden" ng-model = "submitData.task.activity.id">
     <input type ="hidden" ng-model = "submitData.task.activity.proj_id">
     <input type ="hidden" ng-model = "submitData.task.activity.token">
@@ -65,7 +66,7 @@
   <!-- Items -->
     <div ng-if = "submitData.task.activity.id" ng-controller="ActivityItemExpenseController as aiec">
         <h3>Item / Expense</h3>
-        <hr ng-init = 'aiec.activity_id = submitData.task.activity.id;aiec.refresh()'>
+        <hr ng-init = 'aiec.getProjectExpense(submitData.task.activity.project.id);aiec.activity_id = submitData.task.activity.id;aiec.refresh()'>
         @if(Session::get('role') == config('constants.role_champion') || Session::get('role') == config('constants.role_volunteer') )
         <button class = "btn btn-sm btn-success pull-right" ng-click = "aiec.add()">Add Item/Expense</button>
         @endif

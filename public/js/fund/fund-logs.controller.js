@@ -12,7 +12,8 @@
         var vm = this;
 
         vm.dtInstance = {};
-        vm.funds = [];
+        vm.schoolFunds = [];
+        vm.projectFunds = [];
 
         vm.refresh = refresh;
 
@@ -29,14 +30,15 @@
 
         function activate() {
             $http.get('../funds/school-funds').then(function (result) {
-                vm.funds = result.data;
-                console.log(result);
+                vm.schoolFunds = result.data.schoolFunds;
+                vm.projectFunds = result.data.projectFunds;
             });
         }
 
         function refresh() {
             $http.get('../funds/school-funds').then(function (result) {
-                vm.funds = result.data;
+                vm.schoolFunds = result.data.schoolFunds;
+                vm.projectFunds = result.data.projectFunds;
             });
         }
     }
