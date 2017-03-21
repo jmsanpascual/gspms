@@ -785,6 +785,42 @@ class ProjectController extends Controller
         return Response::json($data);
     }
 
+    public function expenseReport($id)
+    {
+        $status = FALSE;
+        $msg = '';
+        try
+        {
+            $select = [
+                'activities.name',
+                'activity_item_expenses.quantity',
+                'activity_item_expenses.price',
+                'project_expenses.category as category'
+            ];
+            $activity = App\Activities::leftJoin('proj_activities', 'proj_activities.activity_id', '=', 'activities.id')
+                        ->leftJoin('activity_item_expenses', 'activities.id', '=', 'activity_item_expenses.activity_id')
+                        ->leftJoin('project_expenses', 'project_expenses.proj_id', '=', 'proj_activities.proj_id')
+                        ->where('proj_activities.proj_id', $id)->orderBy('activities.id')->get($select);
+            // logger($activity);
+            $html = view('reports/project-expense', compact('activity'));
+            $html = utf8_encode($html);
+            $pdf = new \mPDF();
+            $pdf->writeHTML($html);
+            $pdf->SetFooter('Generated date: ' . date('F d, Y'));
+            $pdf->Output();
+            exit();
+        }
+        catch(\Exception $e)
+        {
+            logger($e);
+            $msg = $e->getMessage();
+        }
+        $data['status'] = $status;
+        $data['msg'] = $msg;
+
+        return Response::json($data);
+    }
+
     public function createChart($id)
     {
         Log::info('create chart');
