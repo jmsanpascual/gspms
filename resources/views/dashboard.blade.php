@@ -37,6 +37,7 @@ ng-app='dashboard'
       @include('dashboard.delayed-projects')
 
 
+      <!-- DASHBOARD  -->
   @endif
   <!-- End DELAYED PROJECTS -->
   <!-- UPCOMING -->
@@ -49,7 +50,7 @@ ng-app='dashboard'
 @parent
 
 {!! HTML::script('js/dashboard/dashboard.module.js') !!}
-<!-- DASHBOARD  -->
+
 {!! HTML::script('js/dashboard/todo.controller.js') !!}
 {!! HTML::script('js/dashboard/upcoming.controller.js') !!}
 {!! HTML::script('js/dashboard/delayed-projects.controller.js') !!}

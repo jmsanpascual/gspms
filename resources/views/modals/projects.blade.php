@@ -155,9 +155,11 @@
         <h3>Project Expense</h3>
         <hr ng-init = 'pec.proj_id = submitData.proj.id;submitData.refreshExpense = pec.refresh;pec.refresh();'>
         @if(Session::get('role') == config('constants.role_champion'))
-        <button class = "btn btn-sm btn-success pull-right" ng-click = "pec.add()"> Add Project Expense</button>
+        <button class = "btn btn-sm btn-success pull-right" ng-if = "submitData.proj.proj_status_id != 3"
+        ng-click = "pec.add()"> Add Project Expense</button>
         @endif
-        <button class = "btn btn-sm btn-danger pull-right" ng-click = "pec.refresh()" style="margin-right:5px;"> Refresh</button>
+        <button class = "btn btn-sm btn-danger pull-right" ng-click = "pec.refresh()"
+        ng-if = "submitData.proj.proj_status_id != 3" style="margin-right:5px;"> Refresh</button>
 
         <p class="text-danger"><strong>@{{ pec.message }}</strong></p>
         <br>
@@ -177,7 +179,7 @@
               <td>@{{data.remaining_amount}}</td>
               <td>
               @if(Session::get('role') == config('constants.role_finance'))
-                <button class="btn btn-warning btn-sm" ng-click="pec.edit(data)">
+                <button ng-if = "submitData.proj.proj_status_id != 3" class="btn btn-warning btn-sm" ng-click="pec.edit(data)">
                 <i class="fa fa-edit"></i>
                 </button>
 			  @endif

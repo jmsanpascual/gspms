@@ -98,23 +98,23 @@ class ProjectActivitiesController extends Controller
             $proj_id = $req->get('proj_id');
             $activity = $req->all();
             // logger($activity);
-            if(!EMPTY($activity['item'])) {
-                if(EMPTY($activity['quantity'])) {
-                    throw new Exception('Error. Quantity is required if there is an item specified');
-                }
-
-                // check quantity should not exceed to max
-                if($activity['quantity'] > $activity['item']['quantity']) {
-                    throw new Exception('Error. Quantity exceeded the maximum items available, Please try again.');
-                }
-
-                $activity['item_id'] = $activity['item']['id'];
-                unset($activity['item']);
-            } else if(!EMPTY($activity['quantity'])) {
-                if(EMPTY($activity['item'])) {
-                    throw new Exception('Error. Please specify items if there is a quantity.');
-                }
-            }
+            // if(!EMPTY($activity['item'])) {
+            //     if(EMPTY($activity['quantity'])) {
+            //         throw new Exception('Error. Quantity is required if there is an item specified');
+            //     }
+            //
+            //     // check quantity should not exceed to max
+            //     if($activity['quantity'] > $activity['item']['quantity']) {
+            //         throw new Exception('Error. Quantity exceeded the maximum items available, Please try again.');
+            //     }
+            //
+            //     $activity['item_id'] = $activity['item']['id'];
+            //     unset($activity['item']);
+            // } else if(!EMPTY($activity['quantity'])) {
+            //     if(EMPTY($activity['item'])) {
+            //         throw new Exception('Error. Please specify items if there is a quantity.');
+            //     }
+            // }
             unset($activity['proj_id']);
             unset($activity['token']);
             // Log::info($proj_id);
@@ -190,24 +190,24 @@ class ProjectActivitiesController extends Controller
             $proj_id = $req->get('proj_id');
             $act_id = $req->get('id');
             $activity = $req->all();
-            if(!EMPTY($activity['item'])) {
-                if(EMPTY($activity['quantity'])) {
-                    throw new Exception('Error. Quantity is required if there is an item specified');
-                }
-
-                // check quantity should not exceed to max
-                if($activity['quantity'] > $activity['item']['quantity']) {
-                    throw new Exception('Error. Quantity exceeded the maximum items available, Please try again.');
-                }
-
-                $activity['item_id'] = $activity['item']['id'];
-                unset($activity['item']);
-            } else if(!EMPTY($activity['quantity'])) {
-                if(EMPTY($activity['item'])) {
-                    throw new Exception('Error. Please specify items if there is a quantity.');
-                }
-                unset($activity['item']);
-            }
+            // if(!EMPTY($activity['item'])) {
+            //     if(EMPTY($activity['quantity'])) {
+            //         throw new Exception('Error. Quantity is required if there is an item specified');
+            //     }
+            //
+            //     // check quantity should not exceed to max
+            //     if($activity['quantity'] > $activity['item']['quantity']) {
+            //         throw new Exception('Error. Quantity exceeded the maximum items available, Please try again.');
+            //     }
+            //
+            //     $activity['item_id'] = $activity['item']['id'];
+            //     unset($activity['item']);
+            // } else if(!EMPTY($activity['quantity'])) {
+            //     if(EMPTY($activity['item'])) {
+            //         throw new Exception('Error. Please specify items if there is a quantity.');
+            //     }
+            //     unset($activity['item']);
+            // }
             unset($activity['proj_id']);
             unset($activity['id']);
             unset($activity['status']);
@@ -246,6 +246,16 @@ class ProjectActivitiesController extends Controller
             if(!EMPTY($activity['item_id']))
             $data['projAct']['item_id'] = $activity['item_id'];
 
+            // Make the status to on-going from initiating
+            $ongoingId = config('constants.proj_status_ongoing');
+            $approvedId = config('constants.proj_status_approved');
+            $project = Project::findOrFail($proj_id);
+
+            if ($project->proj_status_id == $approvedId) {
+                $project->proj_status_id = $ongoingId;
+                $project->save();
+            }
+
             DB::commit();
             $status = TRUE;
         }
@@ -277,6 +287,17 @@ class ProjectActivitiesController extends Controller
 
             $data['stat'] = App\ActivityStatus::where('id', $req->get('id'))->first(['id','name']);
             Log::info('stat' . json_encode($data['stat']));
+
+            $proj_id = App\ProjectActivities::where('activity_id', $req->get('act_id'))->value('proj_id');
+            // Make the status to on-going from initiating
+            $ongoingId = config('constants.proj_status_ongoing');
+            $approvedId = config('constants.proj_status_approved');
+            $project = Project::findOrFail($proj_id);
+
+            if ($project->proj_status_id == $approvedId) {
+                $project->proj_status_id = $ongoingId;
+                $project->save();
+            }
             $status = TRUE;
         }
         catch(Exception $e)
