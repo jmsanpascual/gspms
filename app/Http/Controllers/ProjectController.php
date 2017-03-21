@@ -236,8 +236,16 @@ class ProjectController extends Controller
             // ];
 
             // $data['proj']->whereIn('proj_status_id', $projStatusAllowed);
-            $data = $data['proj']->where('end_date', '<', date('Y-m-d H:i:s'))
-                ->where('proj_status_id', 3)->get($select);
+            $data = $data['proj']->where(function($query){
+                //delayed projects
+                $query->where('proj_status_id', '!=', config('constants.proj_status_completed'))
+                    ->where('end_date', '<', date('Y-m-d H:i:s'));
+            })
+            // completed but delayed
+                ->orWhere(function($query){
+                $query->where('proj_status_id', config('constants.proj_status_completed'))
+                    ->where('end_date', '<', DB::raw('actual_end'));
+            })->get($select);
         } catch(Exception $e) {
             logger($e);
             $msg = $e->getMessage();
@@ -823,7 +831,7 @@ class ProjectController extends Controller
 
     public function createChart($id)
     {
-        Log::info('create chart');
+        // Log::info('create chart');
         header("Content-type: image/png");
 
         $chart = new \PieChart(500, 260);

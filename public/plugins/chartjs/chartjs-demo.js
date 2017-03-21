@@ -19,10 +19,9 @@
 					value : 120,
 					color : "#4D5360"
 				}
-			
+
 			];
 
 	var myDoughnut = new Chart(document.getElementById("doughnut").getContext("2d")).Pie(doughnutData, {animation: false});
 
 	console.log('eyeyat');
-		

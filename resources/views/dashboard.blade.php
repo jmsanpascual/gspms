@@ -27,11 +27,21 @@ ng-app='dashboard'
       </div>
   </div>
   <div ng-controller ="projDTCtrl as pc">
-  <!-- TO DOS -->
-  @include('dashboard.todo')
-  <!-- End TO DOS -->
-  <!-- DELAYED PROJECTS -->
-  @include('dashboard.delayed-projects')
+  @if(Session::get('role') == config('constants.role_head'))
+     @include('dashboard.head')
+  @else
+      <!-- TO DOS -->
+      @include('dashboard.todo')
+      <!-- End TO DOS -->
+      <!-- DELAYED PROJECTS -->
+      @include('dashboard.delayed-projects')
+
+
+      <!-- DASHBOARD  -->
+      {!! HTML::script('js/dashboard/todo.controller.js') !!}
+      {!! HTML::script('js/dashboard/upcoming.controller.js') !!}
+      {!! HTML::script('js/dashboard/delayed-projects.controller.js') !!}
+  @endif
   <!-- End DELAYED PROJECTS -->
   <!-- UPCOMING -->
   <!-- include('dashboard.upcoming') -->
@@ -41,11 +51,8 @@ ng-app='dashboard'
 
 @section('scripts')
 @parent
-<!-- DASHBOARD  -->
+
 {!! HTML::script('js/dashboard/dashboard.module.js') !!}
-{!! HTML::script('js/dashboard/todo.controller.js') !!}
-{!! HTML::script('js/dashboard/upcoming.controller.js') !!}
-{!! HTML::script('js/dashboard/delayed-projects.controller.js') !!}
 <!-- {!! HTML::script('js/dashboard/factories/champion-manager.factory.js') !!}
 {!! HTML::script('js/dashboard/factories/program-manager.factory.js') !!}
 {!! HTML::script('js/dashboard/factories/resource-person-manager.factory.js') !!}

@@ -160,7 +160,26 @@ class NotificationController extends Controller
 
     public function dashboard()
     {
+        // $chart =
+        //  $this->createChart();
         return view('dashboard');
+    }
+
+    public function createChart()
+    {
+        // Log::info('create chart');
+        header("Content-type: image/png");
+
+        $chart = new \PieChart(500, 260);
+
+        $dataSet = new \XYDataSet();
+        $dataSet->addPoint(new \Point("tessst", 80));
+        $dataSet->addPoint(new \Point("eyayt", 12));
+        $dataSet->addPoint(new \Point("ababa", 8));
+        $chart->setDataSet($dataSet);
+
+        $chart->setTitle(" TESTING . com - - - ");
+        return $chart->render('generated/test.png');
     }
 
     public function todos()

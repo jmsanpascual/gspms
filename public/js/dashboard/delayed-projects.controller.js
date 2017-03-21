@@ -25,7 +25,8 @@
 		function getProjects() {
 			$http.get('../delayed').then(function(result){
 				var result = result.data;
-				vm.projects = result.proj;
+				vm.projects = result;
+				console.log('delayed', vm.projects);
 			});
 		}
 	}
