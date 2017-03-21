@@ -714,7 +714,7 @@ class ProjectController extends Controller
             ->leftJoin('personal_info AS champ', 'champ.id', '=','user_info.personal_info_id')
             ->where('projects.id', $id)->first(['projects.*','programs.name AS program',
                 'rpi.first_name', 'rpi.middle_name', 'rpi.last_name',
-                DB::raw('CONCAT(champ.first_name, " ", champ.middle_name, " ", champ.last_name) AS champ_name')]);
+                DB::raw('CONCAT(champ.first_name, " ", champ.middle_name, " ", champ.last_name) AS champ_name')], 'remarks');
 
             $data['total_expense'] = App\ProjectExpense::where('proj_id', $id)
             ->sum('amount');
@@ -731,8 +731,9 @@ class ProjectController extends Controller
             $end_date =  Carbon::createFromFormat('Y-m-d H:i:s', $data['proj']->end_date);
             $days = $end_date->diffInDays($start_date);
             $data['duration'] = $this->_convertToYearMonthDays($days);
-
-
+            // $data['proj'] = $data['proj']->get();
+            logger('projects');
+            logger($data['proj']);
             // $data['chart'] = $this->createChart($id);
             $html = view('reports/project', $data);
             $html = utf8_encode($html);

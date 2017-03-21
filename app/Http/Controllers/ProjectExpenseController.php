@@ -63,7 +63,7 @@ class ProjectExpenseController extends Controller
                 ->where('status_id', 2)->sum('amount');
                 // with sum of project total budget and approved budget
             $total_budget = $project->total_budget + $approved_budget;
-            if(($total_budget - $total_expense) <= 0)
+            if(($total_budget - $total_expense) < 0)
                 throw new Exception('Insufficient project budget.');
 
             // Make the status to on-going from initiating

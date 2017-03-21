@@ -116,6 +116,10 @@
 		<td colspan = "2">Budget at Completion (BAC) </td>
 		<td colspan = "2">{{number_format($proj->total_budget - $total_expense,2)}}</td>
 	</tr>
+	<tr>
+		<td colspan = "2">Problems / Remarks</td>
+		<td colspan = "2">{{ $proj->remarks }}</td>
+	</tr>
 	<!-- <tr>
 		<td colspan = "2">Earned Value (EV)</td>
 		<td colspan = "2"></td>
