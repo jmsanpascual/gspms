@@ -206,21 +206,35 @@
 	asc.data.act_id = submitData.projAct.id" style ="margin-right: 5px;" ng-if = "submitData.projAct.id">
 		@if(Session::get('role') == config('constants.role_life'))
 		<span ng-if = "submitData.projAct.status_id == 1">
-			<button class = "btn btn-primary" ng-click = "asc.approve()">Approve</button>
-			<button class = "btn btn-danger" ng-click = "asc.disapprove()">Disapprove</button>
+			<button class = "btn btn-primary btn-sm" ng-click = "asc.approve()">Approve</button>
+			<button class = "btn btn-danger btn-sm" ng-click = "asc.disapprove()">Disapprove</button>
 
 		</span>
 		@endif
+
 		@if(Session::get('role') == config('constants.role_champion'))
-		<button class = "btn btn-default" ng-click = "asc.requestChange()" >Request for change</button>
+			<button class = "btn btn-primary btn-sm" ng-click="asc.showAttachments()" ng-if = "submitData.projAct.status_id != 4">
+					Add Attachments
+			</button>
+		@elseif(Session::get('role') == config('constants.role_finance'))
+		<button class = "btn btn-primary btn-sm" ng-click="asc.showAttachments()">
+				View Attachments
+		</button>
+		@endif
+
+		@if(Session::get('role') == config('constants.role_champion'))
+		<button class = "btn btn-default btn-sm" ng-click = "asc.requestChange()" >Change Request</button>
 		@endif
 		@if(Session::get('role') == config('constants.role_champion'))
-		<button class = "btn btn-info" ng-click = "asc.completed()" ng-if = "submitData.projAct.status_id == 2">Completed</button>
+		<button class = "btn btn-info btn-sm" ng-click = "asc.completed()" ng-if = "submitData.projAct.status_id == 2">Completed</button>
 		@endif
 	</span>
 
-
 	@if(Session::get('role') == config('constants.role_champion'))
-	<button class = "btn btn-success" ng-if = "submitData.projAct.status_id != 4" ng-click="save('projAct')">Save</button>
+	<button class = "btn btn-success btn-sm" ng-if = "submitData.projAct.status_id != 4" ng-click="save('projAct')">Save</button>
 	@endif
+@stop
+
+@section('closeClass')
+	btn-sm
 @stop

@@ -39,9 +39,13 @@ class ExpertiseController extends Controller
     public function store(Request $request)
     {
         $expertiseInfo = $request->get('expertise');
-        $expertise = Expertise::create($expertiseInfo);
 
-        return ['id' => $expertise->id];
+        if (Expertise::where('name', '=', $expertiseInfo['name'])->exists()) {
+            return ['error' => 'Expertise already exist.'];
+        } else {
+            $expertise = Expertise::create($expertiseInfo);
+            return ['id' => $expertise->id];
+        }
     }
 
     /**

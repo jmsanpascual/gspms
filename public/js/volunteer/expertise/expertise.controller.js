@@ -9,12 +9,13 @@
         'Expertise',
         'DTOptionsBuilder',
         'DTColumnDefBuilder',
-        'defaultModal'
+        'defaultModal',
+        'toast'
     ];
 
     /* @ngInject */
     function ExpertiseController(Expertise, DTOptionsBuilder,
-        DTColumnDefBuilder, defaultModal) {
+        DTColumnDefBuilder, defaultModal, toast) {
 
         var vm = this;
 
@@ -69,10 +70,15 @@
 
                 Expertise.addExpertise(request).then(function (response) {
                     console.log('Result', response);
-                    data.expertise.id = response.id;
 
-                    var expertise = Expertise.getInstance(data.expertise);
-                    vm.expertises.push(expertise);
+                    if (response.error) {
+                        toast.error(response.error);
+                    } else {
+                        data.expertise.id = response.id;
+
+                        var expertise = Expertise.getInstance(data.expertise);
+                        vm.expertises.push(expertise);
+                    }
                 });
             });
         }

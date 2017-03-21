@@ -13,12 +13,13 @@
         'DTOptionsBuilder',
         'DTColumnDefBuilder',
         'defaultModal',
-        'ProjectExpenseManager'
+        'ProjectExpenseManager',
+        'ProjectExpense'
     ];
 
     /* @ngInject */
     function ActivityItemExpenseController(ActivityItemExpenseManager, ActivityItemExpense,
-        DTOptionsBuilder, DTColumnDefBuilder, defaultModal, ProjectExpenseManager) {
+        DTOptionsBuilder, DTColumnDefBuilder, defaultModal, ProjectExpenseManager, ProjectExpense) {
         var vm = this;
         vm.activity_id;
         vm.activityitemexpense = [];
@@ -26,6 +27,7 @@
         vm.refresh = getActivity;
         vm.add = addActivity;
         vm.edit = editActivity;
+        vm.getProjectExpense = getProjectExpense;
 
         activate();
 
@@ -40,6 +42,17 @@
                 DTColumnDefBuilder.newColumnDef(5).notSortable()
             ];
             vm.projectExpense = ProjectExpenseManager.get();
+        }
+
+        function getProjectExpense(projId) {
+            if (!vm.projectexpense) {
+                console.log('Proj Id: ', projId);
+                ProjectExpense.get({ proj_id: projId }).$promise.then(function(result){
+                    console.log('expense: ', result);
+                    ProjectExpenseManager.set(result.expense);
+                    vm.projectExpense = result.expense;
+                });
+            }
         }
 
         function getActivity() {

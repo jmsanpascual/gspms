@@ -18,8 +18,11 @@ angular.module('funds', ['ngResource', 'school', 'toast'])
     }
 
     vm.add = function (fundParam) {
+        // Get the year from the received date
+        fundParam.year = new Date(fundParam.received_date).getFullYear();
+
         fund.add(fundParam).then(function (addedFund) {
-            toast.success(fundParam.amount + ' was successfully added');
+            toast.success('Funds from ' + fundParam.school.name + ' was successfully added to the Life\'s funds');
             reset();
         });
     };

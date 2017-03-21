@@ -274,7 +274,7 @@ angular.module('project.activites.controller', [
     ACT_STAT_COMPLETED : 4
 })
 
-.controller('ActivityStatusCtrl', function($scope, ProjectActivitiesRestApi, actStatus){
+.controller('ActivityStatusCtrl', function($scope, ProjectActivitiesRestApi, actStatus, defaultModal){
     // this.proj_id;
     var _self = this;
     _self.data = {};
@@ -315,6 +315,16 @@ angular.module('project.activites.controller', [
     {
         _self.data.id = actStatus.ACT_STAT_COMPLETED; // completed
         changeStatus();
+    }
+
+    _self.showAttachments = function() {
+        var attr = {
+            size: 'md',
+            templateUrl : '../project-attachments/project-attachments',
+            proj_id : $scope.submitData.projAct.id
+        };
+
+        defaultModal.showModal(attr);
     }
 })
 
@@ -419,15 +429,15 @@ angular.module('project.activites.controller', [
         defaultModal.showModal(attr);
     }
 
-    _self.showAttachments = function() {
-        var attr = {
-            size: 'md',
-            templateUrl : '../project-attachments/project-attachments',
-            proj_id : _self.data.proj_id
-        };
-
-        defaultModal.showModal(attr);
-    }
+    // _self.showAttachments = function() {
+    //     var attr = {
+    //         size: 'md',
+    //         templateUrl : '../project-attachments/project-attachments',
+    //         proj_id : _self.data.proj_id
+    //     };
+    //
+    //     defaultModal.showModal(attr);
+    // }
 
     _self.showRelated = function() {
         var attr = {

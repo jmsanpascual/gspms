@@ -39,7 +39,13 @@ class MilestoneController extends Controller
     public function store(Request $request)
     {
         $milestoneInfo = $request->get('milestone');
-        $milestone = Milestone::create($milestoneInfo);
+        $milestoneId = 0;
+
+        if (isset($milestoneInfo['id'])) {
+            $milestoneId = $milestoneInfo['id'];
+        }
+
+        $milestone = Milestone::updateOrCreate(['id' => $milestoneId], $milestoneInfo);
 
         return ['id' => $milestone->id];
     }

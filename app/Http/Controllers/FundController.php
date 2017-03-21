@@ -12,6 +12,7 @@ use App\ProjectFund;
 use Response;
 use Log;
 use DB;
+
 class FundController extends Controller
 {
     public function index()
@@ -65,7 +66,10 @@ class FundController extends Controller
     {
         $school_fund = SchoolFund::with('referer')->get()->toArray();
         $proj_fund = ProjectFund::with('referer')->get()->toArray();
-        $fund = array_merge($school_fund, $proj_fund);
-        return $fund;
+
+        return [
+            'schoolFunds' => $school_fund,
+            'projectFunds' => $proj_fund
+        ];
     }
 }

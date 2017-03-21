@@ -48,10 +48,12 @@ Route::resource('roles', 'RoleController');
 
 // RESTful resource route for Funds
 Route::get('funds/view', function () {
-    return view('funds');
+    $data['page'] = 'funds';
+    return view('funds', $data);
 });
 Route::get('funds/logs', function () {
-    return view('fund-logs');
+    $data['page'] = 'fund-logs';
+    return view('fund-logs', $data);
 });
 Route::get('funds/school-funds', 'FundController@getSchoolFunds');
 Route::resource('funds', 'FundController');
@@ -68,7 +70,8 @@ Route::get('projects/view-project', array('as' => 'view.project', function () {
     return view('view-project');
 }));
 Route::get('projects/view-project2', array('as' => 'view.project2', function () {
-  return view('projects');
+  $data['page'] = 'projects';
+  return view('projects', $data);
 }));
 
 Route::get('projects/view-related', function() {
@@ -122,7 +125,8 @@ Route::get('budget-request/add', array(function () {
 
 // RESTful resource route for Resource Persons
 Route::get('resource-persons/view-resource-persons', array('as' => 'resource-persons.view', function () {
-    return view('resource-persons');
+    $data['page'] = 'resource-persons';
+    return view('resource-persons', $data);
 }));
 Route::post('resource-persons/update', 'ResourcePersonController@update');
 Route::post('resource-persons/getResourcePerson', 'ResourcePersonController@getResourcePersons');
@@ -130,7 +134,8 @@ Route::resource('resource-persons', 'ResourcePersonController');
 
 // RESTful resource route for Volunteers
 Route::get('volunteers/view-volunteers', array('as' => 'volunteers.view', function () {
-    return view('volunteers');
+    $data['page'] = 'volunteers';
+    return view('volunteers', $data);
 }));
 Route::post('volunteers/update', 'VolunteerController@update');
 Route::resource('volunteers', 'VolunteerController');
@@ -140,7 +145,8 @@ Route::resource('expertise', 'ExpertiseController');
 
 // RESTful resource route for Tasks
 Route::get('tasks/view-tasks', array('as' => 'tasks.view', function () {
-    return view('task');
+    $data['page'] = 'task';
+    return view('task', $data);
 }));
 Route::post('tasks/update', 'TaskController@update');
 Route::resource('tasks', 'TaskController');

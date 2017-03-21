@@ -27,12 +27,18 @@
             vm.activitiesCtrl = activitiesCtrl;
 
             Milestone.getMilestone({ id: project.id }).then(function (milestone) {
+                console.log('Milestone: ', milestone);
                 vm.milestoneDates = milestone;
+                vm.milestone.id = milestone.id;
+                vm.milestone.phase_1 = milestone.phase_1;
+                vm.milestone.phase_2 = milestone.phase_2;
             });
         }
 
         function add() {
+            // Inform the the milestone will save using Angular Resource
             vm.milestone.resource = true;
+
             var attr = {
                 size: 'md',
                 templateUrl : '../milestone/create',
@@ -44,7 +50,6 @@
             var modal = defaultModal.showModal(attr);
 
             modal.result.then(function (data) {
-                console.log('Milestone:', data);
                 delete data.resource;
 
                 var request = {

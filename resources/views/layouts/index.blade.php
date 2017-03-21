@@ -60,14 +60,15 @@
 
               @if(Session::get('role') == config('constants.role_head')
                 || Session::get('role') == config('constants.role_finance'))
-              <li class="nav-dropdown">
+              <li class="nav-dropdown @if($page == 'funds' || $page == 'fund-logs') {{ ' open' }} @endif">
                 <a href="" title="Forms">
                     <i class="fa fa-money"></i> Funds
                 </a>
-                <ul class="nav-sub">
+                <ul class="nav-sub"
+                  style="display:@if($page == 'funds' || $page == 'fund-logs') {{ 'block;' }} @else {{ 'none;' }} @endif">
                   @if(Session::get('role') == config('constants.role_head')
                     || Session::get('role') == config('constants.role_finance'))
-                  <li>
+                  <li class = "@if($page == 'funds') {{ 'active' }} @endif">
                     <a href="{{ URL::to('/funds/view') }}">
                       @if(Session::get('role') == config('constants.role_head'))
                         Add/View
@@ -86,7 +87,7 @@
                   </li> -->
                   @endif
                   @if(Session::get('role') == config('constants.role_head'))
-                  <li>
+                  <li class = "@if($page == 'fund-logs') {{ 'active' }} @endif">
                     <a href="{{ URL::to('/funds/logs') }}">
                       Fund Logs
                     </a>
@@ -98,7 +99,7 @@
 
               @if(Session::get('role') == config('constants.role_champion')
                 || Session::get('role') == config('constants.role_exec'))
-              <li class="">
+              <li class = "@if($page == 'resource-persons') {{ 'active' }} @endif">
                 <a href="{{ route('resource-persons.view') }}" title="Forms">
                     <i class="fa fa-user"></i> Resource Persons
                 </a>
@@ -106,7 +107,7 @@
               @endif
 
               @if(Session::get('role') == config('constants.role_champion'))
-              <li class="">
+              <li class = "@if($page == 'volunteers') {{ 'active' }} @endif">
                 <a href="{{ route('volunteers.view') }}" title="Forms">
                     <i class="fa fa-group"></i> Volunteers
                 </a>
@@ -122,7 +123,7 @@
               @endif
 
               @if(Session::get('role') == config('constants.role_volunteer'))
-              <li ng-class = "{'active' : {{json_encode(($page == 'projects'))}} }">
+              <li class = "@if($page == 'task') {{ 'active' }} @endif">
                 <a href="{{ route('tasks.view') }}" title="Forms">
                     <i class="fa fa-file-text-o"></i> Tasks
                 </a>

@@ -27,7 +27,7 @@ class TaskController extends Controller
         $roleId = $this->roleId;
 
         try {
-            $tasks = Task::with('activity')->where('user_id', $this->user->id)->get();
+            $tasks = Task::with('activity.projects')->where('user_id', $this->user->id)->get();
 
             return Response::json($tasks);
         } catch (Exception $e) {

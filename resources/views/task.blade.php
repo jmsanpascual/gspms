@@ -59,6 +59,7 @@
 {!! HTML::script('js/volunteer/task/task.controller.js') !!}
 {!! HTML::script('js/volunteer/task/task.factory.js') !!}
 <!-- project expense  -->
+{!! HTML::script('js/services/item.js') !!}
 {!! HTML::script('js/project-expense/project-expense.module.js') !!}
 {!! HTML::script('js/project-expense/project-expense-manager.factory.js') !!}
 {!! HTML::script('js/project-expense/project-expense-resource.factory.js') !!}

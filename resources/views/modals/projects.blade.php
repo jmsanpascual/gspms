@@ -159,7 +159,7 @@
         ng-click = "pec.add()"> Add Project Expense</button>
         @endif
         <button class = "btn btn-sm btn-danger pull-right" ng-click = "pec.refresh()"
-        ng-if = "submitData.proj.proj_status_id != 3"> Refresh</button>
+        ng-if = "submitData.proj.proj_status_id != 3" style="margin-right:5px;"> Refresh</button>
 
         <p class="text-danger"><strong>@{{ pec.message }}</strong></p>
         <br>
@@ -246,7 +246,7 @@
           ng-if = "submitData.proj.proj_status_id != 3"> Add Activity</button>
           @endif
           <button class = "btn btn-danger btn-sm pull-right" ng-click = "padtc.getProjActivities(submitData.proj.id)"
-          ng-if = "submitData.proj.proj_status_id != 3"> Refresh</button>
+          ng-if = "submitData.proj.proj_status_id != 3" style="margin-right:5px;"> Refresh</button>
           <p class="text-danger"><strong>@{{ padtc.message }}</strong></p>
           <br>
           <table datatable="ng" dt-options="padtc.dtOptions" dt-columns="padtc.dtColumnDefs" dt-instance="padtc.dtInstance" class="table table-hover row-border hover">
@@ -323,7 +323,7 @@
 
       <button class = "btn btn-success btn-sm" ng-click = "btnc.showRelated()">View Related Projects</button>
 
-      @if(Session::get('role') == config('constants.role_champion'))
+      <!-- @if(Session::get('role') == config('constants.role_champion'))
         <button class = "btn btn-primary btn-sm" ng-click="btnc.showAttachments()" ng-if = "submitData.proj.proj_status_id == 1 || submitData.proj.proj_status_id == 5">
             Add Attachments
         </button>
@@ -331,7 +331,7 @@
       <button class = "btn btn-primary btn-sm" ng-click="btnc.showAttachments()">
           View Attachments
       </button>
-      @endif
+      @endif -->
   </div>
 		@if(Session::get('role') == config('constants.role_life'))
 		<span ng-if = "submitData.proj.proj_status_id == 6">

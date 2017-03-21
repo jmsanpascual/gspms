@@ -7,6 +7,7 @@
             'common.service',
             'ui.bootstrap',
             'ngResource',
+            'items.service',
             'activityItemExpense',
             'projectExpense'
         ]);

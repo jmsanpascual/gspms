@@ -11,19 +11,6 @@ ng-app='project.controller'
 @section('content')
   <div class="row">
       <div class="col-md-12">
-          <!--breadcrumbs start -->
-          <ul class="breadcrumb">
-              <li>
-                <a href="#">Projects</a>
-              </li>
-              <li>View Projects</li>
-          </ul>
-          <!--breadcrumbs end -->
-          <h1 class="h1">View Projects</h1>
-      </div>
-  </div>
-  <div class="row">
-      <div class="col-md-12">
           <div class="panel panel-default">
               <div class="panel-heading">
                   <h3 class="panel-title">Projects</h3>
@@ -37,13 +24,12 @@ ng-app='project.controller'
                 <div ng-controller="projDTCtrl as proj">
                   @if(Session::get('role') == config('constants.role_champion') ||
                   Session::get('role') == config('constants.role_exec'))
-                  <button class = "btn btn-success btn-sm pull-right" ng-click = "proj.add()"> Add Project</button>
+                  <button class = "btn btn-success btn-sm pull-right" ng-click = "proj.add()"> Add Project</button>&nbsp;
                   @endif
-                  <button class = "btn btn-danger btn-sm pull-right" ng-click = "proj.refresh()">Refresh</button>
-                  &nbsp;
-                  <a class="btn btn-default btn-sm pull-right" target="_blank" href = "{{asset('projects/report/summary')}}">
-                      View Project Summarry Report
+                  <a class="btn btn-default btn-sm pull-right" target="_blank" href = "{{asset('projects/report/summary')}}" style="margin-right:5px">
+                      Project Summary Report
                   </a>
+                  <button class = "btn btn-danger btn-sm pull-right" ng-click = "proj.refresh()" style="margin-right:5px">Refresh</button>
 
                   <p class="text-danger"><strong ng-bind="proj.message"></strong></p>
                   <br>

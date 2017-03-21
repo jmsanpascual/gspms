@@ -5,7 +5,9 @@
 @stop
 
 @section('modal-content')
-Milestone 1: (@{{ submitData.milestoneDates.phase_1 }}) <div class="progress">
+Milestone 1: (@{{ submitData.milestoneDates.phase_1 }}) <br>
+Days delayed: (@{{ (submitData.phase1.daysLeft < 0) ? submitData.phase1.daysLeft * -1 : 0 }})
+<div class="progress">
   <div class="progress-bar" aria-valuemin="0" aria-valuemax="33"
     ng-style="{width: (submitData.phase1.percent * 3) + '%'}"
     ng-class="phase.class">
@@ -15,7 +17,9 @@ Milestone 1: (@{{ submitData.milestoneDates.phase_1 }}) <div class="progress">
       @{{ (submitData.phase1.percent * 3) - ((submitData.phase1.percent * 3) % 1) }}%
   </div>
 </div>
-Milestone 2: (@{{ submitData.milestoneDates.phase_2 }}) <div class="progress">
+Milestone 2: (@{{ submitData.milestoneDates.phase_2 }})  <br>
+Days delayed: (@{{ (submitData.phase1.daysLeft < 0) ? submitData.phase1.daysLeft * -1 : 0 }})
+<div class="progress">
   <div class="progress-bar" aria-valuemin="0" aria-valuemax="33"
     ng-style="{width: (submitData.phase2.percent * 3) + '%'}"
     ng-class="submitData.phase2.class">
@@ -25,7 +29,9 @@ Milestone 2: (@{{ submitData.milestoneDates.phase_2 }}) <div class="progress">
       @{{ (submitData.phase2.percent * 3) - ((submitData.phase2.percent * 3) % 1) }}%
   </div>
 </div>
-Milestone 3: (@{{ submitData.milestoneDates.phase_3 }}) <div class="progress">
+Milestone 3: (@{{ submitData.milestoneDates.phase_3 }}) <br>
+Days delayed: (@{{ (submitData.phase1.daysLeft < 0) ? submitData.phase1.daysLeft * -1 : 0 }})
+<div class="progress">
   <div class="progress-bar" aria-valuemin="0" aria-valuemax="33"
     ng-style="{width: (submitData.phase3.percent * 3) + '%'}"
     ng-class="submitData.phase3.class">
