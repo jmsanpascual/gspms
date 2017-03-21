@@ -6,6 +6,7 @@
             'datatables',
             'common.service',
             'ui.bootstrap',
-            'ngResource'
+            'ngResource',
+            'toast'
         ]);
 })();

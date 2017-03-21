@@ -26,11 +26,10 @@ ng-app='project.controller'
                   Session::get('role') == config('constants.role_exec'))
                   <button class = "btn btn-success btn-sm pull-right" ng-click = "proj.add()"> Add Project</button>&nbsp;
                   @endif
-                  <button class = "btn btn-danger btn-sm pull-right" ng-click = "proj.refresh()" style="margin-right:5px">Refresh</button>
-                  &nbsp;
-                  <a class="btn btn-default btn-sm pull-right" target="_blank" href = "{{asset('projects/report/summary')}}">
-                      View Project Summarry Report
+                  <a class="btn btn-default btn-sm pull-right" target="_blank" href = "{{asset('projects/report/summary')}}" style="margin-right:5px">
+                      Project Summary Report
                   </a>
+                  <button class = "btn btn-danger btn-sm pull-right" ng-click = "proj.refresh()" style="margin-right:5px">Refresh</button>
 
                   <p class="text-danger"><strong ng-bind="proj.message"></strong></p>
                   <br>

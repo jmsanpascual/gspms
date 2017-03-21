@@ -246,6 +246,11 @@ class ProjectController extends Controller
                 $query->where('proj_status_id', config('constants.proj_status_completed'))
                     ->where('end_date', '<', DB::raw('actual_end'));
             })->get($select);
+
+            foreach($data as $key => $value) {
+                $temp = explode('(#$;)', $value->objective);
+                $data[$key]->objective = $temp;
+            }
         } catch(Exception $e) {
             logger($e);
             $msg = $e->getMessage();

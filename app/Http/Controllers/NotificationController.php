@@ -133,6 +133,10 @@ class NotificationController extends Controller
         $data['message'] = $message;
         $data['todo'] = $todo;
 
+        foreach($data['todo'] as $key => $value) {
+            $temp = explode('(#$;)', $value->objective);
+            $data['todo'][$key]->objective = $temp;
+         }
         return $data;
     }
 
