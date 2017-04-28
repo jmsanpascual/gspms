@@ -35,6 +35,17 @@ class NotificationController extends Controller
         $data['count'] = $notif->count();
 
         $data['notif'] = $notif->orderBy('notifications.created_at', 'desc')->get($select)->take(6);
+
+
+        foreach($data as $key => $value) {
+            if (is_array($value) || is_object($value)) {
+                foreach ($value as $key => $val) {
+                    $temp = explode('(#$;)', $val['objective']);
+                    $value[$key]['objective'] = $temp;
+                }
+            }
+        }
+
         return $data;
     }
 

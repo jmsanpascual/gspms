@@ -113,7 +113,9 @@ angular.module('project.controller', [
     //     }
     // });
 
-    vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+    vm.dtOptions = DTOptionsBuilder.newOptions()
+        .withOption('aaSorting', [1, 'desc'])
+        .withPaginationType('full_numbers');
 
     vm.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0),
