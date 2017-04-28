@@ -17,7 +17,10 @@
 
         vm.refresh = refresh;
 
-        vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+        vm.dtOptions = DTOptionsBuilder.newOptions()
+            .withOption('aaSorting', [2, 'desc'])
+            .withPaginationType('full_numbers');
+
         vm.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0),
             DTColumnDefBuilder.newColumnDef(1),
