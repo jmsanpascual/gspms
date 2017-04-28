@@ -169,9 +169,9 @@
             <tr>
               <th>Item Name</th>
               <th>Category</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Total</th>
+              <th class="right">Price</th>
+              <th class="right">Quantity</th>
+              <th class="right">Total</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -179,9 +179,9 @@
             <tr ng-repeat = "data in aiec.activityitemexpense">
               <td>@{{data.item_name}}</td>
               <td>@{{data.category}}</td>
-              <td>@{{data.price}}</td>
-              <td>@{{data.quantity}}</td>
-              <td>@{{data.price * data.quantity}}</td>
+              <td class="right">@{{data.price}}</td>
+              <td class="right">@{{data.quantity}}</td>
+              <td class="right">@{{data.price * data.quantity}}</td>
               <td>
               @if(Session::get('role') == config('constants.role_finance'))
                 <button class="btn btn-warning btn-sm" ng-click="aiec.edit(data)">
