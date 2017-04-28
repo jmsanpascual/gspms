@@ -90,6 +90,8 @@
                         phaseReference.percent = (phase.subTaskPercentage / phasesLengths[i]);
                         // Divide the total precentage of this phase to the total phases count
                         phaseReference.percent = (phaseReference.percent / phasesReferenceLen).toFixed(2);
+                        // Check if phase reference is not a number
+                        phaseReference.percent = (isNaN(phaseReference.percent)) ? 0 : phaseReference.percent;
                         // Days Left before the project needs to be finished
                         phaseReference.daysLeft = getDateDifference(new Date(), milestone['phase_' + i]);
                     }
