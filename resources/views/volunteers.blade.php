@@ -72,14 +72,12 @@
                   dt-instance="ec.dtInstance" class="table table-hover row-border hover">
                     <thead>
                       <tr>
-                        <th>Id</th>
                         <th>Name</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr ng-repeat = "expertise in ec.expertises">
-                        <td ng-bind="expertise.id"></td>
                         <td ng-bind="expertise.name"></td>
                         <td>
                           <button class="btn btn-warning btn-sm" ng-click="ec.edit($index, expertise)">
