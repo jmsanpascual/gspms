@@ -3,15 +3,31 @@
 	angular.module('dashboard')
 		.controller('TodoController', TodoController);
 
-	TodoController.$inject = ['$http'];
+	TodoController.$inject = [
+		'$http',
+		'DTOptionsBuilder',
+		'DTColumnDefBuilder'
+	];
 
-	function TodoController($http) {
+	function TodoController($http, DTOptionsBuilder, DTColumnDefBuilder) {
 		var vm = this;
 
 		vm.todos = [];
 
 		vm.get = getTodos;
 		vm.show = showTodos;
+		vm.dtOptions = DTOptionsBuilder.newOptions()
+            .withOption('aaSorting', [1, 'desc'])
+            .withPaginationType('full_numbers');
+
+		vm.dtColumnDefs = [
+            DTColumnDefBuilder.newColumnDef(0),
+            DTColumnDefBuilder.newColumnDef(1),
+            DTColumnDefBuilder.newColumnDef(2),
+            DTColumnDefBuilder.newColumnDef(3),
+            DTColumnDefBuilder.newColumnDef(4),
+            DTColumnDefBuilder.newColumnDef(5).notSortable()
+        ];
 
 		activate();
 

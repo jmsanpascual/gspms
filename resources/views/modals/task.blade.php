@@ -3,6 +3,7 @@
 @section('title')
   @{{ submitData.action}} Activity
 @stop
+
 @section('modal-content')
   <form role="form" id = "projForm" ng-controller="ProjectExpenseController as pec"
     ng-init="pec.proj_id = submitData.task.activity.project.id;">
@@ -52,12 +53,12 @@
         </div>
       </div>
     </div>
-    <div class = "form-group" ng-if = "submitData.task.activity.status_id">
+    <div class = "form-group">
       <div class = "row">
         <div class = "col-md-12">
         <label class = "form-label col-md-4">Remarks</label>
         <div class = "col-md-8">
-          <textarea class = "form-control" style ="resize:none" ng-model = "submitData.task.activity.remarks" placeholder="Remarks"></textarea>
+          <textarea class = "form-control" style ="resize:none" ng-model = "submitData.task.remarks" placeholder="Remarks"></textarea>
         </div>
       </div>
       </div>
@@ -90,8 +91,8 @@
               <td>@{{data.item_name}}</td>
               <td>@{{data.category}}</td>
               <td>@{{data.price}}</td>
-              <td>@{{data.quantity}}</td>
-              <td>@{{data.price * data.quantity}}</td>
+              <td>@{{ data.quantity }}</td>
+              <td>@{{ (data.price * data.quantity).toFixed(2) }}</td>
               <td>
               @if(Session::get('role') == config('constants.role_finance'))
                 <button class="btn btn-warning btn-sm" ng-click="aiec.edit(data)">
@@ -108,4 +109,10 @@
           </tbody>
         </table>
     </div>
+@stop
+
+@section('btn')
+	 <button class="btn btn-success" ng-click="save()">
+     @{{ !submitData.task.done ? 'Done' : 'Undone' }}
+   </button>
 @stop
