@@ -136,11 +136,24 @@ class ProjectController extends Controller
 
                     $data['proj'][$key]->duration = $duration;
                 }
+
+                // get program name
+                $program = App\Program::find($data['proj'][$key]->program_id);
+                $data['proj'][$key]->program_name = ($program) ? $program->name : '';
+                // get champion name
+                $user = App\PersonalInfo::find($data['proj'][$key]->champion_id);
+                $fullName = ($user) ? $user->last_name.', '.$user->first_name.' '.$user->middle_name : '';
+                $data['proj'][$key]->champion_name = $fullName;
+                // get resource person
+                $resourcePerson = App\PersonalInfo::find($data['proj'][$key]->resource_person_id);
+                $fullName = ($resourcePerson) ? $resourcePerson->last_name.', '.
+                    $resourcePerson->first_name.' '.$resourcePerson->middle_name : 'No Resource Person';
+                $data['proj'][$key]->resource_person_name = $fullName;
             }
 
             if(!EMPTY($related)) {
                 // logger('computing');
-                $ave_duration = $ave_duration/$data['proj']->count();
+                $ave_duration = $ave_duration/($data['proj']->count() || 1);
                 $data['others'] = [
                     'ave_duration' => $this->_convertToYearMonthDays($ave_duration),
                     'min_duration' => $this->_convertToYearMonthDays($min_duration),

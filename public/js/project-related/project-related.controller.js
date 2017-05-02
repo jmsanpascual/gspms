@@ -47,7 +47,7 @@
                     var total_budget = 0;
                     // var total_duration = 0;
                     for(var key in result.related) {
-                        var budget = result.related[key].total_budget,
+                        var budget = parseInt(result.related[key].total_budget),
                         duration = parseInt(result.related[key].duration);
                         total_budget += budget;
                         // total_duration += duration;
@@ -65,7 +65,7 @@
                     // console.log(total_budget);
                     // console.log(total_duration);
                     // console.log(result.related.length);
-                    vm.ave_budget = ((result.related.length) ? total_budget/ result.related.length : 0).toFixed(2);
+                    vm.ave_budget = (result.related.length) ? (total_budget/ result.related.length).toFixed(2) : 0;
                     // vm.ave_duration = ((result.related.length) ? total_duration/ result.related.length : 0).toFixed(2) + ' year(s)';
                 } else {
                     alert('Unable to load datatable');
@@ -136,7 +136,8 @@
                 proj : angular.copy(proj),
                 old_proj: angular.copy(vm.orig_proj)
             };
-
+            console.log(proj);
+            console.log(vm.orig_proj);
             var modal = defaultModal.showModal(attr);
             modal.result.then(function (data) {
                 vm.projects.splice(index, 1, angular.copy(data.proj));
