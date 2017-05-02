@@ -18,18 +18,18 @@
                   dt-instance="flc.dtInstance" class="table table-hover row-border hover">
                     <thead>
                       <tr>
-                        <th>Fund From</th>
+                        <!-- <th>Fund From</th> -->
                         <th>Funded By</th>
-                        <th>Amount</th>
+                        <th class="right">Amount</th>
                         <th>Received Date</th>
                         <th>Year</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr ng-repeat = "fund in flc.schoolFunds">
-                          <td ng-bind="fund.type"></td>
+                        <!-- <td ng-bind="fund.type"></td> -->
                         <td ng-bind="fund.referer.name"></td>
-                        <td ng-bind="fund.amount"></td>
+                        <td class="right" ng-bind="fund.amount"></td>
                         <td ng-bind="fund.received_date"></td>
                         <td ng-bind="fund.year"></td>
                       </tr>
@@ -55,18 +55,18 @@
                   dt-instance="flc.dtInstance" class="table table-hover row-border hover">
                     <thead>
                       <tr>
-                        <th>Fund From</th>
+                        <!-- <th>Fund From</th> -->
                         <th>Project</th>
-                        <th>Amount</th>
+                        <th class="right">Amount</th>
                         <th>Received Date</th>
                         <th>Year</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr ng-repeat = "fund in flc.projectFunds">
-                        <td ng-bind="fund.type"></td>
+                        <!-- <td ng-bind="fund.type"></td> -->
                         <td ng-bind="fund.referer.name"></td>
-                        <td ng-bind="fund.amount"></td>
+                        <td class="right" ng-bind="fund.amount"></td>
                         <td ng-bind="fund.received_date"></td>
                         <td ng-bind="fund.year"></td>
                       </tr>

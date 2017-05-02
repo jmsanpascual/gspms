@@ -33,8 +33,7 @@
 
         vm.dtColumnDefs = [
             DTColumnDefBuilder.newColumnDef(0),
-            DTColumnDefBuilder.newColumnDef(1),
-            DTColumnDefBuilder.newColumnDef(2).notSortable()
+            DTColumnDefBuilder.newColumnDef(1).notSortable()
         ];
 
         function activate() {

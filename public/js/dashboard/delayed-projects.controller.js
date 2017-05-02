@@ -4,16 +4,30 @@
 		.controller('DelayedProjectController', DelayedProjectController);
 
 	DelayedProjectController.$inject = [
-		'$http'
+		'$http',
+		'DTOptionsBuilder',
+		'DTColumnDefBuilder'
 	];
 
-	function DelayedProjectController($http) {
+	function DelayedProjectController($http, DTOptionsBuilder, DTColumnDefBuilder) {
 
 		var vm = this;
 
 		vm.projects = [];
 
 		vm.get = getProjects;
+		vm.dtOptions = DTOptionsBuilder.newOptions()
+            .withOption('aaSorting', [1, 'desc'])
+            .withPaginationType('full_numbers');
+
+		vm.dtColumnDefs = [
+            DTColumnDefBuilder.newColumnDef(0),
+            DTColumnDefBuilder.newColumnDef(1),
+            DTColumnDefBuilder.newColumnDef(2),
+            DTColumnDefBuilder.newColumnDef(3),
+            DTColumnDefBuilder.newColumnDef(4),
+            DTColumnDefBuilder.newColumnDef(5).notSortable()
+        ];
 
 		activate();
 

@@ -76,7 +76,9 @@ angular.module('project.activites.controller', [
        });
     }
 
-    vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+    vm.dtOptions = DTOptionsBuilder.newOptions()
+        .withOption('aaSorting', [1, 'desc'])
+        .withPaginationType('full_numbers');
 
     vm.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0),
@@ -135,7 +137,8 @@ angular.module('project.activites.controller', [
             projAct : angular.copy(act),
             items: items,
             setItemData: setItemData,
-            phases: vm.phases
+            phases: vm.phases,
+            updateTask: updateTask.bind(null, index)
         };
         attr.projAct.proj_id = $scope.proj_id;
 
@@ -170,6 +173,17 @@ angular.module('project.activites.controller', [
             vm.refreshExpense();
             console.log('reloading expense');
         });
+    }
+
+    function updateTask(index, task) {
+        var tasksLen = vm.project_activities[index].tasks.length;
+
+        for (var i = 0; i < tasksLen; i++) {
+            var origTask = vm.project_activities[index].tasks[i];
+            if (origTask.id == task.id) {
+                origTask.user_id = task.user_id;
+            }
+        }
     }
 
     function deleteRow(index, act) {

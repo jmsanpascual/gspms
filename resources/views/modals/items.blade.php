@@ -19,8 +19,8 @@
               <th>Item Name</th>
               <th>Category</th>
               <th>Quantity</th>
-              <th>Price</th>
-              <th>Total Amount</th>
+              <th class="right">Price</th>
+              <th class="right">Total Amount</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -29,8 +29,8 @@
               <td>@{{data.item_name}}</td>
               <td>@{{data.category}}</td>
               <td>@{{data.quantity}} (@{{data.quantity_label}})</td>
-              <td>@{{data.price}}</td>
-              <td>@{{ ((data.price) * (data.quantity)) }}</td>
+              <td class="right">@{{data.price}}</td>
+              <td class="right">@{{ ((data.price) * (data.quantity)) }}</td>
               <td>
 
               @if(Session::get('role') == config('constants.role_finance'))

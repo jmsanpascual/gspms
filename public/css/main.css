@@ -2806,3 +2806,7 @@ select {
 .modal-eighty {
   width: 80% !important;
 }
+
+.right {
+  text-align: right;
+}

@@ -12,7 +12,7 @@
         <label class="form-label col-md-2">Expertise</label>
         <div class="col-md-10">
           <select class = "form-control" ng-model = "submitData.expertiseId"
-            ng-change="submitData.onChange(submitData.expertiseId)"
+            ng-change="submitData.onChange(submitData.expertiseId, true)"
             ng-options = "expertise.id as expertise.name for expertise in submitData.expertises">
           </select>
         </div>

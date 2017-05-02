@@ -22,21 +22,24 @@
                   dt-instance="tc.dtInstance" class="table table-hover row-border hover">
                     <thead>
                       <tr>
-                        <th>Name</th>
-                        <th>Remarks</th>
+                        <th>Project</th>
+                        <th>Task Name</th>
+                        <th>Start Date</th>
                         <th>Completed</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr ng-repeat = "task in tc.tasks">
+                        <td ng-bind="task.activity.project.name"></td>
                         <td ng-bind="task.name"></td>
-                        <td ng-bind="task.remarks"></td>
-                        <td>
-                          <input type="checkbox" ng-model="task.done"
+                        <td ng-bind="task.activity.start_date"></td>
+                        <td style="text-align:center;">
+                          <!-- <input type="checkbox" ng-model="task.done"
                             ng-change="tc.update($index, task)"
                             ng-true-value="1" ng-false-value="0"
-                            >
+                            > -->
+                            <span ng-class="{'glyphicon glyphicon-ok': task.done, 'glyphicon glyphicon-remove': !task.done}">
                         </td>
                         <td>
                           <button class="btn btn-warning btn-sm" ng-click="tc.edit($index, task)">

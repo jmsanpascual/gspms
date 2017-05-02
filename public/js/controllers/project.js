@@ -113,13 +113,15 @@ angular.module('project.controller', [
     //     }
     // });
 
-    vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
+    vm.dtOptions = DTOptionsBuilder.newOptions()
+        .withOption('aaSorting', [1, 'desc'])
+        .withPaginationType('full_numbers');
 
     vm.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0),
         DTColumnDefBuilder.newColumnDef(1),
         DTColumnDefBuilder.newColumnDef(2),
-        DTColumnDefBuilder.newColumnDef(3),
+        DTColumnDefBuilder.newColumnDef(3).withClass('right'),
         DTColumnDefBuilder.newColumnDef(4),
         DTColumnDefBuilder.newColumnDef(5).notSortable()
     ];

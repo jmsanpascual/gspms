@@ -9,7 +9,7 @@
 
     /* @ngInject */
     function ProgressCalculator(Milestone) {
-        var approvedActivityId = 2,
+        var projectStatus = [2, 4],
             factory = {
                 calculatePhasesPercentages: calculatePhasesPercentages
             };
@@ -43,8 +43,8 @@
             for (var i = 0; i < activitiesLen; i++) {
                 var activity = activities[i];
 
-                // We will only count the approved activities percentages
-                if (activity.status_id == approvedActivityId) {
+                // We will only count the approved and completed activities percentages
+                if (isInArray(activity.status_id, projectStatus)) {
                     var phase = phases[activity.phase_id],
                         tasks = activity.tasks,
                         tasksLen = tasks.length;
@@ -90,6 +90,8 @@
                         phaseReference.percent = (phase.subTaskPercentage / phasesLengths[i]);
                         // Divide the total precentage of this phase to the total phases count
                         phaseReference.percent = (phaseReference.percent / phasesReferenceLen).toFixed(2);
+                        // Check if phase reference is not a number
+                        phaseReference.percent = (isNaN(phaseReference.percent)) ? 0 : phaseReference.percent;
                         // Days Left before the project needs to be finished
                         phaseReference.daysLeft = getDateDifference(new Date(), milestone['phase_' + i]);
                     }
@@ -117,35 +119,9 @@
             var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
             return diffDays;
         }
+
+        function isInArray(value, array) {
+           return array.indexOf(value) > -1;
+        }
     }
 })();
-
-
-//   var activitiesLen = result.proj_activities.length,
-//       subTaskPercentage = 0,
-//       approvedTaskCount = 0;
-//
-//   for (var i = 0; i < activitiesLen; i++) {
-//
-//       if (result.proj_activities[i].status_id == approvedActivityId) {
-//             var tasks = result.proj_activities[i].tasks,
-//                 tasksLen = tasks.length;
-//
-//             approvedTaskCount = 0;
-//
-//             for (var x = 0;  x < tasksLen; x++) {
-//                 if (tasks[x].done) {
-//                     approvedTaskCount++;
-//                 }
-//             }
-//
-//             if (approvedTaskCount > 0)
-//                 subTaskPercentage += (Math.round((approvedTaskCount / tasksLen) * 100));
-//       }
-//   }
-//
-//   if (activitiesLen > 0) {
-//       $timeout(function () {
-//           vm.percentage = Math.round((subTaskPercentage / activitiesLen));
-//       }, 500);
-//   }

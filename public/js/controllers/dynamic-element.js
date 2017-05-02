@@ -113,9 +113,12 @@ angular.module('dynamicElement', ['volunteer'])
     };
 
     $scope.assignTask = function (task) {
+        var userId;
+
         if (!task) return;
 
         if (! task.user_id) task.user_id = volunteers[0].id;
+        else userId = task.user_id;
 
         var attrs = {
             size: 'md',
@@ -146,13 +149,16 @@ angular.module('dynamicElement', ['volunteer'])
             }
         }
 
-        updateVolunteerList(attrs.expertiseId);
+        updateVolunteerList(attrs.expertiseId, !userId);
 
         defaultModal.showModal(attrs).result.then(function(data){
             console.log('Volunteer was assigned successfully', data);
+            $scope.$parent.submitData.updateTask.call(null, task);
+        }, function () {
+            task.user_id = userId;
         });
 
-        function updateVolunteerList(expertiseId) {
+        function updateVolunteerList(expertiseId, change) {
             console.log('ExpertiseId: ', expertiseId);
             attrs.volunteers.length = 0;
             var len = volunteers.length;
@@ -165,7 +171,7 @@ angular.module('dynamicElement', ['volunteer'])
                 }
             }
 
-            if (attrs.volunteers.length) {
+            if (attrs.volunteers.length && change) {
                 attrs.task.user_id = attrs.volunteers[0].id;
             }
         }

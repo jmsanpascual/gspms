@@ -39,8 +39,8 @@
             vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
             vm.dtColumnDefs = [
                 DTColumnDefBuilder.newColumnDef(0),
-                DTColumnDefBuilder.newColumnDef(1),
-                DTColumnDefBuilder.newColumnDef(2),
+                DTColumnDefBuilder.newColumnDef(1).withClass('right'),
+                DTColumnDefBuilder.newColumnDef(2).withClass('right'),
                 DTColumnDefBuilder.newColumnDef(3).notSortable()
             ];
         }
