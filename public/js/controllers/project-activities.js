@@ -62,8 +62,8 @@ angular.module('project.activites.controller', [
     {
         // if(refreshWithExpense)
             // vm.refreshExpense();
-
-        ProjectActivitiesRestApi.query({proj_id : $scope.proj_id}).$promise.then(function (result) {
+        console.log('getting project activities of project ID', proj_id);
+        ProjectActivitiesRestApi.query({proj_id : proj_id}).$promise.then(function (result) {
            result = result[0];
 
           if (result.status) {

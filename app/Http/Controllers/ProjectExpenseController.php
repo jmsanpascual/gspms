@@ -14,8 +14,12 @@ use DB;
 use Carbon\Carbon;
 use Response;
 
+use App\Traits\Notify;
+
 class ProjectExpenseController extends Controller
 {
+    use Notify;
+
     public function index(Request $request)
     {
         $proj_id = $request->proj_id;
@@ -66,6 +70,9 @@ class ProjectExpenseController extends Controller
             if(($total_budget - $total_expense) < 0)
                 throw new Exception('Insufficient project budget.');
 
+
+            $this->_notifyLife($project, trans('notifications.expense_added',['name'=>$project['name']]));
+
             // Make the status to on-going from initiating
             $ongoingId = config('constants.proj_status_ongoing');
             $approvedId = config('constants.proj_status_approved');
@@ -94,6 +101,25 @@ class ProjectExpenseController extends Controller
         return compact('status', 'msg', 'expense', 'total_expense');
     }
 
+    private function _notifyLife($proj, $text)
+    {
+        try {
+            $life = config('constants.role_life');
+            $life_emp = \App\UserRoles::where('role_id', $life)->lists('user_id');
+
+            $data = [
+                'title' => 'Project Expense Added/Edited',
+                'text' => $text,
+                'proj_id' => $proj['id'],
+                'user_ids' => $life_emp
+            ];
+
+            return $this->saveNotif($data);
+        } catch(Exception $e) {
+            throw $e;
+        }
+    }
+
     public function update(Request $request)
     {
         $status = FALSE;
@@ -118,6 +144,8 @@ class ProjectExpenseController extends Controller
             $total_budget = $project->total_budget + $approved_budget;
             if(($total_budget - $total_expense) <= 0)
                 throw new Exception('Insufficient project budget.');
+
+            $this->_notifyLife($project, trans('notifications.expense_edited',['name'=>$project['name']]));
 
             $status = TRUE;
             DB::commit();

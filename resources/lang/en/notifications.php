@@ -24,6 +24,10 @@ return [
     'project_edited' => 'Project :name was edited and needs your approval.',
     'project_added' => 'Project :name was newly added and needs your approval.',
     'project_approval' => 'Project :name needs your approval.',
+    'activity_edited' => 'Activity :name has been edited',
+    'activity_added' => 'Activity :name has been added',
+    'expense_edited' => 'Expense of project :name has been edited',
+    'expense_added' => 'Expense of project :name has been added',
     'budget_request' => 'Budget was requested in project :name and needs your approval.',
     'budget_request_edit_for_approval' => 'Budget was edited in project :name and needs your approval.',
 ];

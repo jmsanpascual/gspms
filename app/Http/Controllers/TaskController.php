@@ -12,8 +12,11 @@ use Lang;
 use Log;
 use DB;
 
+use App\Traits\Notify;
 class TaskController extends Controller
 {
+    use Notify;
+
     protected $roleId = 6;
     protected $user;
 
@@ -49,10 +52,24 @@ class TaskController extends Controller
 
             Task::where('id', $taskId)->update($task);
 
+            // $this->notifyChampion();
+
             return Response::json(['result' => true]);
         } catch (Exception $e) {
             DB::rollback();
             return Response::json(['error' => $e->getMessage()]);
         }
+    }
+
+    public function notifyChampion()
+    {
+        $data = [
+            'title' => 'Project Edited',
+            'text' => trans('notifications.project_edited', ['name' => $proj['name']]),
+            'proj_id' => $proj['id'],
+            'user_ids' => [$proj['champion_id']]
+        ];
+
+        return $this->saveNotif($data);
     }
 }

@@ -18,7 +18,7 @@
         </div>
         <label class = "form-label col-md-2">Program</label>
         <div class = "col-md-4">
-          <select class = "form-control" ng-init="submitData.proj.program_id = submitData.program.id" ng-model = "submitData.proj.program_id"
+          <select class = "form-control" ng-init="submitData.proj.program_id = submitData.program.id; submitData.getResourcePerson(submitData.proj.program_id, submitData)" ng-model = "submitData.proj.program_id"
           ng-options = "p.id as p.name for p in submitData.programs" ng-change ="submitData.getResourcePerson(submitData.proj.program_id, submitData)"
           ng-disabled="{{json_encode(Session::get('role') == config('constants.role_life'))}} || submitData.proj.proj_status_id == {{config('constants.proj_status_approved')}} || submitData.proj.proj_status_id == {{config('constants.proj_status_ongoing')}}" >
           </select>
@@ -65,7 +65,7 @@
         <div class = "col-md-12">
             <label class = "form-label col-md-2">Initial Budget</label>
             <div class = "col-md-4">
-                <input type = "text" class = "form-control" ng-model = "submitData.proj.total_budget" placeholder="Total Budget"
+                <input type = "text" class = "form-control" style="text-align:right" ng-model = "submitData.proj.total_budget" placeholder="Total Budget"
                 ng-disabled="{{json_encode(Session::get('role') == config('constants.role_life'))}} || submitData.proj.proj_status_id == {{config('constants.proj_status_approved')}} || submitData.proj.proj_status_id == {{config('constants.proj_status_ongoing')}}" >
             </div>
         </div>
@@ -76,14 +76,14 @@
         <div class = "col-md-12">
             <label class = "form-label col-md-2">Total Budget</label>
             <div class = "col-md-4">
-                <input type = "text" class = "form-control" disabled value = "@{{ +submitData.proj.total_budget + +pbc.budget.total }}"
+                <input type = "text" class = "form-control" style="text-align:right" disabled value = "@{{ (+submitData.proj.total_budget + +pbc.budget.total).toFixed(2) }}"
                 placeholder="Total Budget" disabled>
             </div>
             <span ng-if = "pbc.expense.total && submitData.proj.id" >
                 <label class = "form-label col-md-2">Remaining Budget</label>
                 <div class = "col-md-4">
-                    <input type = "text" class = "form-control" placeholder="Total Remaining Budget"
-                    disabled value = "@{{ +submitData.proj.total_budget + +pbc.budget.total - pbc.expense.total }}">
+                    <input type = "text" class = "form-control" placeholder="Total Remaining Budget" style="text-align:right"
+                    disabled value = "@{{ (+submitData.proj.total_budget + +pbc.budget.total - pbc.expense.total).toFixed(2)}}">
                 </div>
             </span>
       </div>

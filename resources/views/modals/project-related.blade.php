@@ -5,7 +5,7 @@
 @stop
 @section('modal-content')
 	<!-- DTable -->
-	 <div ng-controller="ProjectRelatedController as prc" ng-init = 'prc.orig_proj = submitData.proj; prc.refresh()'>
+	 <div ng-controller="ProjectRelatedController as prc" ng-init = 'prc.activate(submitData.proj); prc.refresh()'>
 
  		<div class = "form-group">
  			<div class = "row">

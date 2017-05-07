@@ -16,8 +16,12 @@ use App\ProjectItemCategory;
 use App\ProjectExpense;
 use Exception;
 
+use App\Traits\Notify;
+
 class ProjectActivitiesController extends Controller
 {
+    use Notify;
+
     public function __construct()
     {
         DB::connection()->enableQueryLog();
@@ -151,7 +155,7 @@ class ProjectActivitiesController extends Controller
             $ongoingId = config('constants.proj_status_ongoing');
             $approvedId = config('constants.proj_status_approved');
             $project = Project::findOrFail($proj_id);
-
+            $this->_notifyLife($project, trans('notifications.activity_added',['name'=>$activity['name']]));
             if ($project->proj_status_id == $approvedId) {
                 $project->proj_status_id = $ongoingId;
                 $project->save();
@@ -177,6 +181,25 @@ class ProjectActivitiesController extends Controller
         $data['msg'] = $msg;
 
         return Response::json($data);
+    }
+
+    private function _notifyLife($proj, $text)
+    {
+        try {
+            $life = config('constants.role_life');
+            $life_emp = App\UserRoles::where('role_id', $life)->lists('user_id');
+
+            $data = [
+                'title' => 'Activity Added/Edited',
+                'text' => $text,
+                'proj_id' => $proj['id'],
+                'user_ids' => $life_emp
+            ];
+
+            return $this->saveNotif($data);
+        } catch(Exception $e) {
+            throw $e;
+        }
     }
 
     public function update(Request $req)
@@ -250,6 +273,8 @@ class ProjectActivitiesController extends Controller
             $ongoingId = config('constants.proj_status_ongoing');
             $approvedId = config('constants.proj_status_approved');
             $project = Project::findOrFail($proj_id);
+
+            $this->_notifyLife($project, trans('notifications.activity_edited',['name'=>$activity['name']]));
 
             if ($project->proj_status_id == $approvedId) {
                 $project->proj_status_id = $ongoingId;
