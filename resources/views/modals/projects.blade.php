@@ -176,7 +176,7 @@
             <tr ng-repeat = "data in pec.projectexpense">
               <td>@{{data.category}}</td>
               <td>@{{data.amount}}</td>
-              <td>@{{data.remaining_amount}}</td>
+              <td>@{{data.remaining_amount.toFixed(2)}}</td>
               <td>
               @if(Session::get('role') == config('constants.role_finance'))
                 <button ng-if = "submitData.proj.proj_status_id != 3" class="btn btn-warning btn-sm" ng-click="pec.edit(data)">
@@ -313,7 +313,11 @@
           <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">View Reports
           <span class="caret"></span></button>
           <ul class="dropdown-menu">
-            <li><a target="_blank" href="{{asset('projects/report/progress')}}/@{{submitData.proj.id}}">Progress Report</a></li>
+            <li ng-if = "submitData.proj.proj_status_id == 3 || submitData.proj.proj_status_id == 1 || submitData.proj.proj_status_id == 5">
+              <a target="_blank" href="{{asset('projects/report/progress')}}/@{{submitData.proj.id}}">Progress Report</a></li>
+
+            <li ng-if = "submitData.proj.proj_status_id == 3"><a target="_blank" href="{{asset('projects/report/completion')}}/@{{submitData.proj.id}}">
+              Project Completion Report</a></li>
             <!-- <li><a target="_blank" href="{{asset('projects/report/summary')}}/@{{submitData.proj.id}}">Project Summary Report</a></li> -->
             <li><a target="_blank" href="{{asset('projects/report/expense')}}/@{{submitData.proj.id}}">Budget/Expense Report</a></li>
           </ul>

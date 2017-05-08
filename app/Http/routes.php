@@ -89,6 +89,7 @@ Route::get('projects/chart/{id}', 'ProjectController@createChart')->name('proj_c
 Route::get('projects/report/expense/{projId}', 'ProjectController@expenseReport');
 Route::get('projects/report/progress/{id}', 'ProjectController@progressReport')->name('proj_report');
 Route::get('projects/report/summary', 'ProjectController@summaryReport')->name('proj_report');
+Route::get('projects/report/completion/{id}', 'ProjectController@completionReport')->name('proj_report');
 Route::get('projects/fetch/{id}', 'ProjectController@fetchProj');
 Route::post('projects/request/', 'ProjectController@updateStatus');
 Route::post('projects/update', 'ProjectController@update');
