@@ -309,11 +309,18 @@
 
         @if(Session::get('role') == config('constants.role_life')
           || Session::get('role') == config('constants.role_head'))
-        <div class="dropdown" style = "display: inline !important">
+        <div class="dropdown" style = "display: inline !important" ng-if = "submitData.proj.proj_status_id == 3 || submitData.proj.proj_status_id == 1 || submitData.proj.proj_status_id == 5">
           <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">View Reports
           <span class="caret"></span></button>
           <ul class="dropdown-menu">
-            <li><a target="_blank" href="{{asset('projects/report/progress')}}/@{{submitData.proj.id}}">Progress Report</a></li>
+            <li>
+              <a target="_blank" href="{{asset('projects/report/status')}}/@{{submitData.proj.id}}"
+              ng-if = "submitData.proj.proj_status_id != 3">Status Report</a></li>
+            <li>
+              <a target="_blank" href="{{asset('projects/report/progress')}}/@{{submitData.proj.id}}">Project Charter Report</a></li>
+
+            <li ng-if = "submitData.proj.proj_status_id == 3"><a target="_blank" href="{{asset('projects/report/completion')}}/@{{submitData.proj.id}}">
+              Project Completion Report</a></li>
             <!-- <li><a target="_blank" href="{{asset('projects/report/summary')}}/@{{submitData.proj.id}}">Project Summary Report</a></li> -->
             <li><a target="_blank" href="{{asset('projects/report/expense')}}/@{{submitData.proj.id}}">Budget/Expense Report</a></li>
           </ul>

@@ -1,7 +1,7 @@
 <html>
 <head>
 	<title>
-		Green School - Project Charter Report
+		Green School - Project Completion Report
 	</title>
 
     {!! HTML::style('css/bootstrap/css/bootstrap.min.css'); !!}
@@ -46,7 +46,7 @@
 <table width = "100%">
 	<tr>
 		<td colspan= "4" class = "sub-title">
-			<h1><b>Project Charter Report</b></h1>
+			<h1><b>PROJECT COMPLETION REPORT</b></h1>
       <br>
       (Period: {{date('F Y', strtotime($proj->start_date))}} - {{date('F Y', strtotime($proj->end_date))}})
     </td>
@@ -55,28 +55,28 @@
     <td colspan="4"><h4><u><b>Project Information</b></h4></u></td>
   </tr>
   <tr>
-    <td width="29%">Project Name:</td>
-    <td width="25%">{{$proj->name}}</td>
-    <td width="21%">Start Date:</td>
-    <td width="25%">{{date('m/d/Y', strtotime($proj->start_date))}}</td>
+	  <td width="29%">Project Name:</td>
+      <td width="25%">{{$proj->name}}</td>
+      <td width="25%">Start Date:</td>
+    <td width="21%">{{date('m/d/Y', strtotime($proj->start_date))}}</td>
   </tr>
 	<tr>
-		<td>Program :</td>
-		<td>{{$proj->program}}</td>
+	<td>Program :</td>
+	<td>{{$proj->program}}</td>
     <td>End Date</td>
     <td>{{date('m/d/Y', strtotime($proj->end_date))}}</td>
 	</tr>
   {{-- <tr>
     <td colspan="4"><br></td>
   </tr> --}}
-	<tr>
-		<td>Partner Organization : </td>
-		<td >{{$proj->partner_organization ?: 'N/A'}}</td>
-	</tr>
-	<tr>
-    <td >Partner Community : </td>
-		<td >{{$proj->partner_community ?: 'N/A'}}</td>
-	</tr>
+  <tr>
+	  <td>Partner Organization : </td>
+	  <td >{{$proj->partner_organization ?: 'N/A'}}</td>
+  </tr>
+  <tr>
+  <td >Partner Community : </td>
+	  <td >{{$proj->partner_community ?: 'N/A'}}</td>
+  </tr>
 	<tr style ="padding-top:10px;">
 		<td>Champion : </td>
 		<td>{{$proj->champ_name}}</td>
@@ -102,7 +102,7 @@
       </ul>
     </td>
   </tr>
-  <tr style = "padding-top:10px;" colspan="4">
+  <tr style = "padding-top:10px;">
     <td colspan="4"><h4><u><b>Activities</b></h4></u></td>
   </tr>
   <tr>
@@ -129,11 +129,12 @@
 
   </tr> --}}
   <tr style = "padding-top:10px;">
-    <td colspan="4"><h4><u><b>Project Budget</b></h4></u></td>
+    <td colspan="2"><h4><u><b>Project Budget</b></h4></u></td>
   </tr>
   <tr>
     <td>Initial Budget: </td>
-    <td colspan="3"> P {{number_format($proj->total_budget,2)}}</td>
+    <td> P {{number_format($proj->total_budget,2)}}</td>
+
   </tr>
   <tr>
     <td colspan="2">
@@ -150,7 +151,7 @@
       @endforeach
       @if(COUNT($expenses) == 0)
       <tr>
-		  <td colspan="2">No Record(s) Found</td>
+        <td colspan="2">No Record(s) Found</td>
       </tr>
       @endif
       <tr>
@@ -159,6 +160,57 @@
       </tr>
     </table>
     </td>
+  </tr>
+  <tr style = "padding-top:10px;">
+    <td colspan="2"><h4><u><b>Project Expenses</b></h4></u></td>
+  </tr>
+  <tr>
+    <td colspan="4">
+      <table width="100%" class ="table table-bordered">
+        <tr>
+          <th style="padding:10px;"><u> CATEGORY </u></th>
+          <th style="padding:10px;"><u> ITEM </u></th>
+          <th style="padding:10px;"><u> REMAINING AMOUNT </u></th>
+        </tr>
+        <?php $remainingTotal = 0; $totalExpense=0;?>
+        @foreach($expenses as $val)
+        <tr>
+          <td>{{$val->category}}</td>
+          {{-- <td>{{$val->activity->name}}</td> --}}
+          <td>
+            <ul class ="objective" >
+              <?php $total = 0;?>
+              @foreach($val->items as $item)
+                <?php $total += ($item->quantity * $item->price); ?>
+              <li><b>{{$item->item_name}}</b> - P {{$item->price}} x {{$item->quantity}}({{$item->quantity_label}}) = {{ number_format($item->quantity * $item->price, 2,'.',',')}}</li>
+              @endforeach
+              @if(COUNT($val->items) == 0)
+                <li>N/A</li>
+              @endif
+              <li><u style="font-weight:bold">TOTAL:</u> {{number_format($total, 2, '.',',')}}</li>
+            </ul>
+          </td>
+          <?php $remainingTotal += ($val->amount - $total); $totalExpense += $total; ?>
+          <td>{{number_format(($val->amount - $total), 2,'.',',')}}</td>
+        </tr>
+        @endforeach
+        @if(COUNT($expenses) == 0)
+        <tr>
+          <td colspan="3">No Expense(s) Found</td>
+        </tr>
+        @endif
+        <tr>
+          <td colspan="2"> <b><u> TOTAL </u></b></td>
+          <td> P {{number_format($remainingTotal,2, '.',',')}}</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+  	<td>Remaining Budget:</td>
+  	<td> P {{ number_format($total_budget - $total_expense, 2, '.',',') }}</td>
+    <td>Expenses Incurred:</td>
+  	<td> P {{ number_format($totalExpense, 2, '.',',') }}</td>
   </tr>
   <tr>
     <?php $user = auth()->user()->infos[0];
