@@ -759,7 +759,7 @@ class ProjectController extends Controller
 
             $data['activities'] = App\ProjectActivities::where('proj_id', $id)
                 ->leftJoin('activities', 'activities.id', '=', 'proj_activities.activity_id')
-                ->get(['name']);
+                ->get(['name', 'id']);
 
             foreach($data['activities'] AS $key => $val) {
                 $data['activities'][$key]['tasks'] = App\Task::where('activity_id', $val['id'])->get();

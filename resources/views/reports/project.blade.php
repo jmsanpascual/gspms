@@ -25,6 +25,7 @@
 	.objectives{
 		font-weight: normal !important;
 		font-size: 16px;
+		position:relative;
 	}
 	table thead th {
 		text-align:center;
@@ -101,7 +102,7 @@
       </ul>
     </td>
   </tr>
-  <tr style = "padding-top:10px;">
+  <tr style = "padding-top:10px;" colspan="4">
     <td colspan="4"><h4><u><b>Activities</b></h4></u></td>
   </tr>
   <tr>
