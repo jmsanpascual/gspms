@@ -176,6 +176,7 @@
         @foreach($expenses as $val)
         <tr>
           <td>{{$val->category}}</td>
+          {{-- <td>{{$val->activity->name}}</td> --}}
           <td>
             <ul class ="objective" >
               <?php $total = 0;?>
@@ -186,7 +187,7 @@
               @if(COUNT($val->items) == 0)
                 <li>N/A</li>
               @endif
-              <li><u style="font-weight:bold">TOTAL</u>{{number_format($total, 2, '.',',')}}</li>
+              <li><u style="font-weight:bold">TOTAL:</u> {{number_format($total, 2, '.',',')}}</li>
             </ul>
           </td>
           <?php $remainingTotal += ($val->amount - $total); $totalExpense += $total; ?>

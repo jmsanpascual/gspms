@@ -771,6 +771,7 @@ class ProjectController extends Controller
             // compute used by activities
             foreach($data['expenses'] AS &$val) {
                 $val->items = App\ActivityItemExpense::where('project_expense_id', $val['id'])->get();
+                // $val->activity = App\Activities::find($val->items[0]['activity_id']);
             }
 
             $data['total_expense'] = App\ProjectExpense::where('proj_id', $id)
@@ -931,18 +932,29 @@ class ProjectController extends Controller
         $msg = '';
         try
         {
-            $select = [
-                'activities.name',
-                'activity_item_expenses.quantity',
-                'activity_item_expenses.price',
-                'project_expenses.category as category'
-            ];
-            $activity = App\Activities::leftJoin('proj_activities', 'proj_activities.activity_id', '=', 'activities.id')
-                        ->leftJoin('activity_item_expenses', 'activities.id', '=', 'activity_item_expenses.activity_id')
-                        ->leftJoin('project_expenses', 'project_expenses.proj_id', '=', 'proj_activities.proj_id')
-                        ->where('proj_activities.proj_id', $id)->orderBy('activities.id')->get($select);
+            $data['proj'] = App\Projects::find($id);
+
+            $data['categories'] = App\ProjectExpense::where('proj_id',$data['proj']->id)
+                ->get();
+
+            foreach($data['categories'] as &$val) {
+                $val->activities = App\ActivityItemExpense::where('project_expense_id', $val->id)
+                    ->leftJoin('activities', 'activities.id', '=', 'activity_item_expenses.activity_id')
+                    ->groupBy('activity_id')
+                    ->get([DB::raw('SUM(price * activity_item_expenses.quantity) AS expense'), 'name']);
+            }
+            // $select = [
+            //     'activities.name',
+            //     'activity_item_expenses.quantity',
+            //     'activity_item_expenses.price',
+            //     'project_expenses.category as category'
+            // ];
+            // $activity = App\Activities::leftJoin('proj_activities', 'proj_activities.activity_id', '=', 'activities.id')
+            //             ->leftJoin('activity_item_expenses', 'activities.id', '=', 'activity_item_expenses.activity_id')
+            //             ->leftJoin('project_expenses', 'project_expenses.proj_id', '=', 'proj_activities.proj_id')
+            //             ->where('proj_activities.proj_id', $id)->orderBy('activities.id')->get($select);
             // logger($activity);
-            $html = view('reports/project-expense', compact('activity'));
+            $html = view('reports/project-expense', $data);
             $html = utf8_encode($html);
             $pdf = new \mPDF();
             $pdf->writeHTML($html);
