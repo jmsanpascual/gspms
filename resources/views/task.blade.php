@@ -42,9 +42,13 @@
                             <span ng-class="{'glyphicon glyphicon-ok': task.done, 'glyphicon glyphicon-remove': !task.done}">
                         </td>
                         <td>
-                          <button class="btn btn-warning btn-sm" ng-click="tc.edit($index, task)">
-                          <i class="fa fa-edit"></i>
+                          <button title="Edit Task" class="btn btn-warning btn-sm" ng-click="tc.edit($index, task)">
+                            <i class="fa fa-edit"></i>
                           </button>
+                          <a class="btn btn-success btn-sm" title="Status Report"
+                          target="_blank" href="{{ asset('tasks/report/project-status') }}/@{{ task.activity.project.id }}">
+                            <i class="fa fa-file-text" style="color:white;"></i>
+                          </a>
                         </td>
                       </tr>
                     </tbody>

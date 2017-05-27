@@ -92,43 +92,63 @@
   <tr>
     <td colspan = "4">
       <?php
-      $delimiter = '(#$;)';
-      $proj->objective = explode($delimiter, $proj->objective);
+        $delimiter = '(#$;)';
+        $proj->objective = explode($delimiter, $proj->objective);
       ?>
       <ul class = "objectives">
         @foreach($proj->objective as $key => $value)
-        <li>{{$value}}</li>
+          @if(!empty($value))
+            <li>{{ $value }}</li>
+          @endif
         @endforeach
       </ul>
     </td>
   </tr>
-  <tr style = "padding-top:10px;">
-    <td colspan="4"><h4><u><b>Activities</b></h4></u></td>
-  </tr>
-  <tr>
-    <td colspan="4">
-    <ul class = "objectives">
-      @foreach($activities as $key => $value)
-      <li>{{$value['name']}}</li>
-
-          &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"><u>TASKS</u></span><br>
-          @foreach($value['tasks'] AS $val)
-            &nbsp;&nbsp;&nbsp;&nbsp;<span>- {{$val['name']}}</span><br>
-          @endforeach
-          @if(COUNT($value['tasks']) == 0)
-            &nbsp;&nbsp;&nbsp;&nbsp;<span>No task(s) found</span><br>
-          @endif
-      @endforeach
-    </ul>
+  <hr>
+  <!-- Activites Section -->
+  <tr style="padding-top:10px;border:1px solid black;">
+    <td colspan="2" style="border:1px solid black;">
+      <h4><b>Activities</b></h4>
+    </td>
+    <td style="border:1px solid black;">
+      <h4><b>Tasks</b></h4>
+    </td>
+    <td style="border:1px solid black;font-weight:bold;padding:10px;">
+      <h4><b>Done</b></h4>
     </td>
   </tr>
-  {{-- <tr style = "margin-top:20px;">
+
+  @foreach($activities as $key => $value)
+    <tr style="border:1px solid black;">
+      <td colspan="2"> {{ $value['name'] }} </td>
+
+      <td style="border:1px solid black;">
+        @foreach($value['tasks'] AS $val)
+          {{ $val['name'] }}
+        @endforeach
+      </td>
+
+      <td style="border:1px solid black;text-align:center;">
+        @foreach($value['tasks'] AS $val)
+        {{ $val['done'] ? '&#10004;' : '&#x2717;' }}
+        <br>
+        @endforeach
+      </td>
+
+      @if(COUNT($value['tasks']) == 0)
+        <td style="border:1px solid black;">No task(s) found</td>
+        <td style="border:1px solid black;"></td>
+      @endif
+    </tr>
+  @endforeach
+  <!-- End of Activities Section -->
+
+  <!-- <tr style = "margin-top:20px;">
     <td colspan="4"><h4><u><b>Milestones</b></h4></u></td>
   </tr>
-  <tr>
+  <tr></tr> -->
 
-  </tr> --}}
-  <tr style = "padding-top:10px;">
+  <!-- <tr style = "padding-top:10px;">
     <td colspan="2"><h4><u><b>Project Budget</b></h4></u></td>
   </tr>
   <tr>
@@ -211,7 +231,7 @@
   	<td> P {{ number_format($total_budget - $total_expense, 2, '.',',') }}</td>
     <td>Expenses Incurred:</td>
   	<td> P {{ number_format($totalExpense, 2, '.',',') }}</td>
-  </tr>
+  </tr> -->
   <tr>
     <?php $user = auth()->user()->infos[0];
           $fullName = $user->last_name . ', ' . $user->first_name . ' ' . $user->middle_name;

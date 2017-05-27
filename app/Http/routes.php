@@ -146,6 +146,7 @@ Route::resource('volunteers', 'VolunteerController');
 Route::resource('expertise', 'ExpertiseController');
 
 // RESTful resource route for Tasks
+Route::get('tasks/report/project-status/{id}', 'TaskController@statusReport');
 Route::get('tasks/view-tasks', array('as' => 'tasks.view', function () {
     $data['page'] = 'task';
     return view('task', $data);
