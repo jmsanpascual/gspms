@@ -125,8 +125,8 @@ class ProjectController extends Controller
                 $data['proj'][$key]->objective = $temp;
 
 
-                    $start_date =  Carbon::createFromFormat('Y-m-d H:i:s', $data['proj'][$key]->start_date);
-                    $end_date =  Carbon::createFromFormat('Y-m-d H:i:s', $data['proj'][$key]->end_date);
+                    $start_date =  Carbon::createFromFormat('Y-m-d', $data['proj'][$key]->start_date);
+                    $end_date =  Carbon::createFromFormat('Y-m-d', $data['proj'][$key]->end_date);
                     $days = $end_date->diffInDays($start_date);
                     $duration = $this->_convertToYearMonthDays($days);
 
@@ -785,8 +785,8 @@ class ProjectController extends Controller
 
             $data['proj_id'] = $id;
 
-            $start_date =  Carbon::createFromFormat('Y-m-d H:i:s',$data['proj']->start_date);
-            $end_date =  Carbon::createFromFormat('Y-m-d H:i:s', $data['proj']->end_date);
+            $start_date =  Carbon::createFromFormat('Y-m-d',$data['proj']->start_date);
+            $end_date =  Carbon::createFromFormat('Y-m-d', $data['proj']->end_date);
             $days = $end_date->diffInDays($start_date);
             $data['duration'] = $this->_convertToYearMonthDays($days);
             // $data['proj'] = $data['proj']->get();
@@ -860,8 +860,8 @@ class ProjectController extends Controller
 
             $data['proj_id'] = $id;
 
-            $start_date =  Carbon::createFromFormat('Y-m-d H:i:s',$data['proj']->start_date);
-            $end_date =  Carbon::createFromFormat('Y-m-d H:i:s', $data['proj']->end_date);
+            $start_date =  Carbon::createFromFormat('Y-m-d',$data['proj']->start_date);
+            $end_date =  Carbon::createFromFormat('Y-m-d', $data['proj']->end_date);
             $days = $end_date->diffInDays($start_date);
             $data['duration'] = $this->_convertToYearMonthDays($days);
             // $data['proj'] = $data['proj']->get();
@@ -928,8 +928,8 @@ class ProjectController extends Controller
 
             $data['proj_id'] = $id;
 
-            $start_date =  Carbon::createFromFormat('Y-m-d H:i:s',$data['proj']->start_date);
-            $end_date =  Carbon::createFromFormat('Y-m-d H:i:s', $data['proj']->end_date);
+            $start_date =  Carbon::createFromFormat('Y-m-d',$data['proj']->start_date);
+            $end_date =  Carbon::createFromFormat('Y-m-d', $data['proj']->end_date);
             $days = $end_date->diffInDays($start_date);
             $data['duration'] = $this->_convertToYearMonthDays($days);
             // $data['proj'] = $data['proj']->get();

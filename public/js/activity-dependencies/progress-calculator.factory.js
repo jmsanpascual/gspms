@@ -23,16 +23,19 @@
                 phasesLengths,
                 phases  = {
                     1: {
+                        startDate: '',
                         approvedTaskCount: 0,
                         subTaskPercentage: 0
                     },
                     2: {
+                        startDate: '',
                         approvedTaskCount: 0,
                         subTaskPercentage: 0
                     },
                     3: {
-                         approvedTaskCount: 0,
-                         subTaskPercentage: 0
+                        startDate: '',
+                        approvedTaskCount: 0,
+                        subTaskPercentage: 0
                     },
                 };
 
@@ -47,9 +50,14 @@
                 if (isInArray(activity.status_id, projectStatus)) {
                     var phase = phases[activity.phase_id],
                         tasks = activity.tasks,
-                        tasksLen = tasks.length;
+                        tasksLen = tasks.length,
+                        startDate = new Date(activity.start_date);
 
                     if (!phase) continue;
+
+                    if (!phase.startDate || startDate < phase.startDate) {
+                        phase.startDate = startDate;
+                    }
 
                      // Reset counts on every activity
                     approvedTaskCount = 0;
@@ -86,6 +94,7 @@
                         phaseReference = phasesReference[i - 1];
 
                     if (phaseReference.id == i) {
+                        var phaseEndDate = new Date(milestone['phase_' + i]);
                         // Get the total percentage of this phase
                         phaseReference.percent = (phase.subTaskPercentage / phasesLengths[i]);
                         // Divide the total precentage of this phase to the total phases count
@@ -93,10 +102,27 @@
                         // Check if phase reference is not a number
                         phaseReference.percent = (isNaN(phaseReference.percent)) ? 0 : phaseReference.percent;
                         // Days Left before the project needs to be finished
-                        phaseReference.daysLeft = getDateDifference(new Date(), milestone['phase_' + i]);
+                        phaseReference.daysLeft = getDateDifference(new Date(), phaseEndDate);
+                        // Get the suggested percentage based on the earliest start date
+                        // of the the phase, and the end date set by life
+                        phaseReference.suggestedPercentage = getSuggestedPercentage(phase.startDate, phaseEndDate);
                     }
                 }
             });
+        }
+
+        function getSuggestedPercentage(startDate, endDate) {
+            if (!startDate || startDate == 'Invalid Date') return 0;
+            if (!endDate || endDate == 'Invalid Date') return 0;
+
+            var start = startDate.getTime(),
+                end = endDate.getTime(),
+                now = new Date().getTime();
+
+            // If today is greater than the end date, just return 100%
+            if (now > end) return 100;
+
+            return Math.round((( now - start ) / ( end - start )) * 100);
         }
 
         // Gets the total length of the phases
@@ -114,7 +140,6 @@
         }
 
         function getDateDifference(newDate, oldDate) {
-            oldDate = new Date(oldDate);
             var timeDiff = Math.abs(oldDate.getTime() - newDate.getTime());
             var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
             return diffDays;
