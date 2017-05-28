@@ -25,12 +25,12 @@ projectService.factory('Project', function (ProjRestApi) {
 
     var fetchProject = function(params) {
 
-        return ProjRestApi.fetchProj(params).$promise.then(function(response){
+        return ProjRestApi.fetchProj(params).$promise.then(function(response) {
             return response;
         });
     };
 
-    var remove = function(params){
+    var remove = function(params) {
         return ProjRestApi.remove(params).$promise.then(function(response)
         {
             return response;
@@ -45,26 +45,26 @@ projectService.factory('Project', function (ProjRestApi) {
         getProjects: getProjects,
         getOnGoingProjects: getOnGoingProjects,
         addProject: addProject,
-        fetchProject : fetchProject,
-        remove : remove,
+        fetchProject: fetchProject,
+        remove: remove,
         updateTotalBudget: updateTotalBudget
     };
 });
 
 projectService.factory('ProjRestApi', function ($resource) {
-    var restApi = $resource('../projects/:id', {id:'@id'},
+    var restApi = $resource('../projects/:id', {id: '@id'},
         {
             fetchProj: {
                 method: 'GET',
                 params: '@id',
                 url: '../projects/fetch/:id'
             },
-            request : {
-                method : 'POST',
-                url : '../projects/request',
-                params : {
-                    id : '@id',
-                    proj_id : '@proj_id',
+            request: {
+                method: 'POST',
+                url: '../projects/request',
+                params: {
+                    id: '@id',
+                    proj_id: '@proj_id',
                 }
             },
             getOnGoingProjects: {
@@ -76,18 +76,18 @@ projectService.factory('ProjRestApi', function ($resource) {
                 method: 'POST',
                 url: '../projects/update-total-budget'
             },
-            report : {
-                method : 'GET',
-                url : '../projects/report/:proj_id',
-                params : {
-                    proj_id : '@proj_id'
+            report: {
+                method: 'GET',
+                url: '../projects/report/:proj_id',
+                params: {
+                    proj_id: '@proj_id'
                 }
             },
-            related : {
-                metohd : 'GET',
-                url : '../projects/related/:proj_id',
-                params : {
-                    proj_id : '@proj_id'
+            related: {
+                metohd: 'GET',
+                url: '../projects/related/:proj_id',
+                params: {
+                    proj_id: '@proj_id'
                 }
             }
         });

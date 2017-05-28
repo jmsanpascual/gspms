@@ -1,7 +1,8 @@
 <html>
 <head>
+  <img src="{{asset('img/logo.png')}}">
 	<title>
-		Green School - Project Status Report
+	Lasallian Institute for the Environment
 	</title>
 
     {!! HTML::style('css/bootstrap/css/bootstrap.min.css'); !!}
@@ -107,22 +108,52 @@
   </tr>
   <tr>
     <td colspan="4">
-    <ul class = "objectives">
-      @foreach($activities as $key => $value)
-      <li>{{$value['name']}}</li>
+  	  <table class = "table table-bordered" style="padding:20px; width:100%">
+  		  <tr>
+  			  <th>Name</th>
+  			  <th>Tasks</th>
+  			  <th>Remarks</th>
+  			  <th>Status</th>
+  		  </tr>
+  		  @if(COUNT($activities) == 0)
+  			  <tr>
+  				  <td colspan="2" class = "normal">No activities found</td>
+  			  </tr>
+  		  @endif
+  		  @foreach($activities as $key => $value)
+  			  <tr>
+  				  <td  style="font-weight: normal !important;"> {{$value['name']}}</td>
+  				  <td>
+  					  {{-- TASKS --}}
+  					  <table class = "table table-bordered" style="padding:20px; width:100%">
+  						  <tr>
+  							  <th>Name</th>
+  							  <th>Volunteers</th>
+  						  </tr>
+  						  @if(COUNT($value['tasks']) == 0)
+  							  <tr>
+  								  <td colspan="2"  style="font-weight: normal !important;">
+  									  No Tasks Available
+  								  </td>
+  							  </tr>
+  						  @endif
+  						  @foreach($value['tasks'] AS $val)
+  							  <tr>
+  								  <td  style="font-weight: normal !important;">{{$val['name']}}</td>
+  								  <td>{{ $val['volunteer'] }}</td>
+  							  </tr>
+  						  @endforeach
+  					  </table>
+  				  </td>
+  				  <td style="font-weight: normal !important;">{{$value['remarks'] ?: 'No Remarks yet.'}}</td>
+  				  <td>{{$value['status']}}</td>
+  			  </tr>
+  		  @endforeach
 
-          &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"><u>TASKS</u></span><br>
-          @foreach($value['tasks'] AS $val)
-            &nbsp;&nbsp;&nbsp;&nbsp;<span>- {{$val['name']}}</span><br>
-          @endforeach
-          @if(COUNT($value['tasks']) == 0)
-            &nbsp;&nbsp;&nbsp;&nbsp;<span>No task(s) found</span><br>
-          @endif
-      @endforeach
-    </ul>
+  	  </table>
     </td>
   </tr>
-  {{-- <tr style = "margin-top:20px;">
+{{-- <tr style = "margin-top:20px;">
     <td colspan="4"><h4><u><b>Milestones</b></h4></u></td>
   </tr>
   <tr>
@@ -146,7 +177,7 @@
       @foreach($expenses as $val)
       <tr>
         <td>{{$val->category}}</td>
-        <td>{{number_format($val->amount,2,'.',',')}}</td>
+        <td style="text-align:right">{{number_format($val->amount,2,'.',',')}}</td>
       </tr>
       @endforeach
       @if(COUNT($expenses) == 0)
@@ -156,7 +187,7 @@
       @endif
       <tr>
         <td> <b><u> TOTAL </u></b></td>
-        <td> P {{number_format($total_expense,2, '.',',')}}</td>
+        <td style="text-align:right"> P {{number_format($total_expense,2, '.',',')}}</td>
       </tr>
     </table>
     </td>
@@ -170,6 +201,8 @@
         <tr>
           <th style="padding:10px;"><u> CATEGORY </u></th>
           <th style="padding:10px;"><u> ITEM </u></th>
+          <th style="padding:10px;"><u> ACTUAL EXPENSE </u></th>
+          <th style="padding:10px;"><u> PROPOSED BUDGET </u></th>
           <th style="padding:10px;"><u> REMAINING AMOUNT </u></th>
         </tr>
         <?php $remainingTotal = 0; $totalExpense=0;?>
@@ -178,39 +211,76 @@
           <td>{{$val->category}}</td>
           {{-- <td>{{$val->activity->name}}</td> --}}
           <td>
-            <ul class ="objective" >
+            <table class ="table table-bordered">
+              <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+              </tr>
               <?php $total = 0;?>
               @foreach($val->items as $item)
                 <?php $total += ($item->quantity * $item->price); ?>
-              <li><b>{{$item->item_name}}</b> - P {{$item->price}} x {{$item->quantity}}({{$item->quantity_label}}) = {{ number_format($item->quantity * $item->price, 2,'.',',')}}</li>
+                <tr>
+                  <td>{{$item->item_name}}
+                  <br>
+                  <span style="font-weight:normal">- {{$item->description}}</span>
+                  </td>
+                  <td>{{$item->quantity}}({{$item->quantity_label}})</td>
+                  <td style="text-align:right">{{$item->price}}</td>
+                  <td style="text-align:right">{{ number_format($item->quantity * $item->price, 2,'.',',')}}</td>
+                </tr>
               @endforeach
               @if(COUNT($val->items) == 0)
-                <li>N/A</li>
+                <tr>
+                  <td colspan="5"> No items found </td>
+                </tr>
               @endif
-              <li><u style="font-weight:bold">TOTAL:</u> {{number_format($total, 2, '.',',')}}</li>
-            </ul>
+            </table>
           </td>
+          <td style="font-weight:normal; text-align:right">{{number_format($total, 2, '.',',')}}</td>
+          <td style="text-align:right">{{number_format($val->amount,2,'.',',')}}</td>
           <?php $remainingTotal += ($val->amount - $total); $totalExpense += $total; ?>
-          <td>{{number_format(($val->amount - $total), 2,'.',',')}}</td>
+          <td style="text-align:right">{{number_format(($val->amount - $total), 2,'.',',')}}</td>
         </tr>
         @endforeach
         @if(COUNT($expenses) == 0)
         <tr>
-          <td colspan="3">No Expense(s) Found</td>
+          <td colspan="5">No Expense(s) Found</td>
         </tr>
         @endif
         <tr>
           <td colspan="2"> <b><u> TOTAL </u></b></td>
-          <td> P {{number_format($remainingTotal,2, '.',',')}}</td>
+          <td style="font-weight:normal;text-align:right">{{ number_format($totalExpense, 2, '.',',') }}</td>
+          <td style="text-align:right">{{number_format($total_expense,2, '.',',')}}</td>
+          <td style="text-align:right">{{number_format($remainingTotal,2, '.',',')}}</td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
-  	<td>Remaining Budget:</td>
-  	<td> P {{ number_format($total_budget - $total_expense, 2, '.',',') }}</td>
-    <td>Expenses Incurred:</td>
-  	<td> P {{ number_format($totalExpense, 2, '.',',') }}</td>
+    <td> Initial Budget </td>
+    <td style="text-align:right"> P {{number_format($proj->total_budget,2)}} </td>
+    <td>Total Proposed Budget Expense</td>
+    <td style="text-align:right">P {{number_format($total_expense,2, '.',',')}} </td>
+  </tr>
+  <tr>
+    <td>Total Proposed Budget Expense</td>
+    <td style="text-align:right"> - P {{number_format($total_expense,2, '.',',')}} </td>
+    <td>Total Expense:</td>
+  	<td style="text-align:right"> - P {{ number_format($totalExpense, 2, '.',',') }}</td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <hr>
+    </td>
+  <td colspan="2"><hr></td>
+  </tr>
+  <tr>
+  	<td>Project Remaining Budget:</td>
+  	<td style="text-align:right"> P {{ number_format($total_budget - $total_expense, 2, '.',',') }}</td>
+    <td>Total Remaining Budget Expense:</td>
+  	<td style="text-align:right"> P {{number_format($remainingTotal,2, '.',',')}}</td>
   </tr>
   <tr>
     <?php $user = auth()->user()->infos[0];

@@ -758,11 +758,12 @@ class ProjectController extends Controller
 
             $data['activities'] = App\ProjectActivities::where('proj_id', $id)
                 ->leftJoin('activities', 'activities.id', '=', 'proj_activities.activity_id')
-                ->get(['name', 'id']);
+                ->get(['name', 'id', 'status_id']);
 
             foreach($data['activities'] AS $key => $val) {
                 // logger('activity');
                 // logger(json_encode($val));
+                $data['activities'][$key]['status'] = config('constants.activity_status.'.$val['status_id']);
                 $data['activities'][$key]['tasks'] = App\Task::where('activity_id', $val['id'])->get();
             }
 
@@ -796,6 +797,8 @@ class ProjectController extends Controller
             $html = view('reports/project-status', $data);
             $html = utf8_encode($html);
             $pdf = new \mPDF();
+
+            $pdf->setFooter('{PAGENO} / {nb}');
             $pdf->writeHTML($html);
 
             // $user = auth()->user()->infos[0];
@@ -833,13 +836,15 @@ class ProjectController extends Controller
 
             $data['activities'] = App\ProjectActivities::where('proj_id', $id)
                 ->leftJoin('activities', 'activities.id', '=', 'proj_activities.activity_id')
-                ->get(['name', 'id']);
+                ->get(['name', 'id', 'status_id']);
 
             foreach($data['activities'] AS $key => $val) {
                 // logger('activity');
                 // logger(json_encode($val));
+                $data['activities'][$key]['status'] = config('constants.activity_status.'.$val['status_id']);
                 $data['activities'][$key]['tasks'] = App\Task::where('activity_id', $val['id'])->get();
             }
+            // logger(json_encode($data['activities'],JSON_PRETTY_PRINT));
 
             $data['expenses'] =  App\ProjectExpense::where('proj_id', $id)->get();
 
@@ -871,6 +876,8 @@ class ProjectController extends Controller
             $html = view('reports/project-completion', $data);
             $html = utf8_encode($html);
             $pdf = new \mPDF();
+
+            $pdf->setFooter('{PAGENO} / {nb}');
             $pdf->writeHTML($html);
 
             // $user = auth()->user()->infos[0];
@@ -909,14 +916,18 @@ class ProjectController extends Controller
 
             $data['activities'] = App\ProjectActivities::where('proj_id', $id)
                 ->leftJoin('activities', 'activities.id', '=', 'proj_activities.activity_id')
-                ->get(['name', 'id']);
+                ->get(['name', 'id', 'status_id']);
 
             foreach($data['activities'] AS $key => $val) {
+                // logger('activity');
+                // logger(json_encode($val));
+                $data['activities'][$key]['status'] = config('constants.activity_status.'.$val['status_id']);
                 $data['activities'][$key]['tasks'] = App\Task::where('activity_id', $val['id'])->get();
             }
+            // logger(json_encode($data['activities'],JSON_PRETTY_PRINT));
 
             $data['expenses'] =  App\ProjectExpense::where('proj_id', $id)->get();
-            logger(EMPTY($data['expenses']));
+            // logger(EMPTY($data['expenses']));
             $data['total_expense'] = App\ProjectExpense::where('proj_id', $id)
             ->sum('amount');
 
@@ -939,6 +950,7 @@ class ProjectController extends Controller
             $html = view('reports/project', $data);
             $html = utf8_encode($html);
             $pdf = new \mPDF();
+            $pdf->setFooter('{PAGENO} / {nb}');
             $pdf->writeHTML($html);
 
             // $user = auth()->user()->infos[0];
@@ -949,7 +961,7 @@ class ProjectController extends Controller
         }
         catch(\Exception $e)
         {
-
+            logger($e);
             $msg = $e->getMessage();
         }
         $data['status'] = $status;
@@ -982,6 +994,8 @@ class ProjectController extends Controller
             $html = view('reports/project-summary', compact('delayed', 'onTime', 'completed'));
             $html = utf8_encode($html);
             $pdf = new \mPDF();
+
+            $pdf->setFooter('{PAGENO} / {nb}');
             $pdf->writeHTML($html);
 
             $user = auth()->user()->infos[0];
@@ -1032,6 +1046,8 @@ class ProjectController extends Controller
             $html = view('reports/project-expense', $data);
             $html = utf8_encode($html);
             $pdf = new \mPDF();
+
+            $pdf->setFooter('{PAGENO} / {nb}');
             $pdf->writeHTML($html);
             $user = auth()->user()->infos[0];
             $fullName = $user->last_name . ', ' . $user->first_name . ' ' . $user->middle_name;

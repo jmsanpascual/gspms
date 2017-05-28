@@ -17,4 +17,11 @@ return [
     'proj_status_incomplete' => 7,
     'budget_request_for_approval' => 1,
     'budget_request_approved' => 2,
+    'activity_status' => [
+        '',
+        'For Approval',
+        'On-going',
+        'Disapproved',
+        'Completed'
+    ]
 ];

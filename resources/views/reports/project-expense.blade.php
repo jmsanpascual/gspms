@@ -1,8 +1,9 @@
 <html>
 <head>
-	<title>
-		Green School - Project Expense Report
-	</title>
+	<img src="{{asset('img/logo.png')}}">
+	  <title>
+	  Lasallian Institute for the Environment
+	  </title>
 
     {!! HTML::style('css/bootstrap/css/bootstrap.min.css'); !!}
 </head>

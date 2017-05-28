@@ -1,13 +1,17 @@
 <html>
 <head>
+	<img src="{{asset('img/logo.png')}}">
 	<title>
-		Green School - Project Charter Report
+	Lasallian Institute for the Environment
 	</title>
 
     {!! HTML::style('css/bootstrap/css/bootstrap.min.css'); !!}
 </head>
 <center>
 <style>
+	.normal {
+		font-weight: normal !important;
+	}
 	td:nth-child(1), td:nth-child(3) {
 		font-weight: bold;
 		padding : 10px;
@@ -106,23 +110,53 @@
     <td colspan="4"><h4><u><b>Activities</b></h4></u></td>
   </tr>
   <tr>
-    <td colspan="4">
-    <ul class = "objectives">
-      @foreach($activities as $key => $value)
-      <li>{{$value['name']}}</li>
+	<td colspan="4">
+		<table class = "table table-bordered" style="padding:20px; width:100%">
+			<tr>
+				<th>Name</th>
+				<th>Tasks</th>
+				<th>Remarks</th>
+				<th>Status</th>
+			</tr>
+			@if(COUNT($activities) == 0)
+				<tr>
+					<td colspan="2" class = "normal">No activities found</td>
+				</tr>
+			@endif
+			@foreach($activities as $key => $value)
+				<tr>
+					<td  style="font-weight: normal !important;"> {{$value['name']}}</td>
+					<td>
+						{{-- TASKS --}}
+						<table class = "table table-bordered" style="padding:20px; width:100%">
+							<tr>
+								<th>Name</th>
+								<th>Volunteers</th>
+							</tr>
+							@if(COUNT($value['tasks']) == 0)
+								<tr>
+									<td colspan="2"  style="font-weight: normal !important;">
+										No Tasks Available
+									</td>
+								</tr>
+							@endif
+							@foreach($value['tasks'] AS $val)
+								<tr>
+									<td  style="font-weight: normal !important;">{{$val['name']}}</td>
+									<td>{{ $val['volunteer'] }}</td>
+								</tr>
+							@endforeach
+						</table>
+					</td>
+					<td style="font-weight: normal !important;">{{$value['remarks'] ?: 'No Remarks yet.'}}</td>
+					<td>{{$value['status']}}</td>
+				</tr>
+			@endforeach
 
-          &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"><u>TASKS</u></span><br>
-          @foreach($value['tasks'] AS $val)
-            &nbsp;&nbsp;&nbsp;&nbsp;<span>- {{$val['name']}}</span><br>
-          @endforeach
-          @if(COUNT($value['tasks']) == 0)
-            &nbsp;&nbsp;&nbsp;&nbsp;<span>No task(s) found</span><br>
-          @endif
-      @endforeach
-    </ul>
-    </td>
+		</table>
+	</td>
   </tr>
-  {{-- <tr style = "margin-top:20px;">
+{{-- <tr style = "margin-top:20px;">
     <td colspan="4"><h4><u><b>Milestones</b></h4></u></td>
   </tr>
   <tr>
