@@ -120,7 +120,9 @@ class NotificationController extends Controller
         $status = FALSE;
         $message = '';
         try {
-            $todo = UserNotification::where('user_id', auth()->id())
+            $now = date('Y-m-d H:i:s', strtotime('-1 day'));
+            $week = date('Y-m-d H:i:s', strtotime("+8 day", strtotime($now)));
+            $todo = UserNotification::where('user_id', auth()->id())->whereBetween('user_notifications.created_at', [$now, $week])
                 ->leftJoin('notifications', 'notifications.id', '=', 'user_notifications.notification_id')
                 ->leftJoin('projects', 'projects.id', '=', 'notifications.project_id');
 

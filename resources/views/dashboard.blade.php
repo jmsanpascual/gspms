@@ -22,7 +22,11 @@ ng-app='dashboard'
           <!--breadcrumbs end -->
           <h1 class="h1">Welcome {{ Session::get('first_name') }}!</h1>
           <br><br><br>
-          <h4> Here are the list of reminders for you as of today, <b>{{ date('F d, Y')}}</b>.</h4>
+          <?php
+            $now = date('F d, Y');
+            $week = date('F d, Y', strtotime("+7 day", strtotime($now)));
+          ?>
+          <h4> Here are the list of reminders for you this week, <b>{{ $now }}</b> to <b>{{$week}}</b>.</h4>
           <hr>
       </div>
   </div>
