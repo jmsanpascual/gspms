@@ -27,6 +27,10 @@ Route::get('create.account', array('as' => 'create.account', function () {
     return view('layouts/index');
   });
 
+Route::get('activity-chart', 'ProjectController@getActivityChart');
+Route::get('project-chart', 'ProjectController@getProjectChart');
+Route::get('project-status-chart', 'ProjectController@getProjectStatusChart');
+
 Route::post('/login', 'UserController@login');
 Route::get('/logout', 'UserController@logout');
 Route::get('/users', 'UserController@index');

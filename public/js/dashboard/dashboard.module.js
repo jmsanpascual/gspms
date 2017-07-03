@@ -19,6 +19,7 @@
         'upload',
         'toast',
         'project-related',
-        'notification'
+        'notification',
+        'dashboardHead'
     ]);
 })();
