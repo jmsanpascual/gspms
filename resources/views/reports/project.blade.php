@@ -163,7 +163,7 @@
 
   </tr> --}}
   <tr style = "padding-top:10px;">
-    <td colspan="4"><h4><u><b>Project Budget</b></h4></u></td>
+    <td colspan="4"><h4><u><b>Project Budget Allocation</b></h4></u></td>
   </tr>
   <tr>
     <td>Initial Budget: </td>
