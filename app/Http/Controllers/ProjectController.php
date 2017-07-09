@@ -1107,4 +1107,136 @@ class ProjectController extends Controller
         $projects = App\Projects::where('proj_status_id', '1')->get();
         return Response::json($projects);
     }
+
+    public function getActivityChart()
+    {
+        $activities = App\Activities::get(['status_id']);
+        $status = App\ActivityStatus::get(['id', 'name']);
+
+        $data = [];
+        $colors = [];
+        $labels = [];
+        $total = $activities->count();
+        foreach($status as $key => $val) {
+            $numOfProj = $activities->where('status_id', $val->id)->count();
+            $value = $numOfProj/$total * 100;
+            $color = $this->getColorsUnique($key);
+            $data[] = number_format($value, 2);
+            $colors[] = $color;
+            $labels[] = $val->name;
+        }
+
+        $params = [
+            'type' => 'pie',
+            'data' => [
+                'datasets'=> [[
+                    'data' => $data,
+                    'backgroundColor' => $colors
+                ]],
+                'labels' => $labels,
+            ],
+            'options' => [
+                'responsive' => true
+            ]
+        ];
+        return $params;
+    }
+
+    public function getProjectChart()
+    {
+        // get all programs
+        $project = App\Projects::get(['program_id']);
+        $programs = App\Program::get(['id','name']);
+
+        $data = [];
+        $colors = [];
+        $labels = [];
+        $total = $project->count();
+        foreach($programs as $key => $val) {
+            $numOfProj = $project->where('program_id', $val->id)->count();
+            $value = $numOfProj/$total * 100;
+            $color = $this->getColorsUnique($key);
+            $data[] = number_format($value, 2);
+            $colors[] = $color;
+            $labels[] = $val->name;
+        }
+
+        $params = [
+            'type' => 'pie',
+            'data' => [
+                'datasets'=> [[
+                    'data' => $data,
+                    'backgroundColor' => $colors
+                ]],
+                'labels' => $labels,
+            ],
+            'options' => [
+                'responsive' => true
+            ]
+        ];
+        return $params;
+    }
+
+    public function getProjectStatusChart()
+    {
+        $project = App\Project::get(['proj_status_id']);
+        $status = App\ProjectStatus::get(['id', 'name']);
+
+        $data = [];
+        $colors = [];
+        $labels = [];
+        $total = $project->count();
+        foreach($status as $key => $val) {
+            $numOfProj = $project->where('proj_status_id', $val->id)->count();
+            $value = $numOfProj/$total * 100;
+            $color = $this->getColorsUnique($key);
+            $data[] = number_format($value, 2);
+            $colors[] = $color;
+            $labels[] = $val->name;
+        }
+
+        $params = [
+            'type' => 'pie',
+            'data' => [
+                'datasets'=> [[
+                    'data' => $data,
+                    'backgroundColor' => $colors
+                ]],
+                'labels' => $labels,
+            ],
+            'options' => [
+                'responsive' => true
+            ]
+        ];
+        return $params;
+    }
+
+    public function getColorsUnique($key) {
+        $colors = [
+            // BLUE
+            '#0074D9',
+            // AQUA
+            '#7FDBFF',
+            // TEAL
+            '#39CCCC',
+            // OLIVE
+            '#3D9970',
+            // GREEN
+            '#2ECC40',
+            // LIME
+            '#01FF70',
+            // YELLOW
+            '#FFDC00',
+            // ORANGE
+            '#FF851B',
+            // RED
+            '#FF4136',
+            // MAROON
+            '#85144b',
+            // FUCHSIA
+            '#F012BE'
+        ];
+
+        return $colors[$key];
+    }
 }

@@ -322,7 +322,7 @@
             <li ng-if = "submitData.proj.proj_status_id == 3"><a target="_blank" href="{{asset('projects/report/completion')}}/@{{submitData.proj.id}}">
               Project Completion Report</a></li>
             <!-- <li><a target="_blank" href="{{asset('projects/report/summary')}}/@{{submitData.proj.id}}">Project Summary Report</a></li> -->
-            <li><a target="_blank" href="{{asset('projects/report/expense')}}/@{{submitData.proj.id}}">Budget/Expense Report</a></li>
+            <li><a target="_blank" href="{{asset('projects/report/expense')}}/@{{submitData.proj.id}}">Expense Report</a></li>
           </ul>
         </div>
       <!-- <a class = "btn btn-default btn-sm" target = "_blank" href = "{{asset('projects/report')}}/@{{submitData.proj.id}}">View Progress Report</a> -->

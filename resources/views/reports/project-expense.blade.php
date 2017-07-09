@@ -49,13 +49,17 @@
 <table width = "100%">
 	<tr>
 		<td colspan= "4" class = "sub-title">
-			<h1><b>BUDGET / EXPENSE REPORT</b></h1>
+			<h1><b>EXPENSE REPORT</b></h1>
       <br>
       (Period: {{date('F Y', strtotime($proj->start_date))}} - {{date('F Y', strtotime($proj->end_date))}})
     </td>
 	</tr>
   <tr>
-    <td colspan="4"><h4><u><b>Project Completed</b></h4></u></td>
+    <td colspan="4"><h4><u><b>Project Budget Allocation</b></h4></u></td>
+  </tr>
+  <tr>
+	  <td>Initial Budget: </td>
+	  <td>{{'P '.number_format($proj->total_budget, 2)}}</td>
   </tr>
   <?php $total=0; ?>
   @foreach($categories as $category)

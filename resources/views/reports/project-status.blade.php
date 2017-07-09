@@ -160,7 +160,7 @@
 
   </tr> --}}
   <tr style = "padding-top:10px;">
-    <td colspan="2"><h4><u><b>Project Budget</b></h4></u></td>
+    <td colspan="2"><h4><u><b>Project Budget Allocation</b></h4></u></td>
   </tr>
   <tr>
     <td>Initial Budget: </td>
@@ -202,7 +202,7 @@
           <th style="padding:10px;"><u> CATEGORY </u></th>
           <th style="padding:10px;"><u> ITEM </u></th>
           <th style="padding:10px;"><u> ACTUAL EXPENSE </u></th>
-          <th style="padding:10px;"><u> PROPOSED BUDGET </u></th>
+          <th style="padding:10px;"><u> BUDGET </u></th>
           <th style="padding:10px;"><u> REMAINING AMOUNT </u></th>
         </tr>
         <?php $remainingTotal = 0; $totalExpense=0;?>
@@ -261,13 +261,13 @@
   <tr>
     <td> Initial Budget </td>
     <td style="text-align:right"> P {{number_format($proj->total_budget,2)}} </td>
-    <td>Total Proposed Budget Expense</td>
+    <td>Total Budget</td>
     <td style="text-align:right">P {{number_format($total_expense,2, '.',',')}} </td>
   </tr>
   <tr>
-    <td>Total Proposed Budget Expense</td>
+    <td>Total Budget </td>
     <td style="text-align:right"> - P {{number_format($total_expense,2, '.',',')}} </td>
-    <td>Total Expense:</td>
+    <td>Total Project Expense:</td>
   	<td style="text-align:right"> - P {{ number_format($totalExpense, 2, '.',',') }}</td>
   </tr>
   <tr>
