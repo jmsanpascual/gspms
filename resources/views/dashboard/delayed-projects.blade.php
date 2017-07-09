@@ -31,7 +31,7 @@
                     <td ng-bind="project.name"></td>
                     <td ng-bind="project.start_date"></td>
                     <td ng-bind="project.end_date"></td>
-                    <td class="right" ng-bind="project.total_budget"></td>
+                    <td class="right" ng-bind="project.total_budget | number"></td>
                     <td ng-bind="project.status"></td>
                     <td>
                       <button class="btn btn-warning btn-sm" ng-click="pc.edit($index, project)">

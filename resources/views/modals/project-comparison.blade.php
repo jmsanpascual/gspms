@@ -94,8 +94,8 @@
           </tr>
           <tr ng-repeat="data in submitData.projectexpense">
             <td>@{{data.category}}</td>
-            <td  style="text-align:right">@{{data.amount}}</td>
-            <td  style="text-align:right">@{{data.remaining_amount}}</td>
+            <td  style="text-align:right">@{{data.amount | number}}</td>
+            <td  style="text-align:right">@{{data.remaining_amount | number}}</td>
           </tr>
           <tr ng-if="submitData.projectexpense.length == 0">
             <td colspan="3">No record(s) found</td>
@@ -111,8 +111,8 @@
           </tr>
           <tr ng-repeat="data in submitData.proj.projectexpense">
             <td>@{{data.category}}</td>
-            <td  style="text-align:right">@{{data.amount}}</td>
-            <td  style="text-align:right">@{{data.remaining_amount}}</td>
+            <td  style="text-align:right">@{{data.amount | number}}</td>
+            <td  style="text-align:right">@{{data.remaining_amount | number}}</td>
           </tr>
           <tr ng-if="submitData.proj.projectexpense.length == 0">
             <td colspan="3">No record(s) found</td>

@@ -10,7 +10,7 @@
  		<div class = "form-group">
  			<div class = "row">
  				<label class = "col-md-3">Average Total Budget</label>
- 				<label class = "col-md-3" ng-bind="prc.ave_budget"></label>
+ 				<label class = "col-md-3" ng-bind="prc.ave_budget | number"></label>
  				<label class = "col-md-3">Average Duration</label>
  				<label class = "col-md-3" ng-bind="prc.ave_duration"></label>
  			</div>
@@ -18,7 +18,7 @@
  		<div class = "form-group">
  			<div class = "row">
  				<label class = "col-md-3">Minimum Total Budget</label>
- 				<label class = "col-md-3" ng-bind="prc.min_budget"></label>
+ 				<label class = "col-md-3" ng-bind="prc.min_budget | number"></label>
  				<label class = "col-md-3">Minimum Duration</label>
  				<label class = "col-md-3" ng-bind="prc.min_duration"></label>
  			</div>
@@ -26,7 +26,7 @@
  		<div class = "form-group">
  			<div class = "row">
  				<label class = "col-md-3">Maximum Total Budget</label>
- 				<label class = "col-md-3" ng-bind="prc.max_budget"></label>
+ 				<label class = "col-md-3" ng-bind="prc.max_budget | number"></label>
  				<label class = "col-md-3">Max Duration</label>
  				<label class = "col-md-3" ng-bind="prc.max_duration"></label>
  			</div>

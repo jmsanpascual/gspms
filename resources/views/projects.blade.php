@@ -49,7 +49,7 @@ ng-app='project.controller'
                       <td ng-bind="data.name"></td>
                       <td ng-bind="data.start_date"></td>
                       <td ng-bind="data.end_date"></td>
-                      <td ng-bind="data.total_budget"></td>
+                      <td ng-bind="data.total_budget | number"></td>
                       <td ng-bind="data.status"></td>
                       <td>
                         <button class="btn btn-warning btn-sm" ng-if = "data.champion_id == {{Session::get('id')}} ||

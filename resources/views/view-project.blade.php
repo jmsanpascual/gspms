@@ -42,7 +42,7 @@
               <tr ng-repeat='project in projects'>
                 <td ng-bind='$index'></td>
                 <td ng-bind='project.name'></td>
-                <td ng-bind='project.total_budget'></td>
+                <td ng-bind='project.total_budget | number'></td>
                 <td ng-bind='project.start_date'></td>
                 <td ng-bind='project.end_date'></td>
               </tr>

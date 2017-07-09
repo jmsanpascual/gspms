@@ -29,7 +29,7 @@
                       <tr ng-repeat = "fund in flc.schoolFunds">
                         <!-- <td ng-bind="fund.type"></td> -->
                         <td ng-bind="fund.referer.name"></td>
-                        <td class="right" ng-bind="fund.amount"></td>
+                        <td class="right" ng-bind="fund.amount | number"></td>
                         <td ng-bind="fund.received_date"></td>
                         <td ng-bind="fund.year"></td>
                       </tr>
@@ -66,7 +66,7 @@
                       <tr ng-repeat = "fund in flc.projectFunds">
                         <!-- <td ng-bind="fund.type"></td> -->
                         <td ng-bind="fund.referer.name"></td>
-                        <td class="right" ng-bind="fund.amount"></td>
+                        <td class="right" ng-bind="fund.amount | number"></td>
                         <td ng-bind="fund.received_date"></td>
                         <td ng-bind="fund.year"></td>
                       </tr>

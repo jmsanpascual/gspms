@@ -29,8 +29,8 @@
               <td>@{{data.item_name}}</td>
               <td>@{{data.category}}</td>
               <td>@{{data.quantity}} (@{{data.quantity_label}})</td>
-              <td class="right">@{{data.price}}</td>
-              <td class="right">@{{ ((data.price) * (data.quantity)) }}</td>
+              <td class="right">@{{data.price  | number}}</td>
+              <td class="right">@{{ ((data.price) * (data.quantity))  | number}}</td>
               <td>
 
               @if(Session::get('role') == config('constants.role_finance'))

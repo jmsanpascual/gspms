@@ -175,8 +175,8 @@
           <tbody>
             <tr ng-repeat = "data in pec.projectexpense">
               <td>@{{data.category}}</td>
-              <td>@{{data.amount}}</td>
-              <td>@{{data.remaining_amount.toFixed(2)}}</td>
+              <td>@{{data.amount | number}}</td>
+              <td>@{{data.remaining_amount.toFixed(2) | number}}</td>
               <td>
               @if(Session::get('role') == config('constants.role_finance'))
                 <button ng-if = "submitData.proj.proj_status_id != 3" class="btn btn-warning btn-sm" ng-click="pec.edit(data)">
