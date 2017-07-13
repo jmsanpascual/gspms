@@ -970,26 +970,31 @@ class ProjectController extends Controller
         return Response::json($data);
     }
 
-    public function summaryReport()
+    public function summaryReport(Request $request)
     {
+        $period = $request->all();
         $status = FALSE;
         $msg = '';
         try
         {
             // $projects = Project::get();
-            $completed = App\Project::where('proj_status_id', config('constants.proj_status_completed'))->get();
+            $completed = App\Project::where('proj_status_id', config('constants.proj_status_completed'))
+                ->whereBetween(DB::raw('YEAR(start_date)'), [$period['from'], $period['to']])->get();
             $onTime = App\Project::where('proj_status_id', config('constants.proj_status_completed'))
-                ->where('end_date', '>=', DB::raw('actual_end'))->get();
+                ->where('end_date', '>=', DB::raw('actual_end'))
+                ->whereBetween(DB::raw('YEAR(start_date)'), [$period['from'], $period['to']])->get();
                 logger($onTime);
-            $delayed = App\Project::where(function($query){
+            $delayed = App\Project::where(function($query) use ($period) {
                 //delayed projects
                 $query->where('proj_status_id', '!=', config('constants.proj_status_completed'))
-                    ->where('end_date', '<', date('Y-m-d H:i:s'));
+                    ->where('end_date', '<', date('Y-m-d H:i:s'))
+                    ->whereBetween(DB::raw('YEAR(start_date)'), [$period['from'], $period['to']]);
             })
             // completed but delayed
-                ->orWhere(function($query){
+                ->orWhere(function($query) use ($period) {
                 $query->where('proj_status_id', config('constants.proj_status_completed'))
-                    ->where('end_date', '<', DB::raw('actual_end'));
+                    ->where('end_date', '<', DB::raw('actual_end'))
+                    ->whereBetween(DB::raw('YEAR(start_date)'), [$period['from'], $period['to']]);
             })->get();
             $html = view('reports/project-summary', compact('delayed', 'onTime', 'completed'));
             $html = utf8_encode($html);
@@ -1238,5 +1243,9 @@ class ProjectController extends Controller
         ];
 
         return $colors[$key];
+    }
+
+    public function periodModal() {
+      return view('modals.period-modal');
     }
 }

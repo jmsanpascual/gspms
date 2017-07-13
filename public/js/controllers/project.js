@@ -152,6 +152,39 @@ angular.module('project.controller', [
         });
     }
 
+    vm.statusReport = function () {
+        var dates = getUniqueStartDates();
+        var attr = {
+            size: 'sm',
+            templateUrl : '../projects/period-modal',
+            dates : dates,
+            period: {
+              from: dates[0],
+              to: dates[0]
+            }
+        };
+
+        var modal = defaultModal.showModal(attr);
+        return modal.result.then(function (data) {
+          //
+        }, function() {
+          //
+        });
+    };
+
+    function getUniqueStartDates() {
+       var dates = [];
+       for (var i = 0; i < vm.projects.length; i++) {
+         var proj = vm.projects[i];
+         var date = parseInt(proj.start_date.substring(0, 4));
+         if (dates.indexOf(date) == -1) {
+           dates.push(date);
+         }
+       }
+       console.log(dates);
+       return dates;
+    }
+
     function edit(index, proj) {
         // console.log(proj);
         var attr = {

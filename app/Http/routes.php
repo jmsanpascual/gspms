@@ -86,6 +86,7 @@ Route::get('projects/compare', function() {
     return view('modals/project-comparison');
 });
 
+Route::get('projects/period-modal', 'ProjectController@periodModal');
 Route::get('projects/get-on-going-projects', 'ProjectController@getOnGoingProjects');
 Route::post('projects/update-total-budget', 'ProjectController@updateTotalBudget');
 Route::get('projects/chart/{id}', 'ProjectController@createChart')->name('proj_chart');

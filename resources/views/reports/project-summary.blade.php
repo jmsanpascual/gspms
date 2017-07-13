@@ -37,7 +37,7 @@
 </style>
 <body>
 <div class = "row">
-    <h1 ><u>Project Summary</u></h1>
+    <h1 ><u>Project Status</u></h1>
 </div>
 
 <h3><u>Projects Completed</u><h3>
