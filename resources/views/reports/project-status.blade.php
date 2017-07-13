@@ -47,7 +47,7 @@
 <table width = "100%">
 	<tr>
 		<td colspan= "4" class = "sub-title">
-			<h1><b>STATUS REPORT</b></h1>
+			<h1><b>PROGRESS REPORT</b></h1>
       <br>
       (Period: {{date('F Y', strtotime($proj->start_date))}} - {{date('F Y', strtotime($proj->end_date))}})
     </td>

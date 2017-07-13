@@ -63,28 +63,30 @@
   </tr>
   <?php $total=0; ?>
   @foreach($categories as $category)
-  <tr>
-	<td colspan = "4">
-		<table class = "table table-bordered" width="100%">
-			<tr>
-				<th style="padding:10px;">CATEGORY</th>
-				<th style="padding:10px;">EXPENSE</th>
-				<th style="padding:10px;">ACTIVITY</th>
-			</tr>
-			<?php $name = $category->category;?>
-			@foreach($category->activities as $activity)
-			<tr>
-				<td>{{$name}}</td>
-				<td>{{$activity->expense}}</td>
-				<td>{{$activity->name}}</td>
-			</tr>
-			<?php $name = '';
-			$total += $activity->expense
-			?>
-			@endforeach
-		</table>
-	</td>
-  </tr>
+		@if(count($category->activities) != 0)
+	  <tr>
+		<td colspan = "4">
+			<table class = "table table-bordered" width="100%">
+				<tr>
+					<th style="padding:10px;">CATEGORY</th>
+					<th style="padding:10px;">EXPENSE</th>
+					<th style="padding:10px;">ACTIVITY</th>
+				</tr>
+				<?php $name = $category->category;?>
+				@foreach($category->activities as $activity)
+				<tr>
+					<td>{{$name}}</td>
+					<td>{{$activity->expense}}</td>
+					<td>{{$activity->name}}</td>
+				</tr>
+				<?php $name = '';
+				$total += $activity->expense
+				?>
+				@endforeach
+			</table>
+		</td>
+	  </tr>
+		@endif
   @endforeach
   @if(EMPTY($categories) || COUNT($categories) == 0)
   <tr>

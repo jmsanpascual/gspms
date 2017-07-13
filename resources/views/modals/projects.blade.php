@@ -201,11 +201,11 @@
 
         <h3 ng-init="mc.activate(submitData.proj, padtc)" ng-controller="MilestoneController as mc">Activities
           @if(Session::get('role') == config('constants.role_life'))
-          <button class="btn btn-success btn-sm" ng-click="mc.add()">
-            Milestone
+          <button class="btn btn-primary btn-sm" ng-click="mc.add()">
+            Add Milestone
           </button>
           @endif
-          @if(Session::get('role') == config('constants.role_champion'))
+          @if(Session::get('role') == config('constants.role_champion') || Session::get('role') == config('constants.role_life'))
           <button class="btn btn-success btn-sm" ng-click="mc.view()">
             Milestone
           </button>
@@ -315,7 +315,7 @@
           <ul class="dropdown-menu">
             <li>
               <a target="_blank" href="{{asset('projects/report/status')}}/@{{submitData.proj.id}}"
-              ng-if = "submitData.proj.proj_status_id != 3">Status Report</a></li>
+              ng-if = "submitData.proj.proj_status_id != 3">Progress Report</a></li>
             <li>
               <a target="_blank" href="{{asset('projects/report/progress')}}/@{{submitData.proj.id}}">Project Charter Report</a></li>
 
