@@ -50,11 +50,8 @@
 
 @section('scripts')
     @parent
-    {!! HTML::script('js/dashboard-head/dashboard-head.module.js') !!}
-    {!! HTML::script('js/dashboard-head/project-chart/project-chart.module.js') !!}
     {!! HTML::script('js/dashboard-head/project-chart/project-chart.controller.js') !!}
     {!! HTML::script('js/dashboard-head/project-chart/project-chart-manager.factory.js') !!}
-    {!! HTML::script('js/dashboard-head/activity-chart/activity-chart.module.js') !!}
     {!! HTML::script('js/dashboard-head/activity-chart/activity-chart.controller.js') !!}
     {!! HTML::script('js/dashboard-head/activity-chart/activity-chart-manager.factory.js') !!}
 @endsection

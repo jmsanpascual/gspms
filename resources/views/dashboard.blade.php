@@ -58,10 +58,14 @@ ng-app='dashboard'
 {!! HTML::script('js/dashboard/todo.controller.js') !!}
 {!! HTML::script('js/dashboard/upcoming.controller.js') !!}
 {!! HTML::script('js/dashboard/delayed-projects.controller.js') !!}
-<!-- {!! HTML::script('js/dashboard/factories/champion-manager.factory.js') !!}
+{!! HTML::script('js/dashboard/factories/champion-manager.factory.js') !!}
 {!! HTML::script('js/dashboard/factories/program-manager.factory.js') !!}
 {!! HTML::script('js/dashboard/factories/resource-person-manager.factory.js') !!}
 {!! HTML::script('js/dashboard/factories/status-manager.factory.js') !!} -->
+
+{!! HTML::script('js/dashboard-head/dashboard-head.module.js') !!}
+{!! HTML::script('js/dashboard-head/project-chart/project-chart.module.js') !!}
+{!! HTML::script('js/dashboard-head/activity-chart/activity-chart.module.js') !!}
 
 <!-- END Dashboard -->
 @endsection
