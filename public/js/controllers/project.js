@@ -43,15 +43,15 @@ angular.module('project.controller', [
             } else {
                 alert('Unable to load datatable');
             }
-         });
+        });
     }
     vm.refresh();
 
     vm.getResourcePerson = function(program_id, data) {
         return ResourcePerson.get({program_id: program_id}).then(function (resourcePersons) {
             console.log('Resource Persons:', resourcePersons);
-            resourcePersons.unshift({id:'NA', name: 'No Resource Person'});
-            if(data) {
+            resourcePersons.unshift({id: 'NA', name: 'No Resource Person'});
+            if (data) {
                 return data.resource_person = resourcePersons;
             }
 
@@ -73,15 +73,15 @@ angular.module('project.controller', [
 
     // instantiate program
     ProgramRestApi.query().$promise.then(function (programs) {
-       var result = programs[0];
-       console.log('Programs:', result);
+        var result = programs[0];
+        console.log('Programs:', result);
 
-       if (result.status) {
-           $scope.program = result.program;
-           vm.getResourcePerson($scope.program[0]);
-       } else {
-           console.log(result.msg);
-       }
+        if (result.status) {
+            $scope.program = result.program;
+            vm.getResourcePerson($scope.program[0]);
+        } else {
+            console.log(result.msg);
+        }
     });
 
     // instantiate project status
@@ -129,16 +129,16 @@ angular.module('project.controller', [
     this.add = function () {
         var attr = {
             size: 'lg',
-            templateUrl : 'projects',
+            templateUrl: 'projects',
             saveUrl: '../projects',
             action: 'Add',
-            keepOpen : true, // keep open even after save
-            programs : $scope.program,
+            keepOpen: true, // keep open even after save
+            programs: $scope.program,
             program: $scope.program[0],
-            status : $scope.status,
-            champions : $scope.champions,
+            status: $scope.status,
+            champions: $scope.champions,
             champion: $scope.champions[0],
-            resource_person : vm.resourcePersons,
+            resource_person: vm.resourcePersons,
             resource: vm.resourcePersons[0],
             proj: {objective: {}},
             getResourcePerson: vm.getResourcePerson
@@ -146,7 +146,7 @@ angular.module('project.controller', [
         var modal = defaultModal.showModal(attr);
 
         // Add to datatable
-        modal.result.then(function(data){
+        modal.result.then(function(data) {
             // vm.projects.push(data);
             vm.refresh();
         });
@@ -189,18 +189,18 @@ angular.module('project.controller', [
         // console.log(proj);
         var attr = {
             size: 'lg',
-            templateUrl : 'projects',
+            templateUrl: 'projects',
             saveUrl: '../projects/update',
             action: 'Edit',
             // keepOpen : true, // keep open even after save
-            programs : $scope.program,
+            programs: $scope.program,
             program: {id: proj.program_id},
-            status : $scope.status,
-            champions : $scope.champions,
+            status: $scope.status,
+            champions: $scope.champions,
             champion: {id: proj.champion_id},
-            resource_person : vm.resourcePersons,
+            resource_person: vm.resourcePersons,
             resource: {id: proj.resource_person_id},
-            proj : angular.copy(proj),
+            proj: angular.copy(proj),
             getResourcePerson: vm.getResourcePerson
         };
 
@@ -221,14 +221,14 @@ angular.module('project.controller', [
         // Then reload the data so that DT is refreshed
         // vm.dtInstance.reloadData();
         var attr = {
-            deleteName : proj.name,
-            deletedKey : proj.id
+            deleteName: proj.name,
+            deletedKey: proj.id
         }
         var del = defaultModal.delConfirm(attr);
 
-        del.result.then(function(id){
-            Project.remove({id: id}).then(function(result){
-                if(result.status)
+        del.result.then(function(id) {
+            Project.remove({id: id}).then(function(result) {
+                if (result.status)
                 {
                     console.log('successfully deleted');
                     vm.projects.splice(index, 1);
@@ -242,7 +242,7 @@ angular.module('project.controller', [
     }
 })
 
-.controller('ProjBudgetCtrl', function($http, ExpenseManager, BudgetManager){
+.controller('ProjBudgetCtrl', function($http, ExpenseManager, BudgetManager) {
     var vm = this;
     vm.expense;
     vm.budget;
@@ -253,9 +253,9 @@ angular.module('project.controller', [
     // activate();
 
     function getTotalExpense(proj_id) {
-        if(!proj_id) return;
+        if (!proj_id) return;
 
-        $http.get('../project-expense/total_expense/'+proj_id).then(function(result) {
+        $http.get('../project-expense/total_expense/' + proj_id).then(function(result) {
             result = result.data;
             ExpenseManager.setTotal(result.total_expense);
             vm.expense = ExpenseManager.get();
@@ -263,9 +263,9 @@ angular.module('project.controller', [
     }
 
     function getTotalBudget(proj_id) {
-        if(!proj_id) return;
+        if (!proj_id) return;
 
-        $http.get('../budget-request/getTotalBudget/'+proj_id).then(function(result){
+        $http.get('../budget-request/getTotalBudget/' + proj_id).then(function(result) {
             result = result.data;
             BudgetManager.setTotal(result.total_budget);
             vm.budget = BudgetManager.get();
@@ -274,23 +274,23 @@ angular.module('project.controller', [
 })
 
 .directive('dateFormat', function() {
-  return {
-    require: 'ngModel',
-    link: function(scope, element, attr, ngModelCtrl) {
+    return {
+        require: 'ngModel',
+        link: function(scope, element, attr, ngModelCtrl) {
       //Angular 1.3 insert a formater that force to set model to date object, otherwise throw exception.
       //Reset default angular formatters/parsers
-      ngModelCtrl.$formatters.length = 0;
-      ngModelCtrl.$parsers.length = 0;
+            ngModelCtrl.$formatters.length = 0;
+            ngModelCtrl.$parsers.length = 0;
 
-      ngModelCtrl.$formatters.push(function(valueFromModel) {
+            ngModelCtrl.$formatters.push(function(valueFromModel) {
          //return how data will be shown in input
-          if (valueFromModel) {
+                if (valueFromModel) {
              // For momentjs > 2.9 moment global va is not defined use momentjs instead of moment.
-              return valueFromModel.substr(0, valueFromModel.indexOf(' '));
-          }
-          else
+                    return valueFromModel.substr(0, valueFromModel.indexOf(' ')) || valueFromModel;
+                }
+                else
               return null;
-      });
-    }
-  };
+            });
+        }
+    };
 });

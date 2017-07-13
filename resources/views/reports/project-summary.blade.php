@@ -1,6 +1,5 @@
 <html>
 <head>
-	<img src="{{asset('img/logo.png')}}">
 	  <title>
 	  Lasallian Institute for the Environment
 	  </title>
@@ -36,6 +35,9 @@
     }
 </style>
 <body>
+<div class = "row center">
+    <img src="{{asset('img/life_logo.png')}}" style="width:55px"> Lasallian Institute for the Environment
+</div>
 <div class = "row">
     <h1 ><u>Project Status</u></h1>
 </div>

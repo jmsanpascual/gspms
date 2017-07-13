@@ -63,5 +63,9 @@ ng-app='dashboard'
 {!! HTML::script('js/dashboard/factories/resource-person-manager.factory.js') !!}
 {!! HTML::script('js/dashboard/factories/status-manager.factory.js') !!} -->
 
+{!! HTML::script('js/dashboard-head/dashboard-head.module.js') !!}
+{!! HTML::script('js/dashboard-head/project-chart/project-chart.module.js') !!}
+{!! HTML::script('js/dashboard-head/activity-chart/activity-chart.module.js') !!}
+
 <!-- END Dashboard -->
 @endsection

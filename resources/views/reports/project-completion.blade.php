@@ -1,13 +1,11 @@
 <html>
 <head>
-  <img src="{{asset('img/logo.png')}}">
 	<title>
 	Lasallian Institute for the Environment
 	</title>
 
     {!! HTML::style('css/bootstrap/css/bootstrap.min.css'); !!}
 </head>
-<center>
 <style>
 	td:nth-child(1), td:nth-child(3) {
 		font-weight: bold;
@@ -44,7 +42,15 @@
     margin-left:20px!important;
   }
 </style>
+<body>
 <table width = "100%">
+  <tr>
+    <td colspan="4" style="font-weight:normal;">
+      <center>
+      	<h5><img src="{{asset('img/life_logo.png')}}" style="width:55px"> Lasallian Institute for the Environment</h5>
+      </center>
+    </td>
+  </tr>
 	<tr>
 		<td colspan= "4" class = "sub-title">
 			<h1><b>PROJECT COMPLETION REPORT</b></h1>
@@ -295,4 +301,5 @@
 </table>
     {!! HTML::script('js/others/jquery-1.12.0.min.js') !!}
     {!! HTML::script('plugins/bootstrap/js/bootstrap.min.js') !!}
+  </body>
 </html>
