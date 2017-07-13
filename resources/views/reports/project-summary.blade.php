@@ -35,13 +35,9 @@
     }
 </style>
 <body>
-<table>
-    <tr>
-        <td style="width:100%; text-align:center">
-            <img src="{{asset('img/life_logo.png')}}" style="width:55px"> Lasallian Institute for the Environment
-        </td>
-    </tr>
-</table>
+<div class = "row center">
+    <img src="{{asset('img/life_logo.png')}}" style="width:55px"> Lasallian Institute for the Environment
+</div>
 <div class = "row">
     <h1 ><u>Project Summary</u></h1>
 </div>
