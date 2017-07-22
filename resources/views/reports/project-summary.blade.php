@@ -39,7 +39,7 @@
     <img src="{{asset('img/life_logo.png')}}" style="width:55px"> Lasallian Institute for the Environment
 </div>
 <div class = "row">
-    <h1 ><u>Project Summary</u></h1>
+    <h1 ><u>Project Status</u></h1>
 </div>
 
 <h3><u>Projects Completed</u><h3>
