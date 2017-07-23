@@ -18,6 +18,7 @@ use App\UserRoles;
 use App\Traits\Notify;
 use Carbon\Carbon;
 use App\Fund;
+use Anam\PhantomMagick\Converter;
 
 class ProjectController extends Controller
 {
@@ -734,9 +735,59 @@ class ProjectController extends Controller
         {
             $msg = $e->getMessage();
         }
-        Log::info(json_encode(DB::getQueryLog()));
+        // Log::info(json_encode(DB::getQueryLog()));
         $data['msg'] = $msg;
         $data['status'] = $status;
+        return Response::json($data);
+    }
+
+    public function budgetReport(Request $request)
+    {
+        $status = FALSE;
+        $msg = '';
+        try {
+            $startDate = $request['from'];
+            $endDate = $request['to'];
+            $completed = config('constants.proj_status_completed');
+            $project = new App\Project();
+            // get all projects completed
+            $completed = $project->with('budget_request', 'expenses')
+            ->whereBetween(DB::raw('YEAR(start_date)'), [$startDate, $endDate])
+            ->where('proj_status_id', $completed)->get();
+            $withRequest = $leftOvers = $withoutRequest = [];
+
+            foreach($completed AS $key => &$val) {
+                $val['totalBudgetRequested'] = $val->budget_request->sum('amount');
+                $val['totalExpense'] = $val->expenses->sum('amount');
+                $val['remaining'] = $val['totalBudgetRequested'] + $val['total_budget'] - $val['totalExpense'];
+
+                // projects with budget request
+                if($val['totalBudgetRequested'])
+                    array_push($withRequest, $val);
+
+                // projects with leftover funds
+                if($val['remaining'])
+                    array_push($leftOvers, $val);
+
+                // projects without budget request
+                if(EMPTY($val['totalBudgetRequested']) && EMPTY($val['remaining']))
+                    array_push($withoutRequest, $val);
+            }
+            $html = view('reports/budget', compact('withoutRequest', 'withRequest', 'leftOvers'));
+
+            $html = utf8_encode($html);
+            $pdf = new \mPDF();
+            $pdf->setFooter('{PAGENO} / {nb}');
+            $pdf->writeHTML($html);
+            $pdf->Output();
+            exit();
+        } catch(\Exception $e) {
+            $msg = $e->getMessage();
+        }
+
+        $data['status'] = $status;
+        $data['msg'] = $msg;
+
         return Response::json($data);
     }
 

@@ -9,7 +9,9 @@
         "laravel/framework": "5.2.*",
         "illuminate/html": "5.*",
         "mpdf/mpdf": "^6.0",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "anam/phantommagick": "^1.0",
+        "anam/phantomjs-linux-x86-binary": "^2.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
