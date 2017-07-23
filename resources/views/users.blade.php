@@ -54,8 +54,9 @@ ng-app='users'
                       <td ng-bind="person.lname"></td>
                       <td ng-bind="person.email"></td>
                       <td>
-                        <button class="btn btn-warning btn-sm" ng-click="showCase.edit($index, person)"
-                        ng-if="person.selectedRole == 4">
+                        <!-- <button class="btn btn-warning btn-sm" ng-click="showCase.edit($index, person)"
+                        ng-if="person.selectedRole == 4"> -->
+                        <button class="btn btn-warning btn-sm" ng-click="showCase.edit($index, person)">
                         <i class="fa fa-edit"></i>
                         </button>
                         @if(Session::get('role') == config('constants.role_life'))
