@@ -29,6 +29,14 @@ ng-app='project.controller'
                   <a class="btn btn-default btn-sm pull-right" target="_blank" href = "javascript:;" ng-click="proj.statusReport()" style="margin-right:5px">
                       Project Status Report
                   </a>
+                  @if(Session::get('role') == config('constants.role_champion') ||
+                  Session::get('role') == config('constants.role_exec'))
+                  <a class="btn btn-default btn-sm pull-right"
+                  target="_blank" style="margin-right:5px"
+                  href="{{asset('projects/report/volunteers')}}">
+                    Volunteer Status Report
+                  </a>
+                  @endif
                   <button class = "btn btn-danger btn-sm pull-right" ng-click = "proj.refresh()" style="margin-right:5px">Refresh</button>
 
                   <p class="text-danger"><strong ng-bind="proj.message"></strong></p>

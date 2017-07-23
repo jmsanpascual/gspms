@@ -17,4 +17,14 @@ class ActivityTask extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function volunteers()
+    {
+        return $this->belongsTo('App\User', 'user_id', 'id');
+    }
+
+    public function activity()
+    {
+        return $this->belongsTo('App\Activities');
+    }
 }
