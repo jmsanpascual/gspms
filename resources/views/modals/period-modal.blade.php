@@ -35,7 +35,7 @@
 
 @section('btn')
   <a class="btn btn-success" target="_blank" style="margin-right:5px;color:white;"
-  href="{{ asset('projects/report/summary') }}?from=@{{ submitData.period.from }}&to=@{{ submitData.period.to }}" >
+  href="{{ asset('projects/report') }}/@{{submitData.report}}?from=@{{ submitData.period.from }}&to=@{{ submitData.period.to }}" >
       Generate Report
   </a>
 @stop

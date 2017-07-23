@@ -26,9 +26,24 @@ ng-app='project.controller'
                   Session::get('role') == config('constants.role_exec'))
                   <button class = "btn btn-success btn-sm pull-right" ng-click = "proj.add()"> Add Project</button>&nbsp;
                   @endif
-                  <a class="btn btn-default btn-sm pull-right" target="_blank" href = "javascript:;" ng-click="proj.statusReport()" style="margin-right:5px">
-                      Project Status Report
-                  </a>
+                  <div class="dropdown pull-right" style = "display: inline !important">
+                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">Project Reports
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                      <li>
+                          <a target="_blank" href = "javascript:;"
+                          ng-click="proj.statusReport()">
+                              Project Status Report
+                          </a>
+                        </li>
+                      <li>
+                        <a target="_blank" href="javascript:;" ng-click="proj.budgetReport()">
+                          Project Budget Report</a>
+                      </li>
+
+                    </ul>
+                  </div>
+
                   <button class = "btn btn-danger btn-sm pull-right" ng-click = "proj.refresh()" style="margin-right:5px">Refresh</button>
 
                   <p class="text-danger"><strong ng-bind="proj.message"></strong></p>

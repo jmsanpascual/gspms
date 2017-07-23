@@ -7,32 +7,42 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-  use SoftDeletes;
+    use SoftDeletes;
 
-  protected $table = 'projects';
+    protected $table = 'projects';
 
-  protected $appends = [
+    protected $appends = [
       'start_date',
       'end_date',
       'actual_end'
-  ];
+    ];
 
-  public function getStartDateAttribute($val)
-  {
-      if(EMPTY($val)) return;
+    public function budget_request()
+    {
+        return $this->hasMany('App\ProjectBudgetRequest', 'proj_id');
+    }
 
-      return date('F j, Y', strtotime($val));
-  }
-  public function getEndDateAttribute($val)
-  {
-      if(EMPTY($val)) return;
+    public function expenses()
+    {
+        return $this->hasMany('App\ProjectBudgetRequest', 'proj_id');
+    }
 
-      return date('F j, Y', strtotime($val));
-  }
-  public function getActualEndAttribute($val)
-  {
-      if(EMPTY($val)) return;
+    public function getStartDateAttribute($val)
+    {
+        if(EMPTY($val)) return;
 
-      return date('F j, Y', strtotime($val));
-  }
+        return date('F j, Y', strtotime($val));
+    }
+    public function getEndDateAttribute($val)
+    {
+        if(EMPTY($val)) return;
+
+        return date('F j, Y', strtotime($val));
+    }
+    public function getActualEndAttribute($val)
+    {
+        if(EMPTY($val)) return;
+
+        return date('F j, Y', strtotime($val));
+    }
 }
