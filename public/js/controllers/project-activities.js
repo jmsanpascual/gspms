@@ -1,12 +1,12 @@
 'use strict'
 angular.module('project.activites.controller', [
-        'projectActivities.service',
-        'datatables',
-        'common.service',
-        'ui.bootstrap',
-        'activityStatus.service',
-        'activityDependencies'
-    ])
+    'projectActivities.service',
+    'datatables',
+    'common.service',
+    'ui.bootstrap',
+    'activityStatus.service',
+    'activityDependencies'
+])
 
 .controller('projActDTCtrl', function($rootScope, $scope, $compile, $timeout, DTOptionsBuilder, DTColumnDefBuilder,
     reqDef, defaultModal, ProjectActivitiesRestApi, activityStatusRestApi, ItemManager, Phase, ProgressCalculator) {
@@ -63,17 +63,17 @@ angular.module('project.activites.controller', [
         // if(refreshWithExpense)
             // vm.refreshExpense();
         console.log('getting project activities of project ID', proj_id);
-        ProjectActivitiesRestApi.query({proj_id : proj_id}).$promise.then(function (result) {
-           result = result[0];
+        ProjectActivitiesRestApi.query({proj_id: proj_id}).$promise.then(function (result) {
+            result = result[0];
 
-          if (result.status) {
-              vm.project_activities =  result.proj_activities;
-              vm.percentage = ProgressCalculator.calculatePhasesPercentages(
+            if (result.status) {
+                vm.project_activities =  result.proj_activities;
+                vm.percentage = ProgressCalculator.calculatePhasesPercentages(
                   vm.project, vm.project_activities, vm.phasesPercentages, vm.percent);
-          } else {
-              alert('Unable to load datatable');
-          }
-       });
+            } else {
+                alert('Unable to load datatable');
+            }
+        });
     }
 
     vm.dtOptions = DTOptionsBuilder.newOptions()
@@ -90,7 +90,7 @@ angular.module('project.activites.controller', [
     ];
 
     function setItemData(projAct) {
-        if(projAct.item_id) {
+        if (projAct.item_id) {
             projAct.item = items.tmjFind(projAct.item_id, 'id');
         }
     }
@@ -100,12 +100,12 @@ angular.module('project.activites.controller', [
         items = ItemManager.get();
         var attr = {
             size: 'md',
-            templateUrl : '../project-activities/project-activities',
+            templateUrl: '../project-activities/project-activities',
             saveUrl: '../project-activities',
             action: 'Add',
             // status : $scope.status,
-            projAct : {
-                proj_id : $scope.proj_id,
+            projAct: {
+                proj_id: $scope.proj_id,
                 phase_id: (vm.phases.length) ? vm.phases[0].id : ''
             },
             items: items,
@@ -113,7 +113,7 @@ angular.module('project.activites.controller', [
             phases: vm.phases
         };
 
-        defaultModal.showModal(attr).result.then(function(data){
+        defaultModal.showModal(attr).result.then(function(data) {
             console.log(data);
             vm.project_activities.push(data.projAct);
             // reload the expense
@@ -130,11 +130,11 @@ angular.module('project.activites.controller', [
         items = ItemManager.get();
         var attr = {
             size: 'md',
-            templateUrl : '../project-activities/project-activities',
+            templateUrl: '../project-activities/project-activities',
             saveUrl: '../project-activities/update',
             action: 'Edit',
             // status : $scope.status,
-            projAct : angular.copy(act),
+            projAct: angular.copy(act),
             items: items,
             setItemData: setItemData,
             phases: vm.phases,
@@ -142,7 +142,7 @@ angular.module('project.activites.controller', [
         };
         attr.projAct.proj_id = $scope.proj_id;
 
-        defaultModal.showModal(attr).result.then(function(data){
+        defaultModal.showModal(attr).result.then(function(data) {
             console.log(data);
             vm.project_activities.splice(index, 1, angular.copy(data.projAct));
 
@@ -192,14 +192,14 @@ angular.module('project.activites.controller', [
         // Then reload the data so that DT is refreshed
         // vm.dtInstance.reloadData();
         var attr = {
-            deleteName : act.name,
-            deletedKey : act.id
+            deleteName: act.name,
+            deletedKey: act.id
         }
         var del = defaultModal.delConfirm(attr);
 
-        del.result.then(function(id){
-            ProjectActivitiesRestApi.remove({activity_id : act.id}).$promise.then(function(result){
-                if(result.status)
+        del.result.then(function(id) {
+            ProjectActivitiesRestApi.remove({activity_id: act.id}).$promise.then(function(result) {
+                if (result.status)
                 {
                     console.log('successfully deleted');
                     vm.project_activities.splice(index, 1);
@@ -283,31 +283,28 @@ angular.module('project.activites.controller', [
 })
 
 .constant('actStatus', {
-    ACT_STAT_APPROVED : 2,
-    ACT_STAT_DISAPPROVED : 3,
-    ACT_STAT_COMPLETED : 4
+    ACT_STAT_APPROVED: 2,
+    ACT_STAT_DISAPPROVED: 3,
+    ACT_STAT_COMPLETED: 4
 })
 
-.controller('ActivityStatusCtrl', function($scope, ProjectActivitiesRestApi, actStatus, defaultModal){
+.controller('ActivityStatusCtrl', function($scope, ProjectActivitiesRestApi, actStatus, defaultModal) {
     // this.proj_id;
     var _self = this;
     _self.data = {};
     _self.data.remarks = $scope.submitData.projAct.remarks
     var changeStatus = function()
     {
-        ProjectActivitiesRestApi.request(_self.data).$promise.then(function(result){
-            if(!result.status)
+        ProjectActivitiesRestApi.request(_self.data).$promise.then(function(result) {
+            if (!result.status)
             {
                 alert(result.msg);
                 return;
             }
             // alert('approved');
             // from modal scope
-            console.log(result);
             $scope.submitData.projAct.status_id = result.stat.id;
             $scope.submitData.projAct.status = result.stat.name;
-            console.log('status');
-            console.log($scope.submitData);
             $scope.closeSubmit($scope.submitData);
         });
     }
@@ -315,7 +312,6 @@ angular.module('project.activites.controller', [
     _self.approve = function()
     {
         _self.data.id = actStatus.ACT_STAT_APPROVED; // approved
-        console.log(_self.data);
         changeStatus();
     }
 
@@ -334,8 +330,8 @@ angular.module('project.activites.controller', [
     _self.showAttachments = function() {
         var attr = {
             size: 'md',
-            templateUrl : '../project-attachments/project-attachments',
-            proj_id : $scope.submitData.projAct.id
+            templateUrl: '../project-attachments/project-attachments',
+            proj_id: $scope.submitData.projAct.proj_id
         };
 
         defaultModal.showModal(attr);
@@ -343,15 +339,15 @@ angular.module('project.activites.controller', [
 })
 
 .constant('projStatus', {
-    PROJ_STAT_ONGOING : 1,
-    PROJ_STAT_FOR_APPROVAL : 2,
-    PROJ_STAT_COMPLETED : 3,
-    PROJ_STAT_DISAPPROVED : 4,
+    PROJ_STAT_ONGOING: 1,
+    PROJ_STAT_FOR_APPROVAL: 2,
+    PROJ_STAT_COMPLETED: 3,
+    PROJ_STAT_DISAPPROVED: 4,
     PROJ_STAT_APPROVED: 5,
-    PROJ_STAT_FOR_APPROVAL_LIFE : 6,
+    PROJ_STAT_FOR_APPROVAL_LIFE: 6,
 })
 
-.controller('btnCtrl', function($scope, defaultModal, ProjRestApi, projStatus, $window){
+.controller('btnCtrl', function($scope, defaultModal, ProjRestApi, projStatus, $window) {
     var _self = this;
     _self.proj = {};
 
@@ -366,19 +362,19 @@ angular.module('project.activites.controller', [
         // if(!confirm('Are you sure you want to '))
         //     return;
 
-        ProjRestApi.request(_self.data).$promise.then(function(result){
-            if(!result.status)
+        ProjRestApi.request(_self.data).$promise.then(function(result) {
+            if (!result.status)
             {
                 alert(result.msg);
                 return;
             }
             // alert('approved');
             // from modal scope
-            console.log(result);
+            // console.log(result);
             $scope.submitData.proj.proj_status_id = result.stat.id;
             $scope.submitData.proj.status = result.stat.name;
-            console.log('status');
-            console.log($scope.submitData);
+            // console.log('status');
+            // console.log($scope.submitData);
             $scope.closeSubmit($scope.submitData);
         });
     }
@@ -386,7 +382,7 @@ angular.module('project.activites.controller', [
     _self.approve = function()
     {
         _self.data.id = projStatus.PROJ_STAT_APPROVED; // approved
-        console.log(_self.data);
+        // console.log(_self.data);
         changeStatus();
     }
 
@@ -423,8 +419,8 @@ angular.module('project.activites.controller', [
     {
         var attr = {
             size: 'lg',
-            templateUrl : '../items/items',
-            proj_id : _self.data.proj_id
+            templateUrl: '../items/items',
+            proj_id: _self.data.proj_id
         };
 
         defaultModal.showModal(attr);
@@ -436,8 +432,8 @@ angular.module('project.activites.controller', [
         // console.log(_self.proj_id);
         var attr = {
             size: 'md',
-            templateUrl : '../budget-request/budget-request',
-            proj_id : _self.data.proj_id
+            templateUrl: '../budget-request/budget-request',
+            proj_id: _self.data.proj_id
         };
 
         defaultModal.showModal(attr);
@@ -456,8 +452,8 @@ angular.module('project.activites.controller', [
     _self.showRelated = function() {
         var attr = {
             size: 'md',
-            templateUrl : '../projects/view-related',
-            proj : _self.proj
+            templateUrl: '../projects/view-related',
+            proj: _self.proj
         };
 
         defaultModal.showModal(attr);
@@ -465,7 +461,7 @@ angular.module('project.activites.controller', [
 
     _self.showReport = function()
     {
-        ProjRestApi.report({proj_id : 1}).$promise.then(function(result){
+        ProjRestApi.report({proj_id: 1}).$promise.then(function(result) {
             // console.log(result);
             // if(!result.status)
             // {
@@ -473,10 +469,10 @@ angular.module('project.activites.controller', [
             //     return;
             // }
 
-            var file = new Blob([result], {type : 'application/pdf'});
+            var file = new Blob([result], {type: 'application/pdf'});
             var fileURL = URL.createObjectURL(file);
             $window.open(fileURL);
         });
-        console.log('report');
+        // console.log('report');
     }
 });
