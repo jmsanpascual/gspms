@@ -27,7 +27,7 @@ ng-app='project.controller'
                   <button class = "btn btn-success btn-sm pull-right" ng-click = "proj.add()"> Add Project</button>&nbsp;
                   @endif
                   <div class="dropdown pull-right" style = "display: inline !important">
-                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">Project Reports
+                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" style="margin-right:5px;">Project Reports
                     <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                       <li>
@@ -40,7 +40,11 @@ ng-app='project.controller'
                         <a target="_blank" href="javascript:;" ng-click="proj.budgetReport()">
                           Project Budget Report</a>
                       </li>
-
+                      <li>
+                        <a target="_blank" href="{{asset('projects/report/volunteers')}}">
+                          Volunteer Status Report
+                        </a>
+                      </li>
                     </ul>
                   </div>
 

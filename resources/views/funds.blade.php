@@ -74,13 +74,13 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Total Fund</label>
                         <div class="col-sm-8">
-                          <input class="form-control" type="decimal" placeholder="Total Fund" ng-model="vfc.fund.amount" readonly>
+                          <input class="form-control" type="decimal" placeholder="Total Fund" ng-model="vfc.fund.amount | number" readonly>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Remaining Fund</label>
                         <div class="col-sm-8">
-                          <input class="form-control" type="decimal" placeholder="Remaining Fund" ng-model="vfc.fund.remaining_funds" readonly>
+                          <input class="form-control" type="decimal" placeholder="Remaining Fund" ng-model="vfc.fund.remaining_funds | number" readonly>
                         </div>
                     </div>
                 </form>

@@ -64,8 +64,10 @@ class FundController extends Controller
 
     function getSchoolFunds()
     {
-        $school_fund = SchoolFund::with('referer')->get()->toArray();
-        $proj_fund = ProjectFund::with('referer')->get()->toArray();
+        $school_fund = SchoolFund::with('referer')
+          ->where('amount', '!=', 0)->get()->toArray();
+        $proj_fund = ProjectFund::with('referer')
+          ->where('amount', '!=', 0)->get()->toArray();
 
         return [
             'schoolFunds' => $school_fund,

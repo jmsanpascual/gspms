@@ -76,6 +76,11 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Expertise', 'user_expertise');
     }
 
+    public function tasks()
+    {
+        return $this->hasMany('App\ActivityTask', 'user_id', 'id');
+    }
+
     public function first_post_pic ()
     {
         return $this->hasOne(PostPicture::class)->orderBy('id', 'asc');
