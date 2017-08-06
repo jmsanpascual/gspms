@@ -213,7 +213,7 @@ angular.module('project.controller', [
             size: 'lg',
             templateUrl: 'projects',
             saveUrl: '../projects/update',
-            action: 'Edit',
+            action: 'View',
             // keepOpen : true, // keep open even after save
             programs: $scope.program,
             program: {id: proj.program_id},

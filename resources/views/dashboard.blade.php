@@ -14,11 +14,11 @@ ng-app='dashboard'
   <div class="row">
       <div class="col-md-12">
           <!--breadcrumbs start -->
-          <ul class="breadcrumb">
+          <!-- <ul class="breadcrumb">
               <li>
                 <a href="#">Home</a>
               </li>
-          </ul>
+          </ul> -->
           <!--breadcrumbs end -->
           <h1 class="h1">Welcome {{ Session::get('first_name') }}!</h1>
           <br><br><br>
@@ -26,7 +26,8 @@ ng-app='dashboard'
             $now = date('F d, Y');
             $week = date('F d, Y', strtotime("+7 day", strtotime($now)));
           ?>
-          <h4> Here are the list of reminders for you this week, <b>{{ $now }}</b> to <b>{{$week}}</b>.</h4>
+          <!-- <h4> Here are the list of reminders for you this week, <b>{{ $now }}</b> to <b>{{$week}}</b>.</h4> -->
+          <h4> Here is the overall status for Project, Activities, and Programs.</h4>
           <hr>
       </div>
   </div>

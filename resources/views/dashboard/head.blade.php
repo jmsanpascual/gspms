@@ -31,7 +31,7 @@
     </div>
 </div>
 <div class = "row">
-    <div class="col-md-6" ng-controller = "ProjectChartController as pcc">
+    <div class="col-md-12" ng-controller = "ProjectChartController as pcc">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Project Programs</h3>

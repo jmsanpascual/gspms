@@ -132,7 +132,7 @@ angular.module('project.activites.controller', [
             size: 'md',
             templateUrl : '../project-activities/project-activities',
             saveUrl: '../project-activities/update',
-            action: 'Edit',
+            action: 'View',
             // status : $scope.status,
             projAct : angular.copy(act),
             items: items,
@@ -335,7 +335,7 @@ angular.module('project.activites.controller', [
         var attr = {
             size: 'md',
             templateUrl : '../project-attachments/project-attachments',
-            proj_id : $scope.submitData.projAct.id
+            proj_id : $scope.submitData.projAct.proj_id
         };
 
         defaultModal.showModal(attr);

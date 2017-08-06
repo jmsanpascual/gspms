@@ -27,6 +27,11 @@ class Project extends Model
         return $this->hasMany('App\ProjectBudgetRequest', 'proj_id');
     }
 
+    public function program()
+    {
+        return $this->belongsTo('App\Program');
+    }
+
     public function getStartDateAttribute($val)
     {
         if(EMPTY($val)) return;

@@ -66,7 +66,7 @@
   </form>
   <!-- Items -->
     <div ng-if = "submitData.task.activity.id" ng-controller="ActivityItemExpenseController as aiec">
-        <h3>Item / Expense</h3>
+        <h3>Expense</h3>
         <hr ng-init = 'aiec.getProjectExpense(submitData.task.activity.project.id);aiec.activity_id = submitData.task.activity.id;aiec.refresh()'>
         @if(Session::get('role') == config('constants.role_champion') || Session::get('role') == config('constants.role_volunteer') )
         <button class = "btn btn-sm btn-success pull-right" ng-click = "aiec.add()">Add Item/Expense</button>

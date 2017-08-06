@@ -758,13 +758,13 @@ label.valid {
   min-height: 80px;
   padding: 0 0 0 10px;
   position: relative;
-  background: #1abc9c url('../img/logo.png') no-repeat 25px 26px;
+  background: #1abc9c;
 }
 #header .logo {
   color: #fff;
   font-size: 1.7em;
   text-transform: uppercase;
-  padding: 23px 0 0 57px;
+  padding: 23px 0 0 38px;
   display: inline-block;
 }
 #header .logo span {

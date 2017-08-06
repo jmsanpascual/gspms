@@ -1308,7 +1308,7 @@ class ProjectController extends Controller
         try
         {
             // $projIds = App\Projects::whereIn('proj_status_id', [1, 4, 5])->pluck('id');
-            $volunteers = App\User::with(['infos', 'tasks.activity.projects'])
+            $volunteers = App\User::with(['infos', 'tasks.activity.projects.program'])
                  ->join('user_roles', function ($join) {
                        $join->on('users.id', '=', 'user_roles.user_id')
                        ->where('user_roles.role_id', '=', 6);

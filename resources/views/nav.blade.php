@@ -1,6 +1,9 @@
 <!--logo start-->
 <div class="brand">
-    <a href="/gspms/public/welcome" class="logo"><span>De La</span> Salle</a>
+    <a href="/gspms/public/welcome" class="logo">
+      <img style="height:30px;" src="{{asset('img/life_logo.png')}}">
+      GSPMS
+    </a>
 </div>
 <!--logo end-->
 <div class="toggle-navigation toggle-left">

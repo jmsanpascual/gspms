@@ -66,9 +66,11 @@
 			<table class = "table table-bordered" width="100%">
 				<tr>
 					<th style="padding:10px;">Volunteer</th>
+					<th style="padding:10px;">Program</th>
 					<th style="padding:10px;">Project</th>
 					<th style="padding:10px;">Tasks</th>
 					<th style="padding:10px;">Completed</th>
+					<th style="padding:10px;">Date Completed</th>
 				</tr>
 				@foreach($volunteer->tasks as $index2 => $task)
 				<tr>
@@ -79,11 +81,21 @@
 					</td>
 					<td>
 						@if($index2 == 0)
+						{{$task->activity['project']['program']['name']}}
+						@endif
+					</td>
+					<td>
+						@if($index2 == 0)
 						{{$task->activity['project']['name']}}
 						@endif
 					</td>
 					<td>{{$task->name}}</td>
 					<td style="text-align:center;">{{$task->done ? '&#10004;' : '&#x2717;'}}</td>
+					<td style="text-align:center;">
+						@if ($task->done)
+							{{ $task->updated_at->format('d/m/Y')}}
+						@endif
+					</td>
 				</tr>
 				@endforeach
 			</table>

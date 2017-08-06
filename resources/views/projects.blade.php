@@ -74,7 +74,7 @@ ng-app='project.controller'
                         <button class="btn btn-warning btn-sm" ng-if = "data.champion_id == {{Session::get('id')}} ||
                         {{ json_encode((Session::get('role') != config('constants.role_champion')))}}"
                         ng-click="proj.edit($index, data)">
-                        <i class="fa fa-edit"></i>
+                        <i class="fa fa-file-text"></i>
                         </button>
                         @if(Session::get('role') == config('constants.role_champion') ||
                         Session::get('role') == config('constants.role_exec'))
