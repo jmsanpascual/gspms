@@ -104,7 +104,10 @@
     <?php $fullname = $proj->first_name . ' ' . $proj->middle_name . ' ' . $proj->last_name; ?>
     <td >{{trim($fullname) ?: 'No Resource Person'}}</td>
   </tr>
-
+  <tr>
+     <td  >Remarks : </td>
+     <td >{{trim($proj->remarks) ?: 'No Remarks Yet.'}}</td>
+ </tr>
     <tr>
       <td colspan="4"></td>
     </tr>
