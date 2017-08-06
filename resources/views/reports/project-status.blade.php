@@ -93,9 +93,19 @@
     <?php $fullname = $proj->first_name . ' ' . $proj->middle_name . ' ' . $proj->last_name; ?>
     <td >{{trim($fullname) ?: 'No Resource Person'}}</td>
   </tr>
-  <tr style = "padding-top:10px;">
+  <tr>
+    <td  >Remarks : </td>
+    <td >{{trim($proj->remarks) ?: 'No Remarks Yet.'}}</td>
+</tr>
+    <tr>
+      <td colspan="4"></td>
+    </tr>
+</table>
+  {{-- <tr style = "padding-top:10px;">
     <td colspan="4"><h4><u><b>Objectives</b></h4></u></td>
-  </tr>
+  </tr> --}}
+  <h4 style="font-weight:bold"><u>Objectives</u></h4>
+  <table width="100%">
   <tr>
     <td colspan = "4">
       <?php
@@ -109,64 +119,61 @@
       </ul>
     </td>
   </tr>
-  <tr style = "padding-top:10px;">
-    <td colspan="4"><h4><u><b>Activities</b></h4></u></td>
-  </tr>
-  <tr>
-    <td colspan="4">
-  	  <table class = "table table-bordered" style="padding:20px; width:100%">
-  		  <tr>
-  			  <th>Name</th>
-  			  <th>Tasks</th>
-  			  <th>Remarks</th>
-  			  <th>Status</th>
-  		  </tr>
-  		  @if(COUNT($activities) == 0)
-  			  <tr>
-  				  <td colspan="2" class = "normal">No activities found</td>
-  			  </tr>
-  		  @endif
-  		  @foreach($activities as $key => $value)
-  			  <tr>
-  				  <td  style="font-weight: normal !important;"> {{$value['name']}}</td>
-  				  <td>
-  					  {{-- TASKS --}}
-  					  <table class = "table table-bordered" style="padding:20px; width:100%">
-  						  <tr>
-  							  <th>Name</th>
-  							  <th>Volunteers</th>
-  						  </tr>
-  						  @if(COUNT($value['tasks']) == 0)
-  							  <tr>
-  								  <td colspan="2"  style="font-weight: normal !important;">
-  									  No Tasks Available
-  								  </td>
-  							  </tr>
-  						  @endif
-  						  @foreach($value['tasks'] AS $val)
-  							  <tr>
-  								  <td  style="font-weight: normal !important;">{{$val['name']}}</td>
-  								  <td>{{ $val['volunteer'] }}</td>
-  							  </tr>
-  						  @endforeach
-  					  </table>
-  				  </td>
-  				  <td style="font-weight: normal !important;">{{$value['remarks'] ?: 'No Remarks yet.'}}</td>
-  				  <td>{{$value['status']}}</td>
-  			  </tr>
-  		  @endforeach
+      <tr>
+        <td colspan="4"></td>
+      </tr>
+  </table>
+  {{-- <tr style = "padding-top:10px;" colspan="4">
+  <td colspan="4"><h4><u><b>Activities</b></h4></u></td>
+</tr> --}}
+  <h4 style="font-weight:bold"><b><u>Activities</u></b></h4>
+  <table class = "table" style="padding:0px; width:100%">
+    {{-- <tr>
+      <th>Name</th>
+      <th>Tasks</th>
+      <th>Remarks</th>
+      <th>Status</th>
+    </tr> --}}
+    @if(COUNT($activities) == 0)
+      <tr>
+        <td colspan="2" class = "normal">No activities found</td>
+      </tr>
+    @endif
+    @foreach($activities as $key => $value)
+      <tr>
+        <td  style="font-weight: normal !important;">
+          <ul class ="objectives">
+            <li>
+              <span>{{$value['name']}}</span>
+              <ul class="objectives">
+                <li>
+                  <span><b>Tasks</b></span>
+                  <ul class="objectives">
+                    @if(COUNT($value['tasks']) == 0)
+                      <li>No Tasks Available</li>
+                    @endif
+                    @foreach($value['tasks'] AS $val)
+                      <li>{{ $val['name'] }}</li>
+                    @endforeach
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    @endforeach
 
-  	  </table>
-    </td>
-  </tr>
+  </table>
 {{-- <tr style = "margin-top:20px;">
     <td colspan="4"><h4><u><b>Milestones</b></h4></u></td>
   </tr>
   <tr>
 
   </tr> --}}
+  <table width="100%">
   <tr style = "padding-top:10px;">
-    <td colspan="2"><h4><u><b>Project Budget Allocation</b></h4></u></td>
+    <td colspan="2"><h4><u><b>Project Budget</b></h4></u></td>
   </tr>
   <tr>
     <td>Initial Budget: </td>

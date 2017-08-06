@@ -757,9 +757,10 @@ class ProjectController extends Controller
             $withRequest = $leftOvers = $withoutRequest = [];
 
             foreach($completed AS $key => &$val) {
-                $val['totalBudgetRequested'] = $val->budget_request->sum('amount');
-                $val['totalExpense'] = $val->expenses->sum('amount');
-                $val['remaining'] = $val['totalBudgetRequested'] + $val['total_budget'] - $val['totalExpense'];
+                $val['total_budget'] = number_format($val['total_budget'],2,'.',',');
+                $val['totalBudgetRequested'] = number_format($val->budget_request->sum('amount'),2,'.',',');
+                $val['totalExpense'] = number_format($val->expenses->sum('amount'),2,'.',',');
+                $val['remaining'] = number_format($val['totalBudgetRequested'] + $val['total_budget'] - $val['totalExpense'],2,'.',',');
 
                 // projects with budget request
                 if($val['totalBudgetRequested'])
