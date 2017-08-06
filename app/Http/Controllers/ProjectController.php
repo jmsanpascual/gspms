@@ -487,12 +487,16 @@ class ProjectController extends Controller
             $upd_arr['objective'] = $temp; // Assign the concatenated objectives
             unset($upd_arr['status_id']);
             if($previous_proj->proj_status_id != config('constants.proj_status_approved') &&
-                $previous_proj->proj_status_id != config('constants.proj_status_incomplete'))
+                $previous_proj->proj_status_id != config('constants.proj_status_incomplete')
+                && $previous_proj->proj_status_id != config('constants.proj_status_completed'))
                 $upd_arr['proj_status_id'] = config('constants.proj_status_for_approval_finance');
 
             if(EMPTY($upd_arr['champion_id'])  && Session::get('role') == config('constants.role_champion'))
                 $upd_arr['champion_id'] = Session::get('id');
 
+            if (isset($upd_arr['duration'])) unset($upd_arr['duration']);
+            if (isset($upd_arr['program_name'])) unset($upd_arr['program_name']);
+            if (isset($upd_arr['champion_name'])) unset($upd_arr['champion_name']);
             $upd_arr['start_date'] = date('Y-m-d H:i:s', strtotime($upd_arr['start_date']));
             $upd_arr['end_date'] = date('Y-m-d H:i:s', strtotime($upd_arr['end_date']));
             App\Projects::where('id', $id)->update($upd_arr);

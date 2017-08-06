@@ -2,7 +2,7 @@
 
 angular.module('dynamicElement', ['volunteer'])
 
-.controller('DynamicElementCtrl', function ($scope) {
+.controller('DynamicElementCtrl', function ($scope, $http) {
     var arrayCount = getLen();
     $scope.fields = arrayCount.length <= 0 ? [{id: 0}] : arrayCount;
 
@@ -14,6 +14,18 @@ angular.module('dynamicElement', ['volunteer'])
     $scope.removeField = function (index) {
         $scope.fields.splice(index);
         $scope.$parent.submitData.proj.objective.splice(index);
+    };
+
+    $scope.accomplished = function (objectives, index) {
+        objectives[index] = objectives[index] + ' (Accomplished)';
+        $http.put('../projects/update',  $scope.$parent.submitData.proj);
+    };
+
+    $scope.isAccomplished = function (objectives, index) {
+        if (objectives[index].indexOf('(Accomplished)') !== -1) {
+            return true;
+        }
+        return false;
     };
 
     function getLen() {

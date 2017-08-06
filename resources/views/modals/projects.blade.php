@@ -135,7 +135,12 @@
             ng-if="submitData.proj.proj_status_id != {{config('constants.proj_status_approved')}} &&
                 submitData.proj.proj_status_id != {{config('constants.proj_status_ongoing')}} && {{json_encode(Session::get('role') != config('constants.role_life'))}}">
               <i class="fa fa-remove"></i>
-            </button
+            </button>
+            <button class="btn btn-primary btn-sm" type="button" ng-click="accomplished(submitData.proj.objective, $index)"
+            ng-if="submitData.proj.proj_status_id == {{config('constants.proj_status_completed')}}
+            && !isAccomplished(submitData.proj.objective, $index)">
+              <i class="fa fa-check"></i>
+            </button>
           </div>
         </div>
         <div class="col-sm-6" ng-class="{'col-sm-offset-2': fields.length}"
